@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Study\\Server_PacketGenerator\\ServerCore\\ServerCore.csproj": {}
+    "D:\\Git\\Server\\RTS_Server\\ServerCore\\ServerCore.csproj": {}
   },
   "projects": {
-    "D:\\Study\\Server_PacketGenerator\\ServerCore\\ServerCore.csproj": {
+    "D:\\Git\\Server\\RTS_Server\\ServerCore\\ServerCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Study\\Server_PacketGenerator\\ServerCore\\ServerCore.csproj",
+        "projectUniqueName": "D:\\Git\\Server\\RTS_Server\\ServerCore\\ServerCore.csproj",
         "projectName": "ServerCore",
-        "projectPath": "D:\\Study\\Server_PacketGenerator\\ServerCore\\ServerCore.csproj",
+        "projectPath": "D:\\Git\\Server\\RTS_Server\\ServerCore\\ServerCore.csproj",
         "packagesPath": "C:\\Users\\JJONG\\.nuget\\packages\\",
-        "outputPath": "D:\\Study\\Server_PacketGenerator\\ServerCore\\obj\\",
+        "outputPath": "D:\\Git\\Server\\RTS_Server\\ServerCore\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

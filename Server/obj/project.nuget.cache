@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "VHx2kk9zTSM=",
+  "dgSpecHash": "BDOkWjWN/Ms=",
   "success": true,
-  "projectFilePath": "D:\\Study\\Server_PacketGenerator\\Server\\Server.csproj",
+  "projectFilePath": "D:\\Git\\Server\\RTS_Server\\Server\\Server.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

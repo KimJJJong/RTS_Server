@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "QAK8XqoQeNY=",
+  "dgSpecHash": "OC1jbmj2QL8=",
   "success": true,
-  "projectFilePath": "D:\\Study\\Server_PacketGenerator\\DummyClient\\DummyClient.csproj",
+  "projectFilePath": "D:\\Git\\Server\\RTS_Server\\DummyClient\\DummyClient.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
