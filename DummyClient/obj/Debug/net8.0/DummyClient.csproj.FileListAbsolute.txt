@@ -1,0 +1,5 @@
+D:\Study\Server_PacketGenerator\DummyClient\obj\Debug\net8.0\DummyClient.csproj.AssemblyReference.cache
+D:\Study\Server_PacketGenerator\DummyClient\obj\Debug\net8.0\DummyClient.GeneratedMSBuildEditorConfig.editorconfig
+D:\Study\Server_PacketGenerator\DummyClient\obj\Debug\net8.0\DummyClient.AssemblyInfoInputs.cache
+D:\Study\Server_PacketGenerator\DummyClient\obj\Debug\net8.0\DummyClient.AssemblyInfo.cs
+D:\Study\Server_PacketGenerator\DummyClient\obj\Debug\net8.0\DummyClient.csproj.CoreCompileInputs.cache

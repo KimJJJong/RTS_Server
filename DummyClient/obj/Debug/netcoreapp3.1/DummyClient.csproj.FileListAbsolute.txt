@@ -1,0 +1,17 @@
+D:\Study\Server_PacketGenerator\DummyClient\bin\Debug\netcoreapp3.1\DummyClient.exe
+D:\Study\Server_PacketGenerator\DummyClient\bin\Debug\netcoreapp3.1\DummyClient.deps.json
+D:\Study\Server_PacketGenerator\DummyClient\bin\Debug\netcoreapp3.1\DummyClient.runtimeconfig.json
+D:\Study\Server_PacketGenerator\DummyClient\bin\Debug\netcoreapp3.1\DummyClient.runtimeconfig.dev.json
+D:\Study\Server_PacketGenerator\DummyClient\bin\Debug\netcoreapp3.1\DummyClient.dll
+D:\Study\Server_PacketGenerator\DummyClient\bin\Debug\netcoreapp3.1\DummyClient.pdb
+D:\Study\Server_PacketGenerator\DummyClient\bin\Debug\netcoreapp3.1\ServerCore.dll
+D:\Study\Server_PacketGenerator\DummyClient\bin\Debug\netcoreapp3.1\ServerCore.pdb
+D:\Study\Server_PacketGenerator\DummyClient\obj\Debug\netcoreapp3.1\DummyClient.csproj.AssemblyReference.cache
+D:\Study\Server_PacketGenerator\DummyClient\obj\Debug\netcoreapp3.1\DummyClient.GeneratedMSBuildEditorConfig.editorconfig
+D:\Study\Server_PacketGenerator\DummyClient\obj\Debug\netcoreapp3.1\DummyClient.AssemblyInfoInputs.cache
+D:\Study\Server_PacketGenerator\DummyClient\obj\Debug\netcoreapp3.1\DummyClient.AssemblyInfo.cs
+D:\Study\Server_PacketGenerator\DummyClient\obj\Debug\netcoreapp3.1\DummyClient.csproj.CoreCompileInputs.cache
+D:\Study\Server_PacketGenerator\DummyClient\obj\Debug\netcoreapp3.1\DummyCli.C46919B7.Up2Date
+D:\Study\Server_PacketGenerator\DummyClient\obj\Debug\netcoreapp3.1\DummyClient.dll
+D:\Study\Server_PacketGenerator\DummyClient\obj\Debug\netcoreapp3.1\DummyClient.pdb
+D:\Study\Server_PacketGenerator\DummyClient\obj\Debug\netcoreapp3.1\DummyClient.genruntimeconfig.cache

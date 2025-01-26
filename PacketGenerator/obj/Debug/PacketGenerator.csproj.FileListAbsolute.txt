@@ -1,0 +1,14 @@
+D:\Study\Server_PacketGenerator\PacketGenerator\bin\PacketGenerator.exe
+D:\Study\Server_PacketGenerator\PacketGenerator\bin\PacketGenerator.deps.json
+D:\Study\Server_PacketGenerator\PacketGenerator\bin\PacketGenerator.runtimeconfig.json
+D:\Study\Server_PacketGenerator\PacketGenerator\bin\PacketGenerator.dll
+D:\Study\Server_PacketGenerator\PacketGenerator\bin\PacketGenerator.pdb
+D:\Study\Server_PacketGenerator\PacketGenerator\obj\Debug\PacketGenerator.GeneratedMSBuildEditorConfig.editorconfig
+D:\Study\Server_PacketGenerator\PacketGenerator\obj\Debug\PacketGenerator.AssemblyInfoInputs.cache
+D:\Study\Server_PacketGenerator\PacketGenerator\obj\Debug\PacketGenerator.AssemblyInfo.cs
+D:\Study\Server_PacketGenerator\PacketGenerator\obj\Debug\PacketGenerator.csproj.CoreCompileInputs.cache
+D:\Study\Server_PacketGenerator\PacketGenerator\obj\Debug\PacketGenerator.dll
+D:\Study\Server_PacketGenerator\PacketGenerator\obj\Debug\PacketGenerator.pdb
+D:\Study\Server_PacketGenerator\PacketGenerator\obj\Debug\PacketGenerator.genruntimeconfig.cache
+D:\Study\Server_PacketGenerator\PacketGenerator\obj\Debug\refint\PacketGenerator.dll
+D:\Study\Server_PacketGenerator\PacketGenerator\obj\Debug\ref\PacketGenerator.dll

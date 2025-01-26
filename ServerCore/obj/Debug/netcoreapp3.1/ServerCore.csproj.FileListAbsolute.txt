@@ -1,0 +1,9 @@
+D:\Study\Server_PacketGenerator\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.deps.json
+D:\Study\Server_PacketGenerator\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.dll
+D:\Study\Server_PacketGenerator\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.pdb
+D:\Study\Server_PacketGenerator\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.GeneratedMSBuildEditorConfig.editorconfig
+D:\Study\Server_PacketGenerator\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfoInputs.cache
+D:\Study\Server_PacketGenerator\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfo.cs
+D:\Study\Server_PacketGenerator\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.CoreCompileInputs.cache
+D:\Study\Server_PacketGenerator\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.dll
+D:\Study\Server_PacketGenerator\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb

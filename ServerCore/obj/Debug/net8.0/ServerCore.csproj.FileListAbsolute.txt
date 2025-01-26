@@ -1,0 +1,11 @@
+D:\Study\Server_PacketGenerator\ServerCore\bin\Debug\net8.0\ServerCore.deps.json
+D:\Study\Server_PacketGenerator\ServerCore\bin\Debug\net8.0\ServerCore.dll
+D:\Study\Server_PacketGenerator\ServerCore\bin\Debug\net8.0\ServerCore.pdb
+D:\Study\Server_PacketGenerator\ServerCore\obj\Debug\net8.0\ServerCore.GeneratedMSBuildEditorConfig.editorconfig
+D:\Study\Server_PacketGenerator\ServerCore\obj\Debug\net8.0\ServerCore.AssemblyInfoInputs.cache
+D:\Study\Server_PacketGenerator\ServerCore\obj\Debug\net8.0\ServerCore.AssemblyInfo.cs
+D:\Study\Server_PacketGenerator\ServerCore\obj\Debug\net8.0\ServerCore.csproj.CoreCompileInputs.cache
+D:\Study\Server_PacketGenerator\ServerCore\obj\Debug\net8.0\ServerCore.dll
+D:\Study\Server_PacketGenerator\ServerCore\obj\Debug\net8.0\refint\ServerCore.dll
+D:\Study\Server_PacketGenerator\ServerCore\obj\Debug\net8.0\ServerCore.pdb
+D:\Study\Server_PacketGenerator\ServerCore\obj\Debug\net8.0\ref\ServerCore.dll

@@ -1,0 +1,17 @@
+D:\Study\Server_PacketGenerator\Server\bin\Debug\netcoreapp3.1\Server.exe
+D:\Study\Server_PacketGenerator\Server\bin\Debug\netcoreapp3.1\Server.deps.json
+D:\Study\Server_PacketGenerator\Server\bin\Debug\netcoreapp3.1\Server.runtimeconfig.json
+D:\Study\Server_PacketGenerator\Server\bin\Debug\netcoreapp3.1\Server.runtimeconfig.dev.json
+D:\Study\Server_PacketGenerator\Server\bin\Debug\netcoreapp3.1\Server.dll
+D:\Study\Server_PacketGenerator\Server\bin\Debug\netcoreapp3.1\Server.pdb
+D:\Study\Server_PacketGenerator\Server\bin\Debug\netcoreapp3.1\ServerCore.dll
+D:\Study\Server_PacketGenerator\Server\bin\Debug\netcoreapp3.1\ServerCore.pdb
+D:\Study\Server_PacketGenerator\Server\obj\Debug\netcoreapp3.1\Server.csproj.AssemblyReference.cache
+D:\Study\Server_PacketGenerator\Server\obj\Debug\netcoreapp3.1\Server.GeneratedMSBuildEditorConfig.editorconfig
+D:\Study\Server_PacketGenerator\Server\obj\Debug\netcoreapp3.1\Server.AssemblyInfoInputs.cache
+D:\Study\Server_PacketGenerator\Server\obj\Debug\netcoreapp3.1\Server.AssemblyInfo.cs
+D:\Study\Server_PacketGenerator\Server\obj\Debug\netcoreapp3.1\Server.csproj.CoreCompileInputs.cache
+D:\Study\Server_PacketGenerator\Server\obj\Debug\netcoreapp3.1\Server.csproj.Up2Date
+D:\Study\Server_PacketGenerator\Server\obj\Debug\netcoreapp3.1\Server.dll
+D:\Study\Server_PacketGenerator\Server\obj\Debug\netcoreapp3.1\Server.pdb
+D:\Study\Server_PacketGenerator\Server\obj\Debug\netcoreapp3.1\Server.genruntimeconfig.cache
