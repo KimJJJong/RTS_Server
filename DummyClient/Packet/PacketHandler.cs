@@ -1,12 +1,23 @@
-﻿using ServerCore;
+﻿using DummyClient.Session;
+using ServerCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-class PacketHandler
+namespace DummyClient
 {
-	public static void S_TestHandler(PacketSession session, IPacket packet)
-	{
+    class PacketHandler
+    {
+        public static void S_TestHandler(PacketSession session, IPacket packet)
+        {
 
-	}
+        }
+        public static void S_LoginHandler(PacketSession session, IPacket packet)
+        {
+            S_Login loginPacket = packet as S_Login;
+            ServerSession serverSession = session as ServerSession;
+
+
+        }
+    }
 }

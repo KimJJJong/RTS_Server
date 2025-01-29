@@ -1,23 +1,79 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <PDL>
-	<!-- PacketImpliment-->
-  <packet name="C_PlayerInfoReq">
-	<sbyte name="testByte"/>
-	<long name="playerId"/>
-	<string name="name"/>
-	<list name="skill">
-	  <int name="id"/>
-	  <short name="level"/>
-	  <float name="duration"/>
-	  <list name="attribute">
-		<int name="att"/>
-	  </list>
-	</list>
-  </packet>
-  <packet name="S_Test">
-	<int name="testInt"/>
-  </packet>
-  <packet name="S_Req_UserInfo">
-	  <int name="uid"/>
-  </packet>
+	<!-- 로그인 -->
+	<packet name="C_Login">
+		<string name="username"/>
+		<string name="password"/>
+	</packet>
+	<packet name="S_Login">
+		<bool name="success"/>
+		<string name="message"/>
+	</packet>
+
+	<!-- 로비 -->
+	<packet name="C_EnterLobby">
+		<int name="userId"/>
+	</packet>
+	<packet name="S_EnterLobby">
+		<list name="roomList">
+			<int name="roomId"/>
+		</list>
+	</packet>
+	<packet name="C_CreateRoom">
+		<string name="roomName"/>
+		<int name="maxPlayers"/>
+	</packet>
+	<packet name="S_CreateRoom">
+		<bool name="success"/>
+		<int name="roomId"/>
+	</packet>
+	<packet name="C_JoinRoom">
+		<int name="roomId"/>
+	</packet>
+	<packet name="S_JoinRoom">
+		<bool name="success"/>
+		<string name="message"/>
+		<int name="roomId"/>
+	</packet>
+
+	<!-- 준비 상태 -->
+	<packet name="C_Ready">
+		<bool name="isReady"/>
+	</packet>
+	<packet name="S_Ready">
+		<map name="playerReadyState">
+			<int name="playerId"/>
+			<bool name="isReady"/>
+		</map>
+	</packet>
+	<packet name="S_StartGame">
+		<int name="gameId"/>
+		<string name="mapData"/>
+	</packet>
+
+	<!-- 게임 -->
+	<packet name="C_GameAction">
+		<int name="unitId"/>
+		<int name="x"/>
+		<int name="y"/>
+	</packet>
+	<packet name="S_GameUpdate">
+		<list name="units">
+			<class name="GameUnit">
+				<int name="unitId"/>
+				<int name="x"/>
+				<int name="y"/>
+				<int name="ownerId"/>
+			</class>
+		</list>
+		<int name="playerScore"/>
+		<int name="opponentScore"/>
+	</packet>
+	<packet name="S_GameOver">
+		<int name="winnerId"/>
+		<string name="resultMessage"/>
+	</packet>
+
+
 </PDL>
+

@@ -22,12 +22,18 @@ class PacketManager
 		
 	public void Register()
 	{
-		_onRecv.Add((ushort)PacketID.CS_PlayerInfoReq, MakePacket<CS_PlayerInfoReq>);
-		_handler.Add((ushort)PacketID.CS_PlayerInfoReq, PacketHandler.CS_PlayerInfoReqHandler);
-		_onRecv.Add((ushort)PacketID.SC_Test, MakePacket<SC_Test>);
-		_handler.Add((ushort)PacketID.SC_Test, PacketHandler.SC_TestHandler);
-		_onRecv.Add((ushort)PacketID.SC_Req_UserInfo, MakePacket<SC_Req_UserInfo>);
-		_handler.Add((ushort)PacketID.SC_Req_UserInfo, PacketHandler.SC_Req_UserInfoHandler);
+		_onRecv.Add((ushort)PacketID.C_Login, MakePacket<C_Login>);
+		_handler.Add((ushort)PacketID.C_Login, PacketHandler.C_LoginHandler);
+		_onRecv.Add((ushort)PacketID.C_EnterLobby, MakePacket<C_EnterLobby>);
+		_handler.Add((ushort)PacketID.C_EnterLobby, PacketHandler.C_EnterLobbyHandler);
+		_onRecv.Add((ushort)PacketID.C_CreateRoom, MakePacket<C_CreateRoom>);
+		_handler.Add((ushort)PacketID.C_CreateRoom, PacketHandler.C_CreateRoomHandler);
+		_onRecv.Add((ushort)PacketID.C_JoinRoom, MakePacket<C_JoinRoom>);
+		_handler.Add((ushort)PacketID.C_JoinRoom, PacketHandler.C_JoinRoomHandler);
+		_onRecv.Add((ushort)PacketID.C_Ready, MakePacket<C_Ready>);
+		_handler.Add((ushort)PacketID.C_Ready, PacketHandler.C_ReadyHandler);
+		_onRecv.Add((ushort)PacketID.C_GameAction, MakePacket<C_GameAction>);
+		_handler.Add((ushort)PacketID.C_GameAction, PacketHandler.C_GameActionHandler);
 
 	}
 
