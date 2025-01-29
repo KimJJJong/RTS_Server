@@ -10,23 +10,34 @@ namespace ServerCore
 	{
 		Socket _listenSocket;
 		Func<Session> _sessionFactory;
-
-		public void Init(IPEndPoint endPoint, Func<Session> sessionFactory)
+		/// <summary>
+		/// Init ListenerSocket on the Server
+		/// </summary>
+		/// <param name="endPoint">IP Addresss, Port</param>
+		/// <param name="sessionFactory">Function to create a new session for incoming client connections</param>
+		/// <param name="register">ListenerNum</param>
+		/// <param name="backlog">backLog</param>
+		public void Init(IPEndPoint endPoint, Func<Session> sessionFactory, int register = 10, int backlog = 100)
 		{
-			_listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            // Create the Listener socket
+            _listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+			// Sotre the session creation Fun
 			_sessionFactory += sessionFactory;
-
-			// 문지기 교육
+			
 			_listenSocket.Bind(endPoint);
 
-			// 영업 시작
-			// backlog : 최대 대기수
-			_listenSocket.Listen(10);
+			// Start Listening 
+			_listenSocket.Listen(backlog);
 
+
+			for(int i = 0; i < register; i++)
+			{
 			SocketAsyncEventArgs args = new SocketAsyncEventArgs();
 			args.Completed += new EventHandler<SocketAsyncEventArgs>(OnAcceptCompleted);
-			// 최초 등록 ( Casting )
+			// First Register( Casting )
 			RegisterAccept(args);
+
+			}
 		}
 
 		void RegisterAccept(SocketAsyncEventArgs args)
@@ -34,13 +45,13 @@ namespace ServerCore
 			args.AcceptSocket = null;
 
 			bool pending = _listenSocket.AcceptAsync(args);
-			// pending이 false이면 기다림 없이 바로 실행이 되었다는 뜻
+			// pending == false : no delay excution
 			if (pending == false)
 				OnAcceptCompleted(null, args);
 		}
 
-		// Multi Thread의 시작 RaceCondition 주의
-		void OnAcceptCompleted(object sender, SocketAsyncEventArgs args /* CallBack함수 인자 : Clinet 대리자Socket */ )
+		// Multi Threading Start : BeCareful RaceCondition 
+		void OnAcceptCompleted(object sender, SocketAsyncEventArgs args /* CallBack Parameter : Clinet delegate Socket */ )
 		{
 			if (args.SocketError == SocketError.Success)
 			{
@@ -51,7 +62,7 @@ namespace ServerCore
 			else
 				Console.WriteLine(args.SocketError.ToString());
 
-			// 다시 Casting
+			// Re Casting
 			RegisterAccept(args);
 		}
 	}

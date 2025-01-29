@@ -8,15 +8,15 @@ namespace ServerCore
 	{
 		// [r][][w][][][][][][][]
 		ArraySegment<byte> _buffer;
-		int _readPos;	// 읽기 시작 위치
-		int _writePos;	// 쓸 위치
+		int _readPos;	// Read Start Position
+		int _writePos;	// Write Position
 
 		public RecvBuffer(int bufferSize)
 		{
 			_buffer = new ArraySegment<byte>(new byte[bufferSize], 0, bufferSize);
 		}
 
-		public int DataSize { get { return _writePos - _readPos; } }	// 읽을 수 있는 데이터 크기 : 얼마나 데이터가 쌓여 있는가?
+		public int DataSize { get { return _writePos - _readPos; } }	// Data Size can Read : 얼마나 데이터가 쌓여 있는가?
 		public int FreeSize { get { return _buffer.Count - _writePos; } }	// 버퍼에서 데이터를 더 쓸 수 있는 공간 : 남은 공간
 
 		public ArraySegment<byte> ReadSegment

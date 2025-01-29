@@ -40,8 +40,8 @@ namespace ServerCore
 			if (args.SocketError == SocketError.Success)
 			{
 				Session session = _sessionFactory.Invoke();
-				session.Start(args.ConnectSocket  /*args.UserToken as Socket*/)	;
-				session.OnConnected(args.RemoteEndPoint);
+				session.Start(args.ConnectSocket ); // args.UserToken as Socket : 두가지 방법
+                session.OnConnected(args.RemoteEndPoint);
 			}
 			else
 			{

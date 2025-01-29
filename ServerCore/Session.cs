@@ -17,10 +17,12 @@ namespace ServerCore
 		{
 			// 처리한 Byte 크기
 			int processLen = 0;
+			// 얼만치 쌓아 보냈는감?
+			int packetCount = 0;
 
 			while (true)
 			{
-				// 최소한 헤더는 파싱할 수 있는지 확인
+				// 최소한 헤더는 파싱할 수 있는지 확인 : 대가리보다 작으면 안되지 암
 				if (buffer.Count < HeaderSize)
 					break;
 
@@ -31,12 +33,16 @@ namespace ServerCore
 
 				// 여기까지 왔으면 패킷 조립 가능 : DeSerialization
 				OnRecvPacket(new ArraySegment<byte>(buffer.Array, buffer.Offset, dataSize));
-				
+				packetCount++;
+
 				processLen += dataSize;
 				buffer = new ArraySegment<byte>(buffer.Array, buffer.Offset + dataSize, buffer.Count - dataSize);
 			}
 
-			return processLen;
+			if( packetCount > 1)
+                Console.WriteLine($"패킷 모아 보내기 : {packetCount}");
+
+            return processLen;
 		}
 
 		public abstract void OnRecvPacket(ArraySegment<byte> buffer);
@@ -47,7 +53,7 @@ namespace ServerCore
 		Socket _socket;
 		int _disconnected = 0;	// Session Connect Condition Flag
 
-		RecvBuffer _recvBuffer = new RecvBuffer(1024);
+		RecvBuffer _recvBuffer = new RecvBuffer(65535);	//TODO Need to Size Adjust
 
 		object _lock = new object();
 		Queue<ArraySegment<byte>> _sendQueue = new Queue<ArraySegment<byte>>();
@@ -79,8 +85,26 @@ namespace ServerCore
 			RegisterRecv();
 		}
 
+		public void Send(List<ArraySegment<byte>> snedBufferList)
+		{
+			if(snedBufferList.Count == 0) return;
+
+			lock (_lock)
+			{
+				foreach(ArraySegment<byte> sendBuffer in snedBufferList)
+				{
+					_sendQueue.Enqueue(sendBuffer);
+
+					if(_pendingList.Count == 0)
+						RegisterSend();
+				}
+			}
+
+		}
+
 		public void Send(ArraySegment<byte> sendBuff)
 		{
+
 			lock (_lock)
 			{
 				_sendQueue.Enqueue(sendBuff);
