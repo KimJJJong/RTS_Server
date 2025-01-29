@@ -6,7 +6,26 @@ using System.Threading.Tasks;
 
 namespace DummyClient
 {
-    internal class SessionManager
+     class SessionManager
     {
+        static SessionManager _session= new SessionManager();
+        public static SessionManager Instance {  get { return _session; } }
+        List<ServerSession> _sessions = new List<ServerSession> ();
+        object _lock = new object ();
+
+        public void SendForEach()
+        {
+            
+        }
+
+        public ServerSession Generate()
+        {
+            lock (_lock)
+            {
+            ServerSession session = new ServerSession();
+            _sessions.Add(session);
+            return session;
+            }
+        }
     }
 }

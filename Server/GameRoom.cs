@@ -4,37 +4,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Server;
+using ServerCore;
 
 namespace Server
 {
-    class GameRoom
+    class GameRoom :IJobQueue
     {
         List<ClientSession> _sessions = new List<ClientSession>();
-        object _lock = new object();
+        JobQueue _jobQueue = new JobQueue();
+        List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
+
+        public void Push(Action action)
+        {
+            _jobQueue.Push(action);
+        }
+
+        public void Flush()
+        {
+            foreach(ClientSession session in _sessions) 
+                session.Send(_pendingList);
+
+            Console.WriteLine($"Flushed {_pendingList.Count} items");
+            _pendingList.Clear();   
+        }
 
         public void BroadCast(ClientSession session)
         {
-            foreach()
         }
 
         public void Enter(ClientSession session)
         {
-            lock (_lock)
-            {
             _sessions.Add(session);
              session.Room = this;
-
-            }
             
         }
 
         public void Leave(ClientSession session)
         {
-            lock(_lock)
-            {
+
             _sessions.Remove(session);
 
-            }
         }
 
     }

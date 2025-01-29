@@ -1,4 +1,4 @@
-﻿using DummyClient.Session;
+﻿using DummyClient;
 using ServerCore;
 using System;
 using System.Collections.Generic;

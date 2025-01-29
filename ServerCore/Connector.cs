@@ -10,8 +10,10 @@ namespace ServerCore
 	{
 		Func<Session> _sessionFactory;
 
-		public void Connect(IPEndPoint endPoint, Func<Session> sessionFactory)
+		public void Connect(IPEndPoint endPoint, Func<Session> sessionFactory, int count =1 )
 		{
+			for(int i = 0; i < count; i++)
+			{
 			// 휴대폰 설정
 			Socket socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 			_sessionFactory = sessionFactory;
@@ -22,6 +24,8 @@ namespace ServerCore
 			args.UserToken = socket;
 
 			RegisterConnect(args);
+
+			}
 		}
 
 		void RegisterConnect(SocketAsyncEventArgs args)
