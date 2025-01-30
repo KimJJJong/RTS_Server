@@ -8,6 +8,7 @@ using ServerCore;
 
 namespace Server
 {
+    // TODO : Room For Test ( Need to reMake )
     class GameRoom : IJobQueue
     {
         
@@ -31,11 +32,10 @@ namespace Server
 
         public void BroadCast(string chat)
         {
-            S_Chat packet = new S_Chat();
-            //packet.playerId = session.SessionID;
+       /*     S_Chat packet = new S_Chat();
             packet.chat = $"chat : {chat} / SessionId : {packet.playerId}";
             ArraySegment<byte> segment = packet.Write();
-            _pendingList.Add(segment);
+            _pendingList.Add(segment);*/
         }
 
         public void Enter(ClientSession session)

@@ -5,15 +5,29 @@ using System.Text;
 
 class PacketHandler
 {
-	public static void C_PlayerInfoReqHandler(PacketSession session, IPacket packet)
-	{
-/*		C_PlayerInfoReq p = packet as C_PlayerInfoReq;
+    public static void C_LoginHandler(PacketSession session, IPacket packet)
+    {
 
-		Console.WriteLine($"PlayerInfoReq: {p.playerId} {p.name}");
+    }
+    public static void C_EnterLobbyHandler(PacketSession session, IPacket packet)
+    {
 
-		foreach (C_PlayerInfoReq.Skill skill in p.skills)
-		{
-			Console.WriteLine($"Skill({skill.id})({skill.level})({skill.duration})");
-		}*/
-	}
+    }
+    public static void C_CreateRoomHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void C_JoinRoomHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void C_ReadyHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void C_GameActionHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+
 }

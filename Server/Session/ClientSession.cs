@@ -33,7 +33,7 @@ namespace Server
             if(Room != null)
             {
                 // JobQueue를 이용시 명령어 처리가 순차적으로 미뤄지는 상황에 따라
-                // Room.Leave(this) => GameRoom room = Room; : 상태 저장 후 명령어 요청
+                // Room.Leave(this) -> GameRoom room = Room; : 상태 저장 후 명령어 요청
                 GameRoom room = Room;
                 room.Push(()=>room.Leave(this));
                 Room = null;
