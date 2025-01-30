@@ -16,23 +16,33 @@ namespace Server
 		static Listener _listener = new Listener();
 		public static GameRoom Room = new GameRoom();
 
-		static void Main(string[] args)
-		{
-			PacketManager.Instance.Register();
+        static void FlushRoom()
+        {
+            Room.Push(() => Room.Flush());
+            Room.Push(() => Room.BroadCast("test"));
+            JobTimer.Instance.Push(FlushRoom, 250);
+            
+        }
 
-			// DNS (Domain Name System)
-			string host = Dns.GetHostName();
-			IPHostEntry ipHost = Dns.GetHostEntry(host);
-			IPAddress ipAddr = ipHost.AddressList[0];
-			IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
-			_listener.Init(endPoint, () => { return SessionManager.instance.Genrate(); });
-			Console.WriteLine("Listening...");
+        static void Main(string[] args)
+        {
+            // DNS (Domain Name System)
+            string host = Dns.GetHostName();
+            IPHostEntry ipHost = Dns.GetHostEntry(host);
+            IPAddress ipAddr = ipHost.AddressList[0];
+            IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
-			while (true)
-			{
-				;
-			}
-		}
-	}
+            _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
+            Console.WriteLine("Listening...");
+
+            //FlushRoom();
+            JobTimer.Instance.Push(FlushRoom);
+
+            while (true)
+            {
+                JobTimer.Instance.Flush();
+            }
+        }
+    }
 }

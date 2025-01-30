@@ -1,12 +1,9 @@
 {
   "runtimeOptions": {
-    "tfm": "net8.0",
+    "tfm": "netcoreapp3.1",
     "framework": {
       "name": "Microsoft.NETCore.App",
-      "version": "8.0.0"
-    },
-    "configProperties": {
-      "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": false
+      "version": "3.1.0"
     }
   }
 }

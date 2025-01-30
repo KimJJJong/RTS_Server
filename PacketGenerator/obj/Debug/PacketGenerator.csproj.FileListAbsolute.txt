@@ -23,7 +23,6 @@ D:\Git\Server\RTS_Server\PacketGenerator\obj\Debug\PacketGenerator.AssemblyInfo.
 D:\Git\Server\RTS_Server\PacketGenerator\obj\Debug\PacketGenerator.csproj.CoreCompileInputs.cache
 D:\Git\Server\RTS_Server\PacketGenerator\obj\Debug\PacketGenerator.sourcelink.json
 D:\Git\Server\RTS_Server\PacketGenerator\obj\Debug\PacketGenerator.dll
-D:\Git\Server\RTS_Server\PacketGenerator\obj\Debug\refint\PacketGenerator.dll
 D:\Git\Server\RTS_Server\PacketGenerator\obj\Debug\PacketGenerator.pdb
 D:\Git\Server\RTS_Server\PacketGenerator\obj\Debug\PacketGenerator.genruntimeconfig.cache
-D:\Git\Server\RTS_Server\PacketGenerator\obj\Debug\ref\PacketGenerator.dll
+D:\Git\Server\RTS_Server\PacketGenerator\bin\PacketGenerator.runtimeconfig.dev.json

@@ -5,35 +5,22 @@ using System.Collections.Generic;
 class PacketManager
 {
 	#region Singleton
-	static PacketManager _instance;
-	public static PacketManager Instance
-	{
-		get
-		{
-			if (_instance == null)
-				_instance = new PacketManager();
-			return _instance;
-		}
-	}
+	static PacketManager _instance = new PacketManager();
+	public static PacketManager Instance { get { return _instance; } 	}
 	#endregion
+
+	PacektManager()
+	{
+		Register()
+	}
 
 	Dictionary<ushort, Action<PacketSession, ArraySegment<byte>>> _onRecv = new Dictionary<ushort, Action<PacketSession, ArraySegment<byte>>>();
 	Dictionary<ushort, Action<PacketSession, IPacket>> _handler = new Dictionary<ushort, Action<PacketSession, IPacket>>();
 		
 	public void Register()
 	{
-		_onRecv.Add((ushort)PacketID.C_Login, MakePacket<C_Login>);
-		_handler.Add((ushort)PacketID.C_Login, PacketHandler.C_LoginHandler);
-		_onRecv.Add((ushort)PacketID.C_EnterLobby, MakePacket<C_EnterLobby>);
-		_handler.Add((ushort)PacketID.C_EnterLobby, PacketHandler.C_EnterLobbyHandler);
-		_onRecv.Add((ushort)PacketID.C_CreateRoom, MakePacket<C_CreateRoom>);
-		_handler.Add((ushort)PacketID.C_CreateRoom, PacketHandler.C_CreateRoomHandler);
-		_onRecv.Add((ushort)PacketID.C_JoinRoom, MakePacket<C_JoinRoom>);
-		_handler.Add((ushort)PacketID.C_JoinRoom, PacketHandler.C_JoinRoomHandler);
-		_onRecv.Add((ushort)PacketID.C_Ready, MakePacket<C_Ready>);
-		_handler.Add((ushort)PacketID.C_Ready, PacketHandler.C_ReadyHandler);
-		_onRecv.Add((ushort)PacketID.C_GameAction, MakePacket<C_GameAction>);
-		_handler.Add((ushort)PacketID.C_GameAction, PacketHandler.C_GameActionHandler);
+		_onRecv.Add((ushort)PacketID.C_Chat, MakePacket<C_Chat>);
+		_handler.Add((ushort)PacketID.C_Chat, PacketHandler.C_ChatHandler);
 
 	}
 

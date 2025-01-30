@@ -1,5 +1,5 @@
 is_global = true
 build_property.RootNamespace = ServerCore
-build_property.ProjectDir = D:\Study\Server_PacketGenerator\ServerCore\
+build_property.ProjectDir = D:\Git\Server\RTS_Server\ServerCore\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

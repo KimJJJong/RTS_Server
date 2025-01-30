@@ -8,8 +8,9 @@ using ServerCore;
 
 namespace Server
 {
-    class GameRoom :IJobQueue
+    class GameRoom : IJobQueue
     {
+        
         List<ClientSession> _sessions = new List<ClientSession>();
         JobQueue _jobQueue = new JobQueue();
         List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
@@ -28,8 +29,13 @@ namespace Server
             _pendingList.Clear();   
         }
 
-        public void BroadCast(ClientSession session)
+        public void BroadCast(string chat)
         {
+            S_Chat packet = new S_Chat();
+            //packet.playerId = session.SessionID;
+            packet.chat = $"chat : {chat} / SessionId : {packet.playerId}";
+            ArraySegment<byte> segment = packet.Write();
+            _pendingList.Add(segment);
         }
 
         public void Enter(ClientSession session)

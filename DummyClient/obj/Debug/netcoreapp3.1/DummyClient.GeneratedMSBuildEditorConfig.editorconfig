@@ -1,5 +1,5 @@
 is_global = true
 build_property.RootNamespace = DummyClient
-build_property.ProjectDir = D:\Study\Server_PacketGenerator\DummyClient\
+build_property.ProjectDir = D:\Git\Server\RTS_Server\DummyClient\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
