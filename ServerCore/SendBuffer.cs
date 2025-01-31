@@ -10,7 +10,7 @@ namespace ServerCore
 		// Thead간 경합 방지를 위한
 		public static ThreadLocal<SendBuffer> CurrentBuffer = new ThreadLocal<SendBuffer>(() => { return null; });
 
-		public static int ChunkSize { get; set; } = 4096 * 100;
+		public static int ChunkSize { get; set; } = 65535;
 		public static ArraySegment<byte> Open(int reserveSize)
 		{
 			if (CurrentBuffer.Value == null)

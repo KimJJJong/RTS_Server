@@ -14,14 +14,19 @@ namespace Server
 	class Program
 	{
 		static Listener _listener = new Listener();
+        public static Lobby Lobby = new Lobby();
 		public static GameRoom Room = new GameRoom();
 
         static void FlushRoom()
         {
             Room.Push(() => Room.Flush());
-            Room.Push(() => Room.BroadCast("test"));
             JobTimer.Instance.Push(FlushRoom, 250);
             
+        }
+        static void FlushLobby()
+        {
+            Lobby.Push(() => Lobby.Flush());
+            JobTimer.Instance.Push(FlushLobby, 1000);
         }
 
 
@@ -31,13 +36,14 @@ namespace Server
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
             IPAddress ipAddr = ipHost.AddressList[0];
-            IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+            IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("192.168.0.3"), 13221);
 
             _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
             Console.WriteLine("Listening...");
 
-            //FlushRoom();
+            //Flush();
             JobTimer.Instance.Push(FlushRoom);
+            JobTimer.Instance.Push(FlushLobby);
 
             while (true)
             {

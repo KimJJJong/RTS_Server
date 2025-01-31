@@ -17,13 +17,13 @@ namespace DummyClient
 			string host = Dns.GetHostName();
 			IPHostEntry ipHost = Dns.GetHostEntry(host);
 			IPAddress ipAddr = ipHost.AddressList[0];
-			IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+			IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("192.168.0.3"), 13221);
 
 			Connector connector = new Connector();
 
 			connector.Connect(endPoint,
 				() => { return SessionManager.Instance.Generate(); } ,
-				 5 );
+				 1 );
 
 			while (true)
 			{
