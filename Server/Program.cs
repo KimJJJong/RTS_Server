@@ -20,13 +20,13 @@ namespace Server
         static void FlushRoom()
         {
             Room.Push(() => Room.Flush());
-            JobTimer.Instance.Push(FlushRoom, 250);
+            JobTimer.Instance.Push(FlushRoom, 1000);
             
         }
         static void FlushLobby()
         {
             Lobby.Push(() => Lobby.Flush());
-            JobTimer.Instance.Push(FlushLobby, 1000);
+            JobTimer.Instance.Push(FlushLobby, 250);
         }
 
 
@@ -36,7 +36,7 @@ namespace Server
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
             IPAddress ipAddr = ipHost.AddressList[0];
-            IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("192.168.0.3"), 13221);
+            IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("172.28.91.119")/*ipAddr*/, 13221);
 
             _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
             Console.WriteLine("Listening...");
@@ -44,6 +44,7 @@ namespace Server
             //Flush();
             JobTimer.Instance.Push(FlushRoom);
             JobTimer.Instance.Push(FlushLobby);
+            //Room.StartSyncTimer();
 
             while (true)
             {

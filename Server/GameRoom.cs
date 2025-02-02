@@ -15,10 +15,12 @@ namespace Server
     {
         public string RoomId { get; }
         List<ClientSession> _sessions = new List<ClientSession>();
-        JobQueue _jobQueue = new JobQueue();
         List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
+        JobQueue _jobQueue = new JobQueue();
         GameLogicManager _gameLogic;
         RoomState _roomState;
+
+
 
         public GameRoom()
         {
@@ -35,10 +37,10 @@ namespace Server
             foreach (ClientSession session in _sessions)
                 session.Send(_pendingList);
 
-            Console.WriteLine($"Flushed {_pendingList.Count} items");
+            //Console.WriteLine($"Flushed {_pendingList.Count} items");
             _pendingList.Clear();
         }
-
+      
         public void BroadCast(ArraySegment<byte> segment)
         {
             _pendingList.Add(segment);
@@ -63,14 +65,18 @@ namespace Server
         }
         private void StartGame()
         {
+            _roomState = RoomState.InGame;
             Console.WriteLine($"게임 시작! Room ID: {RoomId}");
             
             _gameLogic = new GameLogicManager(this);
             foreach (ClientSession session in _sessions)
                 _gameLogic.AddPlayer(session);
 
-            //BroadcastToAll("게임이 시작되었습니다!");
-            // 게임 로직 돌리기 : _gameLogic.Update();
+            S_StartGame startPacket = new S_StartGame();
+            startPacket.mapData = "";
+            _pendingList.Add(startPacket.Write());
+            //BroadCast(startPacket.Write());
+
         }
 
         public void Leave(ClientSession session)

@@ -52,23 +52,76 @@
 	</packet>
 
 	<!-- 게임 -->
-	<packet name="C_GameAction">
-		<int name="unitId"/>
-		<int name="x"/>
-		<int name="y"/>
-	</packet>
 	<packet name="S_GameUpdate">
+		<list name="pool">
+			<int name="unitId"/>
+			<int name="hp"/>
+			<float name="x"/>
+			<float name="y"/>
+		</list>
+	</packet>
+	<packet name="C_ReqSurmmon">
+		<int name="uid"/>
+		<int name="needMana"/>
+		<float name="x"/>
+		<float name="y"/>
+	</packet>
+	<packet name="S_AnsSurmmon">
+		<int name="uid"/>
+		<int name="decreaseMana"/>
+		<float name="x"/>
+		<float name="y"/>
+	</packet>
+	<packet name="C_RequestManaStatus">
+		<int name="playerId"/>
+	</packet>
+
+	<packet name="C_UnitAction">
+		<int name="unitId"/>
+		<int name="targetX"/>
+		<int name="targetY"/>
+		<string name="actionType"/>
+		<!-- "move" or "attack" -->
+	</packet>
+
+
+
+	<!-- 서버 -> 클라이언트 패킷 -->
+	<packet name="S_GameStateUpdate">
 		<list name="units">
 			<class name="GameUnit">
 				<int name="unitId"/>
 				<int name="x"/>
 				<int name="y"/>
+				<int name="hp"/>
 				<int name="ownerId"/>
 			</class>
 		</list>
+		<int name="playerMana"/>
+		<int name="opponentMana"/>
 		<int name="playerScore"/>
 		<int name="opponentScore"/>
 	</packet>
+
+	<packet name="S_ManaUpdate">
+		<int name="playerId"/>
+		<int name="currentMana"/>
+	</packet>
+
+	<packet name="S_UnitSpawn">
+		<int name="unitId"/>
+		<int name="x"/>
+		<int name="y"/>
+		<int name="ownerId"/>
+	</packet>
+
+	<packet name="S_UnitAction">
+		<int name="unitId"/>
+		<int name="targetX"/>
+		<int name="targetY"/>
+		<string name="actionType"/>
+	</packet>
+
 	<packet name="S_GameOver">
 		<int name="winnerId"/>
 		<string name="resultMessage"/>

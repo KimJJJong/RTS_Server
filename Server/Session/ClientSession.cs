@@ -17,7 +17,7 @@ namespace Server
             // TODO : Client 요청에 따른 Enter 관리
             //Program.Room.Enter(this); 직접 처리 하지 않고 JobQueue : Push
             Program.Lobby.Push(() => Program.Lobby.Enter(this));
-           
+
             Program.Room.Push(() => Program.Room.Enter(this));
 
         }
@@ -31,19 +31,22 @@ namespace Server
         {
             SessionManager.Instance.Remove(this);
 
+
+            if (Room != null)
+            {
+                // JobQueue를 이용시 명령어 처리가 순차적으로 미뤄지는 상황에 따라
+                // Room.Leave(this) -> GameRoom room = Room; : 상태 저장 후 명령어 요청
+                GameRoom room = Room;
+                room.Push(() => room.Leave(this));
+                Room = null;
+
+            }
+
             if (Lobby != null)
             {
                 Lobby lobby = Lobby;
                 lobby.Push(() => lobby.Leave(this));
                 Lobby = null;
-                if (Room != null)
-                {
-                    // JobQueue를 이용시 명령어 처리가 순차적으로 미뤄지는 상황에 따라
-                    // Room.Leave(this) -> GameRoom room = Room; : 상태 저장 후 명령어 요청
-                    GameRoom room = Room;
-                    room.Push(() => room.Leave(this));
-                    Room = null;
-                }
             }
 
             Console.WriteLine($"OnDisconnected : {endPoint}");

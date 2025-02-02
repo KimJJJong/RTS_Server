@@ -16,6 +16,7 @@ namespace Server
         }
         public void Flush()
         {
+            //Console.WriteLine("LobbyFlush");
             foreach (ClientSession session in _sessions)
                 session.Send(_pendingList);
 
@@ -27,11 +28,13 @@ namespace Server
         }
         public void Enter(ClientSession session)
         {
+            Console.WriteLine($"Player {session.SessionID} join Lobby");
             _sessions.Add(session);
             session.Lobby = this;
         }
         public void Leave(ClientSession session)
         {
+            Console.WriteLine($"클라이언트 {session.SessionID}가 로비 에서 퇴장 ");
             _sessions.Remove(session);
         }
 
