@@ -2,7 +2,7 @@ using ServerCore;
 using System;
 using System.Collections.Generic;
 
-class PacketManager
+public class PacketManager
 {
 	#region Singleton
 	static PacketManager _instance = new PacketManager();
@@ -33,6 +33,14 @@ class PacketManager
 		_handler.Add((ushort)PacketID.S_StartGame, PacketHandler.S_StartGameHandler);
 		_makeFunc.Add((ushort)PacketID.S_GameUpdate, MakePacket<S_GameUpdate>);
 		_handler.Add((ushort)PacketID.S_GameUpdate, PacketHandler.S_GameUpdateHandler);
+		_makeFunc.Add((ushort)PacketID.S_AnsSummon, MakePacket<S_AnsSummon>);
+		_handler.Add((ushort)PacketID.S_AnsSummon, PacketHandler.S_AnsSummonHandler);
+		_makeFunc.Add((ushort)PacketID.S_GameStateUpdate, MakePacket<S_GameStateUpdate>);
+		_handler.Add((ushort)PacketID.S_GameStateUpdate, PacketHandler.S_GameStateUpdateHandler);
+		_makeFunc.Add((ushort)PacketID.S_ManaUpdate, MakePacket<S_ManaUpdate>);
+		_handler.Add((ushort)PacketID.S_ManaUpdate, PacketHandler.S_ManaUpdateHandler);
+		_makeFunc.Add((ushort)PacketID.S_UnitAction, MakePacket<S_UnitAction>);
+		_handler.Add((ushort)PacketID.S_UnitAction, PacketHandler.S_UnitActionHandler);
 		_makeFunc.Add((ushort)PacketID.S_GameOver, MakePacket<S_GameOver>);
 		_handler.Add((ushort)PacketID.S_GameOver, PacketHandler.S_GameOverHandler);
 

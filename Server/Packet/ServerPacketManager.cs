@@ -2,7 +2,7 @@ using ServerCore;
 using System;
 using System.Collections.Generic;
 
-class PacketManager
+public class PacketManager
 {
 	#region Singleton
 	static PacketManager _instance = new PacketManager();
@@ -29,8 +29,10 @@ class PacketManager
 		_handler.Add((ushort)PacketID.C_JoinRoom, PacketHandler.C_JoinRoomHandler);
 		_makeFunc.Add((ushort)PacketID.C_Ready, MakePacket<C_Ready>);
 		_handler.Add((ushort)PacketID.C_Ready, PacketHandler.C_ReadyHandler);
-		_makeFunc.Add((ushort)PacketID.C_GameAction, MakePacket<C_GameAction>);
-		_handler.Add((ushort)PacketID.C_GameAction, PacketHandler.C_GameActionHandler);
+		_makeFunc.Add((ushort)PacketID.C_ReqSummon, MakePacket<C_ReqSummon>);
+		_handler.Add((ushort)PacketID.C_ReqSummon, PacketHandler.C_ReqSummonHandler);
+		_makeFunc.Add((ushort)PacketID.C_RequestManaStatus, MakePacket<C_RequestManaStatus>);
+		_handler.Add((ushort)PacketID.C_RequestManaStatus, PacketHandler.C_RequestManaStatusHandler);
 
 	}
 

@@ -17,12 +17,12 @@ namespace Server
         public static Lobby Lobby = new Lobby();
 		public static GameRoom Room = new GameRoom();
 
-        static void FlushRoom()
+       /* static void FlushRoom()
         {
             Room.Push(() => Room.Flush());
             JobTimer.Instance.Push(FlushRoom, 1000);
             
-        }
+        }*/
         static void FlushLobby()
         {
             Lobby.Push(() => Lobby.Flush());
@@ -36,13 +36,13 @@ namespace Server
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
             IPAddress ipAddr = ipHost.AddressList[0];
-            IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("172.28.91.119")/*ipAddr*/, 13221);
+            IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("172.30.1.100")/*ipAddr*/, 13221);
 
             _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
             Console.WriteLine("Listening...");
 
             //Flush();
-            JobTimer.Instance.Push(FlushRoom);
+            //JobTimer.Instance.Push(FlushRoom);
             JobTimer.Instance.Push(FlushLobby);
             //Room.StartSyncTimer();
 

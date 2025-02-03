@@ -33,6 +33,7 @@
 	<packet name="S_JoinRoom">
 		<bool name="success"/>
 		<string name="message"/>
+		<int name="sessionID"/>
 		<int name="roomId"/>
 	</packet>
 
@@ -47,6 +48,7 @@
 		</map>
 	</packet>
 	<packet name="S_StartGame">
+		<int name="sessionId"/>
 		<int name="gameId"/>
 		<string name="mapData"/>
 	</packet>
@@ -60,13 +62,15 @@
 			<float name="y"/>
 		</list>
 	</packet>
-	<packet name="C_ReqSurmmon">
+	<packet name="C_ReqSummon">
+		<int name="reqSessionID"/>
 		<int name="uid"/>
 		<int name="needMana"/>
 		<float name="x"/>
 		<float name="y"/>
 	</packet>
-	<packet name="S_AnsSurmmon">
+	<packet name="S_AnsSummon">
+		<int name="reqSessionID"/>
 		<int name="uid"/>
 		<int name="decreaseMana"/>
 		<float name="x"/>
@@ -75,18 +79,6 @@
 	<packet name="C_RequestManaStatus">
 		<int name="playerId"/>
 	</packet>
-
-	<packet name="C_UnitAction">
-		<int name="unitId"/>
-		<int name="targetX"/>
-		<int name="targetY"/>
-		<string name="actionType"/>
-		<!-- "move" or "attack" -->
-	</packet>
-
-
-
-	<!-- 서버 -> 클라이언트 패킷 -->
 	<packet name="S_GameStateUpdate">
 		<list name="units">
 			<class name="GameUnit">
@@ -108,13 +100,6 @@
 		<int name="currentMana"/>
 	</packet>
 
-	<packet name="S_UnitSpawn">
-		<int name="unitId"/>
-		<int name="x"/>
-		<int name="y"/>
-		<int name="ownerId"/>
-	</packet>
-
 	<packet name="S_UnitAction">
 		<int name="unitId"/>
 		<int name="targetX"/>
@@ -126,6 +111,8 @@
 		<int name="winnerId"/>
 		<string name="resultMessage"/>
 	</packet>
+	
+	
 
 
 </PDL>

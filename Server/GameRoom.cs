@@ -32,20 +32,22 @@ namespace Server
             _jobQueue.Push(action);
         }
         
-        public void Flush()
+/*        public void Flush()
         {
             foreach (ClientSession session in _sessions)
                 session.Send(_pendingList);
 
-            //Console.WriteLine($"Flushed {_pendingList.Count} items");
+            Console.WriteLine($"Flushed {_pendingList.Count} items");
             _pendingList.Clear();
-        }
+        }*/
       
         public void BroadCast(ArraySegment<byte> segment)
         {
-            _pendingList.Add(segment);
+//            _pendingList.Add(segment);
+            foreach (ClientSession session in _sessions)
+                session.Send(segment);
         }
-
+        
         public void Enter(ClientSession session)
         {
             if (_roomState != RoomState.Waiting)
@@ -55,6 +57,10 @@ namespace Server
             }
             _sessions.Add(session);
             session.Room = this;
+            S_JoinRoom joinPacket = new S_JoinRoom();
+            joinPacket.message = "";
+            joinPacket.sessionID = session.SessionID;
+            session.Send(joinPacket.Write());
             Console.WriteLine($"클라이언트 {session.SessionID}가 방 {RoomId}에 입장");
 
             if (_sessions.Count == 2)  // 두 명이 입장하면 게임 시작
@@ -75,7 +81,7 @@ namespace Server
             S_StartGame startPacket = new S_StartGame();
             startPacket.mapData = "";
             _pendingList.Add(startPacket.Write());
-            //BroadCast(startPacket.Write());
+            BroadCast(startPacket.Write());
 
         }
 

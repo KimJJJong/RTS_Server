@@ -15,7 +15,19 @@ namespace DummyClient
 
         public void SendForEach()
         {
-            
+            lock (_lock)
+            {
+                foreach (ServerSession session in _sessions)
+                {
+                    C_ReqSummon sumPacket = new C_ReqSummon ();
+                    sumPacket.x= 1;
+                    sumPacket.y= 1;
+                    sumPacket.uid = 12;
+                    ArraySegment<byte> segment = sumPacket.Write();
+
+                    session.Send(segment);
+                }
+            }
         }
 
         public ServerSession Generate()

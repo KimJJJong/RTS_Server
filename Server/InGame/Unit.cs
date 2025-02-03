@@ -2,6 +2,7 @@
 
 class Unit
 {
+    public int ObjectID {  get; set; }
     public int UnitID { get; private set; }
     public int OwnerID { get; private set; }
     public int Position { get; private set; }
@@ -10,11 +11,12 @@ class Unit
     private int _attackPower = 10;
     private int _attackRange = 1;
 
-    public Unit(int unitID, int ownerID, int startPosition)
+    public Unit(int objectID, int unitID/*, int ownerID, int startPosition*/)
     {
+        ObjectID = objectID;
         UnitID = unitID;
-        OwnerID = ownerID;
-        Position = startPosition;
+/*        OwnerID = ownerID;
+        Position = startPosition;*/
     }
 
     public void Update()
