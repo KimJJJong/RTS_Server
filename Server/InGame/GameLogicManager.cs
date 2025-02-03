@@ -1,9 +1,11 @@
 ﻿using Server;
 using System.Collections.Generic;
 using System;
+using ServerCore;
 
 class GameLogicManager
 {
+    public List<ClientSession> Sessions = new List<ClientSession>();
     private GameRoom _room;
     private Dictionary<int, Mana> _playerMana = new Dictionary<int, Mana>(); // Mana
     private bool[][] _grid;

@@ -236,7 +236,6 @@ public class S_EnterLobby : IPacket
 public class C_CreateRoom : IPacket
 {
 	public string roomName;
-	public int maxPlayers;
 
 	public ushort Protocol { get { return (ushort)PacketID.C_CreateRoom; } }
 
@@ -251,8 +250,6 @@ public class C_CreateRoom : IPacket
 		count += sizeof(ushort);
 		this.roomName = Encoding.Unicode.GetString(s.Slice(count, roomNameLen));
 		count += roomNameLen;
-		this.maxPlayers = BitConverter.ToInt32(s.Slice(count, s.Length - count));
-		count += sizeof(int);
 	}
 
 	public ArraySegment<byte> Write()
@@ -270,8 +267,6 @@ public class C_CreateRoom : IPacket
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), roomNameLen);
 		count += sizeof(ushort);
 		count += roomNameLen;
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.maxPlayers);
-		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;
@@ -282,7 +277,7 @@ public class C_CreateRoom : IPacket
 public class S_CreateRoom : IPacket
 {
 	public bool success;
-	public int roomId;
+	public string roomId;
 
 	public ushort Protocol { get { return (ushort)PacketID.S_CreateRoom; } }
 
@@ -295,8 +290,10 @@ public class S_CreateRoom : IPacket
 		count += sizeof(ushort);
 		this.success = BitConverter.ToBoolean(s.Slice(count, s.Length - count));
 		count += sizeof(bool);
-		this.roomId = BitConverter.ToInt32(s.Slice(count, s.Length - count));
-		count += sizeof(int);
+		ushort roomIdLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+		count += sizeof(ushort);
+		this.roomId = Encoding.Unicode.GetString(s.Slice(count, roomIdLen));
+		count += roomIdLen;
 	}
 
 	public ArraySegment<byte> Write()
@@ -312,8 +309,10 @@ public class S_CreateRoom : IPacket
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.success);
 		count += sizeof(bool);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.roomId);
-		count += sizeof(int);
+		ushort roomIdLen = (ushort)Encoding.Unicode.GetBytes(this.roomId, 0, this.roomId.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), roomIdLen);
+		count += sizeof(ushort);
+		count += roomIdLen;
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;
@@ -323,7 +322,7 @@ public class S_CreateRoom : IPacket
 
 public class C_JoinRoom : IPacket
 {
-	public int roomId;
+	public string roomId;
 
 	public ushort Protocol { get { return (ushort)PacketID.C_JoinRoom; } }
 
@@ -334,8 +333,10 @@ public class C_JoinRoom : IPacket
 		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 		count += sizeof(ushort);
 		count += sizeof(ushort);
-		this.roomId = BitConverter.ToInt32(s.Slice(count, s.Length - count));
-		count += sizeof(int);
+		ushort roomIdLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+		count += sizeof(ushort);
+		this.roomId = Encoding.Unicode.GetString(s.Slice(count, roomIdLen));
+		count += roomIdLen;
 	}
 
 	public ArraySegment<byte> Write()
@@ -349,8 +350,10 @@ public class C_JoinRoom : IPacket
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.C_JoinRoom);
 		count += sizeof(ushort);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.roomId);
-		count += sizeof(int);
+		ushort roomIdLen = (ushort)Encoding.Unicode.GetBytes(this.roomId, 0, this.roomId.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), roomIdLen);
+		count += sizeof(ushort);
+		count += roomIdLen;
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;
@@ -360,10 +363,8 @@ public class C_JoinRoom : IPacket
 
 public class S_JoinRoom : IPacket
 {
-	public bool success;
-	public string message;
 	public int sessionID;
-	public int roomId;
+	public string roomId;
 
 	public ushort Protocol { get { return (ushort)PacketID.S_JoinRoom; } }
 
@@ -374,16 +375,12 @@ public class S_JoinRoom : IPacket
 		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 		count += sizeof(ushort);
 		count += sizeof(ushort);
-		this.success = BitConverter.ToBoolean(s.Slice(count, s.Length - count));
-		count += sizeof(bool);
-		ushort messageLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
-		count += sizeof(ushort);
-		this.message = Encoding.Unicode.GetString(s.Slice(count, messageLen));
-		count += messageLen;
 		this.sessionID = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
-		this.roomId = BitConverter.ToInt32(s.Slice(count, s.Length - count));
-		count += sizeof(int);
+		ushort roomIdLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+		count += sizeof(ushort);
+		this.roomId = Encoding.Unicode.GetString(s.Slice(count, roomIdLen));
+		count += roomIdLen;
 	}
 
 	public ArraySegment<byte> Write()
@@ -397,16 +394,12 @@ public class S_JoinRoom : IPacket
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_JoinRoom);
 		count += sizeof(ushort);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.success);
-		count += sizeof(bool);
-		ushort messageLen = (ushort)Encoding.Unicode.GetBytes(this.message, 0, this.message.Length, segment.Array, segment.Offset + count + sizeof(ushort));
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), messageLen);
-		count += sizeof(ushort);
-		count += messageLen;
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.sessionID);
 		count += sizeof(int);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.roomId);
-		count += sizeof(int);
+		ushort roomIdLen = (ushort)Encoding.Unicode.GetBytes(this.roomId, 0, this.roomId.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), roomIdLen);
+		count += sizeof(ushort);
+		count += roomIdLen;
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;

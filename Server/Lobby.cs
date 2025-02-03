@@ -39,7 +39,7 @@ namespace Server
         }
 
         #region Room
-        public string GenerateRoom()
+        public string CreateRoom()
         {
             GameRoom room = new GameRoom();
             _rooms.Add(room.RoomId, room);

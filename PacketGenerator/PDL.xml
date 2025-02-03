@@ -21,20 +21,17 @@
 	</packet>
 	<packet name="C_CreateRoom">
 		<string name="roomName"/>
-		<int name="maxPlayers"/>
 	</packet>
 	<packet name="S_CreateRoom">
 		<bool name="success"/>
-		<int name="roomId"/>
+		<string name="roomId"/>
 	</packet>
 	<packet name="C_JoinRoom">
-		<int name="roomId"/>
+		<string name="roomId"/>
 	</packet>
 	<packet name="S_JoinRoom">
-		<bool name="success"/>
-		<string name="message"/>
 		<int name="sessionID"/>
-		<int name="roomId"/>
+		<string name="roomId"/>
 	</packet>
 
 	<!-- 준비 상태 -->
