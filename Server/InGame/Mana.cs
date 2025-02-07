@@ -8,7 +8,7 @@ class Mana
 
     public Mana()
     {
-        _currentMana = 5; // 초기 마나 5
+        _currentMana = 0; // 초기 마나 
     }
 
     public int GetMana() => _currentMana;

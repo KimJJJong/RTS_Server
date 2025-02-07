@@ -38,8 +38,9 @@ class PacketHandler
         
         S_CreateRoom s_CreateRoom = new S_CreateRoom();
         s_CreateRoom.success = true;
-        s_CreateRoom.roomId = clientSession.Lobby.CreateRoom();
-
+        
+        Program.Lobby.Push(() => s_CreateRoom.roomId = clientSession.Lobby.CreateRoom());
+        // s_CreateRoom.roomId = clientSession.Lobby.CreateRoom(); // MainThread에서 처리 하지 않아도 괜찮은가?
         Program.Lobby.Push(() => clientSession.Lobby.FindRoom(s_CreateRoom.roomId).Enter(clientSession));
         Program.Lobby.Push(() => clientSession.Send(s_CreateRoom.Write()));
 
@@ -48,6 +49,10 @@ class PacketHandler
     }
     public static void C_JoinRoomHandler(PacketSession session, IPacket packet)
     {
+        C_JoinRoom c_JoinRoom = packet as C_JoinRoom;
+        ClientSession clientSession = session as ClientSession;
+
+        clientSession.Lobby.Push(() => clientSession.Lobby.FindRoom(c_JoinRoom.roomId)?.Enter(clientSession));
 
     }
     #endregion
@@ -76,19 +81,24 @@ class PacketHandler
     {
         C_ReqSummon sumPacket = packet as C_ReqSummon;
         ClientSession cliSsession = session as ClientSession;
-        
-        Console.WriteLine($"uid : {sumPacket.uid}\nx : {sumPacket.x} y : {sumPacket.y}");
-        
-        // TODO : Mana 확인 필요
-        S_AnsSummon ansPacket = new S_AnsSummon();
-        ansPacket.x = sumPacket.x;
-        ansPacket.y = sumPacket.y;
-        ansPacket.uid = sumPacket.uid;
-        ansPacket.reqSessionID = cliSsession.SessionID;
-
         GameRoom room = cliSsession.Room;
+
+        // Mana Check
+        if( room.GameLogic.Manas[sumPacket.reqSessionID].UseMana(sumPacket.needMana))
+        {
+            S_AnsSummon ansPacket = new S_AnsSummon();
+            ansPacket.x = sumPacket.x;
+            ansPacket.y = sumPacket.y;
+            ansPacket.uid = sumPacket.uid;  
+            ansPacket.reqSessionID = cliSsession.SessionID;
+            ansPacket.reducedMana = room.GameLogic.Manas[sumPacket.reqSessionID].GetMana();
+
+            Console.WriteLine($"uid : {sumPacket.uid}\nx : {sumPacket.x} y : {sumPacket.y}");
+            room.BroadCast(ansPacket.Write());
+        }
+
+
         //room.Push(() => room.BroadCast(ansPacket.Write()));
-        room.BroadCast(ansPacket.Write());
     }
     public static void C_RequestManaStatusHandler(PacketSession session, IPacket packet)
     {

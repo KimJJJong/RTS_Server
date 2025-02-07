@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EPPlus" Version="7.5.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ServerCore\ServerCore.csproj" />
   </ItemGroup>
 

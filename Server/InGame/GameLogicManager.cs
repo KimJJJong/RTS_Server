@@ -5,9 +5,9 @@ using ServerCore;
 
 class GameLogicManager
 {
-    public List<ClientSession> Sessions = new List<ClientSession>();
-    private GameRoom _room;
+    private Dictionary<int,ClientSession> _sessions = new Dictionary<int, ClientSession>();
     private Dictionary<int, Mana> _playerMana = new Dictionary<int, Mana>(); // Mana
+    private GameRoom _room;
     private bool[][] _grid;
     private List<Unit> _unitPool;
     private List<Card> _cardCombination; // int = unitID;
@@ -15,6 +15,9 @@ class GameLogicManager
     private int _gameDuration = 180; // 게임 제한 시간 (초)
     private int _remainingTime;
     private bool _gameOver = false;
+
+    public IReadOnlyDictionary<int,ClientSession> Sessions => _sessions;
+    public IReadOnlyDictionary<int, Mana> Manas => _playerMana;
 
     public GameLogicManager(GameRoom room)
     {
@@ -56,14 +59,15 @@ class GameLogicManager
         
         Console.WriteLine($"[게임 로직] 플레이어 {session.SessionID} 추가");
     }
-
+    /// <summary>
+    /// 1second loop
+    /// </summary>
     public void Update()
     {
         if (_gameOver) 
             return;
 
-        _remainingTime--;  // 1초 감소
-        Console.WriteLine($"게임 남은 시간: {_remainingTime}초");
+        Console.WriteLine($"게임 남은 시간: {_remainingTime--}초");
 
         // 마나 자동 회복
         foreach (var mana in _playerMana.Values)
@@ -76,6 +80,7 @@ class GameLogicManager
         {
             EndGame();
         }
+        JobTimer.Instance.Push(Update, 1000);
     }
 
     private void EndGame()

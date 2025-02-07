@@ -670,7 +670,7 @@ public class S_AnsSummon : IPacket
 {
 	public int reqSessionID;
 	public int uid;
-	public int decreaseMana;
+	public int reducedMana;
 	public float x;
 	public float y;
 
@@ -687,7 +687,7 @@ public class S_AnsSummon : IPacket
 		count += sizeof(int);
 		this.uid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
-		this.decreaseMana = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		this.reducedMana = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
 		this.x = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
@@ -710,7 +710,7 @@ public class S_AnsSummon : IPacket
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.uid);
 		count += sizeof(int);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.decreaseMana);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.reducedMana);
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.x);
 		count += sizeof(float);

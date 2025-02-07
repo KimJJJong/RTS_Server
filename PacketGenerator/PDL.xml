@@ -34,6 +34,7 @@
 		<string name="roomId"/>
 	</packet>
 
+	
 	<!-- 준비 상태 -->
 	<packet name="C_Ready">
 		<bool name="isReady"/>
@@ -69,7 +70,7 @@
 	<packet name="S_AnsSummon">
 		<int name="reqSessionID"/>
 		<int name="uid"/>
-		<int name="decreaseMana"/>
+		<int name="reducedMana"/>
 		<float name="x"/>
 		<float name="y"/>
 	</packet>

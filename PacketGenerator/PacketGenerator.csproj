@@ -14,4 +14,8 @@
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="EPPlus" Version="7.5.3" />
+  </ItemGroup>
+
 </Project>

@@ -19,13 +19,15 @@ namespace DummyClient
             {
                 foreach (ServerSession session in _sessions)
                 {
-                    C_ReqSummon sumPacket = new C_ReqSummon ();
+                    /*C_ReqSummon sumPacket = new C_ReqSummon ();
                     sumPacket.x= 1;
                     sumPacket.y= 1;
                     sumPacket.uid = 12;
-                    ArraySegment<byte> segment = sumPacket.Write();
+                    ArraySegment<byte> segment = sumPacket.Write();*/
+                    C_CreateRoom c_CreateRoom = new C_CreateRoom ();
+                    c_CreateRoom.roomName = "TEST";
 
-                    session.Send(segment);
+                    session.Send(c_CreateRoom.Write());
                 }
             }
         }
