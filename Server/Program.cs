@@ -25,6 +25,7 @@ namespace Server
         }*/
         static void FlushLobby()
         {
+            //Console.WriteLine(DateTime.UtcNow.Ticks / 10000000);
             Lobby.Push(() => Lobby.Flush());
             JobTimer.Instance.Push(FlushLobby, 250);
         }

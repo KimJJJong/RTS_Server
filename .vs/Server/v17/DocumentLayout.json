@@ -3,80 +3,120 @@
   "WorkspaceRootPath": "D:\\Git\\Server\\RTS_Server\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|d:\\git\\server\\rts_server\\packetgenerator\\pdl.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|solutionrelative:packetgenerator\\pdl.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\packet\\packethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\packet\\packethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\ingame\\mana.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\ingame\\mana.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\ingame\\gamelogicmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\ingame\\gamelogicmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\gameroom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\gameroom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|d:\\git\\server\\rts_server\\dummyclient\\session\\serversession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|solutionrelative:dummyclient\\session\\serversession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\jobtimer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\jobtimer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|d:\\git\\server\\rts_server\\servercore\\jobqueue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|solutionrelative:servercore\\jobqueue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|d:\\git\\server\\rts_server\\dummyclient\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|solutionrelative:dummyclient\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|d:\\git\\server\\rts_server\\dummyclient\\session\\sessionmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|solutionrelative:dummyclient\\session\\sessionmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|d:\\git\\server\\rts_server\\packetgenerator\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|solutionrelative:packetgenerator\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|d:\\git\\server\\rts_server\\servercore\\listener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|solutionrelative:servercore\\listener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|d:\\git\\server\\rts_server\\dummyclient\\packet\\packethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|solutionrelative:dummyclient\\packet\\packethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|d:\\git\\server\\rts_server\\packetgenerator\\packetformat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|solutionrelative:packetgenerator\\packetformat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\packet\\packethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\packet\\packethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\lobby.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\lobby.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|d:\\git\\server\\rts_server\\packetgenerator\\packetexcelgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|solutionrelative:packetgenerator\\packetexcelgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\session\\clientsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\session\\clientsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\session\\sessionmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\session\\sessionmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\gameroom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\gameroom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\jobtimer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\jobtimer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|d:\\git\\server\\rts_server\\servercore\\priorityqueue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|solutionrelative:servercore\\priorityqueue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|d:\\git\\server\\rts_server\\servercore\\jobqueue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|solutionrelative:servercore\\jobqueue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\packet\\serverpacketmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\packet\\serverpacketmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\packet\\genpackets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\packet\\genpackets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|d:\\git\\server\\rts_server\\dummyclient\\packet\\clientpacketmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|solutionrelative:dummyclient\\packet\\clientpacketmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|d:\\git\\server\\rts_server\\dummyclient\\packet\\genpackets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|solutionrelative:dummyclient\\packet\\genpackets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|d:\\git\\server\\rts_server\\packetgenerator\\packetexcelgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|solutionrelative:packetgenerator\\packetexcelgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|d:\\git\\server\\rts_server\\packetgenerator\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|solutionrelative:packetgenerator\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|d:\\git\\server\\rts_server\\packetgenerator\\packetformat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|solutionrelative:packetgenerator\\packetformat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|d:\\git\\server\\rts_server\\packetgenerator\\pdl.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|solutionrelative:packetgenerator\\pdl.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|d:\\git\\server\\rts_server\\servercore\\connector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|solutionrelative:servercore\\connector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|d:\\git\\server\\rts_server\\servercore\\listener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|solutionrelative:servercore\\listener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|d:\\git\\server\\rts_server\\servercore\\session.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|solutionrelative:servercore\\session.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|d:\\git\\server\\rts_server\\servercore\\recvbuffer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|solutionrelative:servercore\\recvbuffer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|d:\\git\\server\\rts_server\\servercore\\sendbuffer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|solutionrelative:servercore\\sendbuffer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|d:\\git\\server\\rts_server\\dummyclient\\session\\serversession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|solutionrelative:dummyclient\\session\\serversession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\ingame\\gamelogicmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\ingame\\gamelogicmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\ingame\\mana.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\ingame\\mana.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|d:\\git\\server\\rts_server\\packetgenerator\\packetgenerator.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|solutionrelative:packetgenerator\\packetgenerator.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|d:\\git\\server\\rts_server\\dummyclient\\session\\sessionmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|solutionrelative:dummyclient\\session\\sessionmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|d:\\git\\server\\rts_server\\dummyclient\\packet\\packethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DD61612-86DF-4284-887A-FB0BC158E9E0}|DummyClient\\DummyClient.csproj|solutionrelative:dummyclient\\packet\\packethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\server.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
@@ -91,23 +131,7 @@
       "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\ingame\\card.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|d:\\git\\server\\rts_server\\server\\packet\\serverpacketmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\packet\\serverpacketmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\8.0.303\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.EolTargetFrameworks.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|d:\\git\\server\\rts_server\\servercore\\connector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|solutionrelative:servercore\\connector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|d:\\git\\server\\rts_server\\servercore\\session.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|solutionrelative:servercore\\session.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|d:\\git\\server\\rts_server\\servercore\\recvbuffer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{225DE72F-27CC-45B4-B0F0-F8F08A7328A2}|ServerCore\\ServerCore.csproj|solutionrelative:servercore\\recvbuffer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Git\\Server\\RTS_Server\\Common\\Packet\\GenPackets.bat||{3B902123-F8A7-4915-9F01-361F908088D0}",
@@ -121,7 +145,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 210,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -137,104 +161,357 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "GameLogicManager.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\InGame\\GameLogicManager.cs",
-              "RelativeDocumentMoniker": "Server\\InGame\\GameLogicManager.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\InGame\\GameLogicManager.cs",
-              "RelativeToolTip": "Server\\InGame\\GameLogicManager.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAgAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-31T11:31:33.992Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Mana.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\InGame\\Mana.cs",
-              "RelativeDocumentMoniker": "Server\\InGame\\Mana.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\InGame\\Mana.cs",
-              "RelativeToolTip": "Server\\InGame\\Mana.cs",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAywAIAAAAGAAAA",
+              "Title": "PacketHandler.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\Packet\\PacketHandler.cs",
+              "RelativeDocumentMoniker": "Server\\Packet\\PacketHandler.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\Packet\\PacketHandler.cs",
+              "RelativeToolTip": "Server\\Packet\\PacketHandler.cs",
+              "ViewState": "AQIAAE0AAAAAAAAAAAAcwF4AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-31T12:25:11.542Z"
+              "WhenOpened": "2025-02-05T11:11:08.739Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "GameRoom.cs",
               "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\GameRoom.cs",
               "RelativeDocumentMoniker": "Server\\GameRoom.cs",
               "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\GameRoom.cs",
               "RelativeToolTip": "Server\\GameRoom.cs",
-              "ViewState": "AQIAABgAAAAAAAAAAAAYwDYAAAAjAAAA",
+              "ViewState": "AQIAAEoAAAAAAAAAAAAkwCEAAAAXAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-30T07:06:51.278Z"
+              "WhenOpened": "2025-01-30T07:06:51.278Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ServerSession.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\DummyClient\\Session\\ServerSession.cs",
-              "RelativeDocumentMoniker": "DummyClient\\Session\\ServerSession.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\DummyClient\\Session\\ServerSession.cs",
-              "RelativeToolTip": "DummyClient\\Session\\ServerSession.cs",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAywBkAAAAAAAAA",
+              "DocumentIndex": 7,
+              "Title": "JobTimer.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\JobTimer.cs",
+              "RelativeDocumentMoniker": "Server\\JobTimer.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\JobTimer.cs",
+              "RelativeToolTip": "Server\\JobTimer.cs",
+              "ViewState": "AQIAAA4AAAAAAAAAAADwvwkAAAAXAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-01T10:31:43.054Z"
+              "WhenOpened": "2025-02-06T11:35:00.511Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Lobby.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\Lobby.cs",
+              "RelativeDocumentMoniker": "Server\\Lobby.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\Lobby.cs",
+              "RelativeToolTip": "Server\\Lobby.cs",
+              "ViewState": "AQIAADkAAAAAAAAAAAAiwCUAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-31T14:36:59.993Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\Program.cs",
+              "RelativeDocumentMoniker": "Server\\Program.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\Program.cs",
+              "RelativeToolTip": "Server\\Program.cs",
+              "ViewState": "AQIAAA0AAAAAAAAAAAAcwBsAAAAOAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-14T11:45:06.674Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ClientSession.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\Session\\ClientSession.cs",
+              "RelativeDocumentMoniker": "Server\\Session\\ClientSession.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\Session\\ClientSession.cs",
+              "RelativeToolTip": "Server\\Session\\ClientSession.cs",
+              "ViewState": "AQIAACMAAAAAAAAAAAAuwDIAAAAsAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-31T06:44:45.889Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\DummyClient\\Program.cs",
+              "RelativeDocumentMoniker": "DummyClient\\Program.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\DummyClient\\Program.cs",
+              "RelativeToolTip": "DummyClient\\Program.cs",
+              "ViewState": "AQIAAAsAAAAAAAAAAAA+wBIAAAAsAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-01T11:04:11.844Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "SessionManager.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\Session\\SessionManager.cs",
+              "RelativeDocumentMoniker": "Server\\Session\\SessionManager.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\Session\\SessionManager.cs",
+              "RelativeToolTip": "Server\\Session\\SessionManager.cs",
+              "ViewState": "AQIAAAoAAAAAAAAAAAAIwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-09T12:27:33.955Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "PriorityQueue.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\ServerCore\\PriorityQueue.cs",
+              "RelativeDocumentMoniker": "ServerCore\\PriorityQueue.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\ServerCore\\PriorityQueue.cs",
+              "RelativeToolTip": "ServerCore\\PriorityQueue.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAADwvwAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-09T12:10:18.735Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "JobQueue.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\ServerCore\\JobQueue.cs",
+              "RelativeDocumentMoniker": "ServerCore\\JobQueue.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\ServerCore\\JobQueue.cs",
+              "RelativeToolTip": "ServerCore\\JobQueue.cs",
+              "ViewState": "AQIAACAAAAAAAAAAAAAQwAgAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-31T14:37:43.505Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ServerPacketManager.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\Packet\\ServerPacketManager.cs",
+              "RelativeDocumentMoniker": "Server\\Packet\\ServerPacketManager.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\Packet\\ServerPacketManager.cs",
+              "RelativeToolTip": "Server\\Packet\\ServerPacketManager.cs",
+              "ViewState": "AQIAABMAAAAAAAAAAAAAwCIAAABdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-02T08:18:08.018Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "GenPackets.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\Packet\\GenPackets.cs",
+              "RelativeDocumentMoniker": "Server\\Packet\\GenPackets.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\Packet\\GenPackets.cs",
+              "RelativeToolTip": "Server\\Packet\\GenPackets.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAIwBAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-02T11:33:47.691Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ClientPacketManager.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\DummyClient\\Packet\\ClientPacketManager.cs",
+              "RelativeDocumentMoniker": "DummyClient\\Packet\\ClientPacketManager.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\DummyClient\\Packet\\ClientPacketManager.cs",
+              "RelativeToolTip": "DummyClient\\Packet\\ClientPacketManager.cs",
+              "ViewState": "AQIAADEAAAAAAAAAAAAYwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-09T11:59:57.536Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "GenPackets.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\DummyClient\\Packet\\GenPackets.cs",
+              "RelativeDocumentMoniker": "DummyClient\\Packet\\GenPackets.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\DummyClient\\Packet\\GenPackets.cs",
+              "RelativeToolTip": "DummyClient\\Packet\\GenPackets.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAADwvwAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-09T12:17:27.361Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "PacketExcelGenerator.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\PacketGenerator\\PacketExcelGenerator.cs",
+              "RelativeDocumentMoniker": "PacketGenerator\\PacketExcelGenerator.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\PacketGenerator\\PacketExcelGenerator.cs",
+              "RelativeToolTip": "PacketGenerator\\PacketExcelGenerator.cs",
+              "ViewState": "AQIAABgAAAAAAAAAAAAIwDQAAAA2AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-05T10:38:23.535Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Connector.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\ServerCore\\Connector.cs",
+              "RelativeDocumentMoniker": "ServerCore\\Connector.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\ServerCore\\Connector.cs",
+              "RelativeToolTip": "ServerCore\\Connector.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-14T10:31:52.695Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "PacketFormat.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\PacketGenerator\\PacketFormat.cs",
+              "RelativeDocumentMoniker": "PacketGenerator\\PacketFormat.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\PacketGenerator\\PacketFormat.cs",
+              "RelativeToolTip": "PacketGenerator\\PacketFormat.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAAAkAAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-26T11:49:25.668Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
               "Title": "PDL.xml",
               "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\PacketGenerator\\PDL.xml",
               "RelativeDocumentMoniker": "PacketGenerator\\PDL.xml",
               "ToolTip": "D:\\Git\\Server\\RTS_Server\\PacketGenerator\\PDL.xml",
               "RelativeToolTip": "PacketGenerator\\PDL.xml",
-              "ViewState": "AQIAAEUAAAAAAAAAAAAAAFIAAAAYAAAA",
+              "ViewState": "AQIAADkAAAAAAAAAAAAAACoAAAAGAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003576|",
               "WhenOpened": "2025-02-03T05:11:22.875Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "JobTimer.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\JobTimer.cs",
-              "RelativeDocumentMoniker": "Server\\JobTimer.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\JobTimer.cs",
-              "RelativeToolTip": "Server\\JobTimer.cs",
-              "ViewState": "AQIAACUAAAAAAAAAAAAUwAkAAAAXAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-06T11:35:00.511Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PacketHandler.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\Packet\\PacketHandler.cs",
-              "RelativeDocumentMoniker": "Server\\Packet\\PacketHandler.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\Packet\\PacketHandler.cs",
-              "RelativeToolTip": "Server\\Packet\\PacketHandler.cs",
-              "ViewState": "AQIAAFIAAAAAAAAAAADwv1gAAAAXAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-05T11:11:08.739Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 15,
               "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\DummyClient\\Program.cs",
-              "RelativeDocumentMoniker": "DummyClient\\Program.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\DummyClient\\Program.cs",
-              "RelativeToolTip": "DummyClient\\Program.cs",
-              "ViewState": "AQIAAA4AAAAAAAAAAAAAwB8AAAAAAAAA",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\PacketGenerator\\Program.cs",
+              "RelativeDocumentMoniker": "PacketGenerator\\Program.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\PacketGenerator\\Program.cs",
+              "RelativeToolTip": "PacketGenerator\\Program.cs",
+              "ViewState": "AQIAALIAAAAAAAAAAAAmwCkAAABHAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-01T11:04:11.844Z"
+              "WhenOpened": "2025-02-02T11:13:34.808Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 19,
+              "Title": "Listener.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\ServerCore\\Listener.cs",
+              "RelativeDocumentMoniker": "ServerCore\\Listener.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\ServerCore\\Listener.cs",
+              "RelativeToolTip": "ServerCore\\Listener.cs",
+              "ViewState": "AQIAACgAAAAAAAAAAAAAwBoAAAADAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-31T14:37:02.333Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "RecvBuffer.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\ServerCore\\RecvBuffer.cs",
+              "RelativeDocumentMoniker": "ServerCore\\RecvBuffer.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\ServerCore\\RecvBuffer.cs",
+              "RelativeToolTip": "ServerCore\\RecvBuffer.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAAwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-31T14:17:52.668Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "SendBuffer.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\ServerCore\\SendBuffer.cs",
+              "RelativeDocumentMoniker": "ServerCore\\SendBuffer.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\ServerCore\\SendBuffer.cs",
+              "RelativeToolTip": "ServerCore\\SendBuffer.cs",
+              "ViewState": "AQIAADQAAAAAAAAAAAAiwAwAAAAzAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-09T12:01:03.653Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "GameLogicManager.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\InGame\\GameLogicManager.cs",
+              "RelativeDocumentMoniker": "Server\\InGame\\GameLogicManager.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\InGame\\GameLogicManager.cs",
+              "RelativeToolTip": "Server\\InGame\\GameLogicManager.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAFYAAAAnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-31T11:31:33.992Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Session.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\ServerCore\\Session.cs",
+              "RelativeDocumentMoniker": "ServerCore\\Session.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\ServerCore\\Session.cs",
+              "RelativeToolTip": "ServerCore\\Session.cs",
+              "ViewState": "AQIAAO8AAAAAAAAAAADwv5QAAAAUAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-31T14:18:06.908Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "ServerSession.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\DummyClient\\Session\\ServerSession.cs",
+              "RelativeDocumentMoniker": "DummyClient\\Session\\ServerSession.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\DummyClient\\Session\\ServerSession.cs",
+              "RelativeToolTip": "DummyClient\\Session\\ServerSession.cs",
+              "ViewState": "AQIAABAAAAAAAAAAAAAAwBkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-01T10:31:43.054Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "Mana.cs",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\InGame\\Mana.cs",
+              "RelativeDocumentMoniker": "Server\\InGame\\Mana.cs",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\InGame\\Mana.cs",
+              "RelativeToolTip": "Server\\InGame\\Mana.cs",
+              "ViewState": "AQIAABAAAAAAAAAAAAAcwBkAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-31T12:25:11.542Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "PacketGenerator",
+              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\PacketGenerator\\PacketGenerator.csproj",
+              "RelativeDocumentMoniker": "PacketGenerator\\PacketGenerator.csproj",
+              "ToolTip": "D:\\Git\\Server\\RTS_Server\\PacketGenerator\\PacketGenerator.csproj",
+              "RelativeToolTip": "PacketGenerator\\PacketGenerator.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-02-09T07:16:36.076Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
               "Title": "SessionManager.cs",
               "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\DummyClient\\Session\\SessionManager.cs",
               "RelativeDocumentMoniker": "DummyClient\\Session\\SessionManager.cs",
@@ -246,55 +523,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "JobQueue.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\ServerCore\\JobQueue.cs",
-              "RelativeDocumentMoniker": "ServerCore\\JobQueue.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\ServerCore\\JobQueue.cs",
-              "RelativeToolTip": "ServerCore\\JobQueue.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAANAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-31T14:37:43.505Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\Program.cs",
-              "RelativeDocumentMoniker": "Server\\Program.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\Program.cs",
-              "RelativeToolTip": "Server\\Program.cs",
-              "ViewState": "AQIAABkAAAAAAAAAAAAxwCYAAABSAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-14T11:45:06.674Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\PacketGenerator\\Program.cs",
-              "RelativeDocumentMoniker": "PacketGenerator\\Program.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\PacketGenerator\\Program.cs",
-              "RelativeToolTip": "PacketGenerator\\Program.cs",
-              "ViewState": "AQIAAD8AAAAAAAAAAAAIwC8AAAAfAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-02T11:13:34.808Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "Listener.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\ServerCore\\Listener.cs",
-              "RelativeDocumentMoniker": "ServerCore\\Listener.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\ServerCore\\Listener.cs",
-              "RelativeToolTip": "ServerCore\\Listener.cs",
-              "ViewState": "AQIAABUAAAAAAAAAAAArwBoAAAADAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-31T14:37:02.333Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 28,
               "Title": "PacketHandler.cs",
               "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\DummyClient\\Packet\\PacketHandler.cs",
               "RelativeDocumentMoniker": "DummyClient\\Packet\\PacketHandler.cs",
@@ -306,67 +535,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "PacketFormat.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\PacketGenerator\\PacketFormat.cs",
-              "RelativeDocumentMoniker": "PacketGenerator\\PacketFormat.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\PacketGenerator\\PacketFormat.cs",
-              "RelativeToolTip": "PacketGenerator\\PacketFormat.cs",
-              "ViewState": "AQIAABYAAAAAAAAAAAAkwCAAAAADAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-26T11:49:25.668Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "Lobby.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\Lobby.cs",
-              "RelativeDocumentMoniker": "Server\\Lobby.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\Lobby.cs",
-              "RelativeToolTip": "Server\\Lobby.cs",
-              "ViewState": "AQIAACMAAAAAAAAAAAAAwDAAAAAYAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-31T14:36:59.993Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "PacketExcelGenerator.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\PacketGenerator\\PacketExcelGenerator.cs",
-              "RelativeDocumentMoniker": "PacketGenerator\\PacketExcelGenerator.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\PacketGenerator\\PacketExcelGenerator.cs",
-              "RelativeToolTip": "PacketGenerator\\PacketExcelGenerator.cs",
-              "ViewState": "AQIAAC0AAAAAAAAAAAAAADQAAAA2AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-05T10:38:23.535Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "ClientSession.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\Session\\ClientSession.cs",
-              "RelativeDocumentMoniker": "Server\\Session\\ClientSession.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\Session\\ClientSession.cs",
-              "RelativeToolTip": "Server\\Session\\ClientSession.cs",
-              "ViewState": "AQIAACwAAAAAAAAAAAAuwD8AAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-31T06:44:45.889Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "GenPackets.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\Packet\\GenPackets.cs",
-              "RelativeDocumentMoniker": "Server\\Packet\\GenPackets.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\Packet\\GenPackets.cs",
-              "RelativeToolTip": "Server\\Packet\\GenPackets.cs",
-              "ViewState": "AQIAAGUBAAAAAAAAAAAjwIwBAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-02T11:33:47.691Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 29,
               "Title": "Server.csproj",
               "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\Server.csproj",
               "RelativeDocumentMoniker": "Server\\Server.csproj",
@@ -379,7 +548,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 30,
               "Title": "Unit.cs",
               "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\InGame\\Unit.cs",
               "RelativeDocumentMoniker": "Server\\InGame\\Unit.cs",
@@ -391,7 +560,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 31,
               "Title": "Card.cs",
               "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\InGame\\Card.cs",
               "RelativeDocumentMoniker": "Server\\InGame\\Card.cs",
@@ -403,19 +572,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "ServerPacketManager.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Server\\Packet\\ServerPacketManager.cs",
-              "RelativeDocumentMoniker": "Server\\Packet\\ServerPacketManager.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\Server\\Packet\\ServerPacketManager.cs",
-              "RelativeToolTip": "Server\\Packet\\ServerPacketManager.cs",
-              "ViewState": "AQIAABAAAAAAAAAAAAAAwCIAAABdAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-02T08:18:08.018Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 32,
               "Title": "Microsoft.NET.EolTargetFrameworks.targets",
               "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.EolTargetFrameworks.targets",
               "ToolTip": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.EolTargetFrameworks.targets",
@@ -425,43 +582,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
-              "Title": "Connector.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\ServerCore\\Connector.cs",
-              "RelativeDocumentMoniker": "ServerCore\\Connector.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\ServerCore\\Connector.cs",
-              "RelativeToolTip": "ServerCore\\Connector.cs",
-              "ViewState": "AQIAABMAAAAAAAAAAAAAwBoAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-14T10:31:52.695Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 25,
-              "Title": "Session.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\ServerCore\\Session.cs",
-              "RelativeDocumentMoniker": "ServerCore\\Session.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\ServerCore\\Session.cs",
-              "RelativeToolTip": "ServerCore\\Session.cs",
-              "ViewState": "AQIAAGEAAAAAAAAAAAAowAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-31T14:18:06.908Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 26,
-              "Title": "RecvBuffer.cs",
-              "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\ServerCore\\RecvBuffer.cs",
-              "RelativeDocumentMoniker": "ServerCore\\RecvBuffer.cs",
-              "ToolTip": "D:\\Git\\Server\\RTS_Server\\ServerCore\\RecvBuffer.cs",
-              "RelativeToolTip": "ServerCore\\RecvBuffer.cs",
-              "ViewState": "AQIAAC8AAAAAAAAAAAAgwAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-31T14:17:52.668Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 33,
               "Title": "GenPackets.bat",
               "DocumentMoniker": "D:\\Git\\Server\\RTS_Server\\Common\\Packet\\GenPackets.bat",
               "RelativeDocumentMoniker": "Common\\Packet\\GenPackets.bat",

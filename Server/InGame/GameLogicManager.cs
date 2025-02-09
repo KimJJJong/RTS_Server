@@ -11,6 +11,7 @@ class GameLogicManager
     private bool[][] _grid;
     private List<Unit> _unitPool;
     private List<Card> _cardCombination; // int = unitID;
+    private double _gameCurrentTime;
 
     private int _gameDuration = 180; // 게임 제한 시간 (초)
     private int _remainingTime;
@@ -28,6 +29,10 @@ class GameLogicManager
     {
         // SetCards가 어딘가 호출 되고
         SetPool(10);    // HardCoding ( ! )
+    }
+    public void SetTimer()
+    {
+        _gameCurrentTime = DateTime.UtcNow.Ticks / 10000000;
     }
     public void SetCards(List<Card> p1, List<Card> p2)
     {
@@ -67,19 +72,25 @@ class GameLogicManager
         if (_gameOver) 
             return;
 
-        Console.WriteLine($"게임 남은 시간: {_remainingTime--}초");
+        S_GameStateUpdate sysnc = new S_GameStateUpdate();
 
         // 마나 자동 회복
-        foreach (var mana in _playerMana.Values)
+/*        foreach (var mana in _playerMana.Values)
         {
             mana.RegenMana();
-        }
+            sysnc.manas[0].sessionID = _playerMana
+        }*/
+        // 시간 동기화
+
+        sysnc.serverTime = DateTime.UtcNow.Ticks / 10000000.0;
+
+        _room.BroadCast(sysnc.Write());
 
         // 게임 종료 체크
-        if (_remainingTime <= 0)
-        {
-            EndGame();
-        }
+        /*        if (_remainingTime <= 0)
+                {
+                    EndGame();
+                }*/
         JobTimer.Instance.Push(Update, 1000);
     }
 

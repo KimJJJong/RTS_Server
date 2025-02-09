@@ -79,18 +79,17 @@
 	</packet>
 	<packet name="S_GameStateUpdate">
 		<list name="units">
-			<class name="GameUnit">
-				<int name="unitId"/>
-				<int name="x"/>
-				<int name="y"/>
-				<int name="hp"/>
-				<int name="ownerId"/>
-			</class>
+			<int name="objectID"/>
+			<int name="unitID"/>
+			<float name="x"/>
+			<float name="y"/>
+			<int name="hp"/>
 		</list>
-		<int name="playerMana"/>
-		<int name="opponentMana"/>
-		<int name="playerScore"/>
-		<int name="opponentScore"/>
+		<list name="mana">
+			<int name="playerMana"/>
+			<int name="sessionID"/>
+		</list>
+		<double name="serverTime"/>
 	</packet>
 
 	<packet name="S_ManaUpdate">

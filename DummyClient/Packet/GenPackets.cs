@@ -764,21 +764,68 @@ public class S_GameStateUpdate : IPacket
 {
 	public class Units
 	{
-		
+		public int objectID;
+		public int unitID;
+		public float x;
+		public float y;
+		public int hp;
 	
 		public void Read(ReadOnlySpan<byte> s, ref ushort count)
 		{
-			
+			this.objectID = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+			count += sizeof(int);
+			this.unitID = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+			count += sizeof(int);
+			this.x = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+			count += sizeof(float);
+			this.y = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+			count += sizeof(float);
+			this.hp = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+			count += sizeof(int);
 		}
 	
 		public bool Write(Span<byte> s, ref ushort count)
 		{
 			bool success = true;
-			
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.objectID);
+			count += sizeof(int);
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.unitID);
+			count += sizeof(int);
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.x);
+			count += sizeof(float);
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.y);
+			count += sizeof(float);
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.hp);
+			count += sizeof(int);
 			return success;
 		}	
 	}
 	public List<Units> unitss = new List<Units>();
+	public class Mana
+	{
+		public int playerMana;
+		public int sessionID;
+	
+		public void Read(ReadOnlySpan<byte> s, ref ushort count)
+		{
+			this.playerMana = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+			count += sizeof(int);
+			this.sessionID = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+			count += sizeof(int);
+		}
+	
+		public bool Write(Span<byte> s, ref ushort count)
+		{
+			bool success = true;
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.playerMana);
+			count += sizeof(int);
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.sessionID);
+			count += sizeof(int);
+			return success;
+		}	
+	}
+	public List<Mana> manas = new List<Mana>();
+	public double serverTime;
 
 	public ushort Protocol { get { return (ushort)PacketID.S_GameStateUpdate; } }
 
@@ -798,6 +845,17 @@ public class S_GameStateUpdate : IPacket
 			units.Read(s, ref count);
 			unitss.Add(units);
 		}
+		this.manas.Clear();
+		ushort manaLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+		count += sizeof(ushort);
+		for (int i = 0; i < manaLen; i++)
+		{
+			Mana mana = new Mana();
+			mana.Read(s, ref count);
+			manas.Add(mana);
+		}
+		this.serverTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
+		count += sizeof(double);
 	}
 
 	public ArraySegment<byte> Write()
@@ -815,6 +873,12 @@ public class S_GameStateUpdate : IPacket
 		count += sizeof(ushort);
 		foreach (Units units in this.unitss)
 			success &= units.Write(s, ref count);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)this.manas.Count);
+		count += sizeof(ushort);
+		foreach (Mana mana in this.manas)
+			success &= mana.Write(s, ref count);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.serverTime);
+		count += sizeof(double);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;
