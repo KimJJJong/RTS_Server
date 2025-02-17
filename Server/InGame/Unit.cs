@@ -11,10 +11,10 @@ class Unit
     private int _attackPower = 10;
     private int _attackRange = 1;
 
-    public Unit(int objectID, int unitID/*, int ownerID, int startPosition*/)
+    public Unit(int objectID/*, int unitID, int ownerID, int startPosition*/)
     {
         ObjectID = objectID;
-        UnitID = unitID;
+       // UnitID = unitID;
 /*        OwnerID = ownerID;
         Position = startPosition;*/
     }

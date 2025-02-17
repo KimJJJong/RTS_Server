@@ -32,6 +32,14 @@ using System.Text;
     {
         Console.WriteLine("Game Start");
     }
+    public static void S_SceneLoadHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void S_InitGameHandler(PacketSession session, IPacket packet)
+    {
+
+    }
     public static void S_GameUpdateHandler(PacketSession session, IPacket packet)
     {
 
@@ -45,7 +53,7 @@ using System.Text;
         S_AnsSummon ansPacket = packet as S_AnsSummon;
         //ServerSession serverSession = session as ServerSession;
 
-        Console.WriteLine($"uid : {ansPacket.uid}\nx : {ansPacket.x} y : {ansPacket.y}");
+        Console.WriteLine($"uid : {ansPacket.oid}\nx : {ansPacket.x} y : {ansPacket.y}");
 
     }
     public static void S_GameStateUpdateHandler(PacketSession session, IPacket packet)

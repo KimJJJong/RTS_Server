@@ -52,7 +52,6 @@ class PacketHandler
     {
         C_JoinRoom c_JoinRoom = packet as C_JoinRoom;
         ClientSession clientSession = session as ClientSession;
-
         clientSession.Lobby.Push(() => clientSession.Lobby.FindRoom(c_JoinRoom.roomId)?.Enter(clientSession));
 
     }
@@ -64,7 +63,6 @@ class PacketHandler
         C_Ready c_Ready = packet as C_Ready;
         ClientSession clientSession =session as ClientSession;
         GameRoom gameRoom = clientSession.Room;
-
         clientSession.isReady = true;
         Console.WriteLine($"Client[{clientSession.SessionID}] Ready[{clientSession.isReady}]");
 
@@ -74,14 +72,39 @@ class PacketHandler
             {
                 if (_session.isReady == false) return;
             }
+            clientSession.Room.StartGame();
         }
         else
         {
             Console.WriteLine($"Not Enough Room Cound{gameRoom.Sessions.Count}");
+            return;
         }
 
-        clientSession.Room.StartGame();
         
+    }
+    public static void C_SceneLoadedHandler(PacketSession session, IPacket packet)
+    {
+        C_SceneLoaded loadpacket = packet as C_SceneLoaded;
+        ClientSession clientSession = session as ClientSession;
+        GameRoom gameRoom = clientSession.Room;
+        
+        clientSession.isLoad = loadpacket.isLoad;
+
+        if (gameRoom.Sessions.Count == 2)
+        {
+            foreach (ClientSession _session in gameRoom.Sessions.Values)
+            {
+                if (_session.isLoad == false) return;
+            }
+            S_SceneLoad sPakcet = new S_SceneLoad();
+            gameRoom.BroadCast(sPakcet.Write());
+        }
+        else
+        {
+            Console.WriteLine($"err : RoomCound[{gameRoom.Sessions.Count}]");
+            return;
+        }
+
     }
     public static void C_GameActionHandler(PacketSession session, IPacket packet)
     {
@@ -111,9 +134,8 @@ class PacketHandler
             Console.WriteLine($"uid : {sumPacket.oid}\nx : {sumPacket.x} y : {sumPacket.y} sumTime : {summonTime:F6}");
             room.BroadCast(ansPacket.Write());
         }
+        // deficient mana
 
-
-        //room.Push(() => room.BroadCast(ansPacket.Write()));
     }
     public static void C_RequestManaStatusHandler(PacketSession session, IPacket packet)
     {

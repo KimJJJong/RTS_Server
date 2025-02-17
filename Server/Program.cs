@@ -16,7 +16,7 @@ namespace Server
 		static Listener _listener = new Listener();
         public static Lobby Lobby = new Lobby();
 		public static GameRoom Room = new GameRoom();
-
+        public static double initTime;
        /* static void FlushRoom()
         {
             Room.Push(() => Room.Flush());
@@ -25,7 +25,7 @@ namespace Server
         }*/
         static void FlushLobby()
         {
-            //Console.WriteLine(DateTime.UtcNow.Ticks / 10000000);
+//            Console.WriteLine(DateTime.UtcNow.Ticks );
             Lobby.Push(() => Lobby.Flush());
             JobTimer.Instance.Push(FlushLobby, 250);
         }

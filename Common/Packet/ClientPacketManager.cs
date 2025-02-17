@@ -31,6 +31,8 @@ public class PacketManager
 		_handler.Add((ushort)PacketID.S_Ready, PacketHandler.S_ReadyHandler);
 		_makeFunc.Add((ushort)PacketID.S_StartGame, MakePacket<S_StartGame>);
 		_handler.Add((ushort)PacketID.S_StartGame, PacketHandler.S_StartGameHandler);
+		_makeFunc.Add((ushort)PacketID.S_SceneLoad, MakePacket<S_SceneLoad>);
+		_handler.Add((ushort)PacketID.S_SceneLoad, PacketHandler.S_SceneLoadHandler);
 		_makeFunc.Add((ushort)PacketID.S_InitGame, MakePacket<S_InitGame>);
 		_handler.Add((ushort)PacketID.S_InitGame, PacketHandler.S_InitGameHandler);
 		_makeFunc.Add((ushort)PacketID.S_GameUpdate, MakePacket<S_GameUpdate>);

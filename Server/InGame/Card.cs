@@ -1,8 +1,8 @@
 ﻿public class Card
 {
-    public int ID;
+    public string ID;
     public int LV;
-    public Card(int iD, int lV)
+    public Card(string iD, int lV)
     {
         ID = iD;
         LV = lV;

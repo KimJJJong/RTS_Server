@@ -48,6 +48,12 @@
 	<packet name="S_StartGame">
 		<string name="gameId"/>
 	</packet>
+	<packet name ="C_SceneLoaded">
+		<bool name="isLoad"/>
+	</packet>
+	
+	<packet name="S_SceneLoad">
+	</packet>
 
 	<!-- 게임 -->
 	<packet name="S_InitGame">
