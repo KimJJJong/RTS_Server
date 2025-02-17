@@ -40,11 +40,12 @@ class PacketHandler
         s_CreateRoom.success = true;
         
         Program.Lobby.Push(() => s_CreateRoom.roomId = clientSession.Lobby.CreateRoom());
+        Console.WriteLine($"Client [{clientSession.SessionID}] Create Room [{s_CreateRoom.roomId}]");
+
         // s_CreateRoom.roomId = clientSession.Lobby.CreateRoom(); // MainThread에서 처리 하지 않아도 괜찮은가?
         Program.Lobby.Push(() => clientSession.Lobby.FindRoom(s_CreateRoom.roomId).Enter(clientSession));
         Program.Lobby.Push(() => clientSession.Send(s_CreateRoom.Write()));
 
-        Console.WriteLine($"Client [{clientSession.SessionID}] Create Room [{s_CreateRoom.roomId}]");
 
     }
     public static void C_JoinRoomHandler(PacketSession session, IPacket packet)
@@ -62,12 +63,21 @@ class PacketHandler
     {
         C_Ready c_Ready = packet as C_Ready;
         ClientSession clientSession =session as ClientSession;
+        GameRoom gameRoom = clientSession.Room;
 
         clientSession.isReady = true;
+        Console.WriteLine($"Client[{clientSession.SessionID}] Ready[{clientSession.isReady}]");
 
-        foreach(ClientSession _session in clientSession.Room.Sessions.Values )
+        if (gameRoom.Sessions.Count == 2)
         {
-            if(_session.isReady == false) return;
+            foreach (ClientSession _session in gameRoom.Sessions.Values)
+            {
+                if (_session.isReady == false) return;
+            }
+        }
+        else
+        {
+            Console.WriteLine($"Not Enough Room Cound{gameRoom.Sessions.Count}");
         }
 
         clientSession.Room.StartGame();
@@ -86,14 +96,19 @@ class PacketHandler
         // Mana Check
         if( room.GameLogic.Manas[sumPacket.reqSessionID].UseMana(sumPacket.needMana))
         {
+            double summonTime = room.GameLogic.GetServerTime()+ 0.5/*summonDelay*/;
+
             S_AnsSummon ansPacket = new S_AnsSummon();
             ansPacket.x = sumPacket.x;
             ansPacket.y = sumPacket.y;
-            ansPacket.uid = sumPacket.uid;  
+            ansPacket.oid = sumPacket.oid;  
             ansPacket.reqSessionID = cliSsession.SessionID;
             ansPacket.reducedMana = room.GameLogic.Manas[sumPacket.reqSessionID].GetMana();
+            ansPacket.summonTime = summonTime;
+            ansPacket.serverReceiveTime = room.GameLogic.GetServerTime();
+            ansPacket.clientSendTime = sumPacket.clientSendTime;
 
-            Console.WriteLine($"uid : {sumPacket.uid}\nx : {sumPacket.x} y : {sumPacket.y}");
+            Console.WriteLine($"uid : {sumPacket.oid}\nx : {sumPacket.x} y : {sumPacket.y} sumTime : {summonTime:F6}");
             room.BroadCast(ansPacket.Write());
         }
 

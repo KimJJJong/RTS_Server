@@ -25,15 +25,44 @@ class GameLogicManager
         _room = room;
         _remainingTime = _gameDuration;
     }
+    /// <summary>
+    /// CardSet Init
+    /// Pooling Init
+    /// Loop Sync Event Init
+    /// </summary>
     public void Init()
     {
         // SetCards가 어딘가 호출 되고
-        SetPool(10);    // HardCoding ( ! )
+        List<Card> testSet01 = new List<Card>
+        {
+            new Card(1, 1),
+            new Card(2, 1),
+            new Card(3, 1),
+            new Card(4, 1),
+            new Card(5, 1)
+        };
+        List<Card> testSet02 = new List<Card>
+        {
+            new Card(1, 1),
+            new Card(2, 1),
+            new Card(3, 1),
+            new Card(4, 1),
+            new Card(5, 1)
+        };
+        SetCards( testSet01, testSet02 );
+
+        int poolSize = 10;
+        SetPool(poolSize);    // HardCoding ( ! )
+
+        S_InitGame initPackt= new S_InitGame();
+        initPackt.size = poolSize;
+        initPackt.cards. = _cardCombination
+
+
+        JobTimer.Instance.Push(Update);
+
     }
-    public void SetTimer()
-    {
-        _gameCurrentTime = DateTime.UtcNow.Ticks / 10000000;
-    }
+
     public void SetCards(List<Card> p1, List<Card> p2)
     {
         _cardCombination = new List<Card>(p1);
@@ -53,6 +82,7 @@ class GameLogicManager
                 _unitPool.Add(new Unit(index, uid));
             }
         }
+        Console.WriteLine($"GameRoom[{_room.RoomId}] SetPool Size[{size}] Compl");
     }
 
     
@@ -61,7 +91,10 @@ class GameLogicManager
     public void AddPlayer(ClientSession session)
     {
         _playerMana[session.SessionID] = new Mana();
-        
+        _sessions[session.SessionID] = session;
+
+        Init();
+
         Console.WriteLine($"[게임 로직] 플레이어 {session.SessionID} 추가");
     }
     /// <summary>
@@ -72,25 +105,13 @@ class GameLogicManager
         if (_gameOver) 
             return;
 
-        S_GameStateUpdate sysnc = new S_GameStateUpdate();
 
-        // 마나 자동 회복
-/*        foreach (var mana in _playerMana.Values)
-        {
-            mana.RegenMana();
-            sysnc.manas[0].sessionID = _playerMana
-        }*/
-        // 시간 동기화
+        //Time Sync : 일단 안쓸겁니다 TODO 단발성 이벤트 시간 동기화 먼저 처리하고 진행
+      /*  S_SyncTime syncPacket = new S_SyncTime();
+        syncPacket.serverTime = GetServerTime();
+        _room.BroadCast(syncPacket.Write());*/
 
-        sysnc.serverTime = DateTime.UtcNow.Ticks / 10000000.0;
 
-        _room.BroadCast(sysnc.Write());
-
-        // 게임 종료 체크
-        /*        if (_remainingTime <= 0)
-                {
-                    EndGame();
-                }*/
         JobTimer.Instance.Push(Update, 1000);
     }
 
@@ -101,8 +122,12 @@ class GameLogicManager
         _room.EndGame();
     }
 
-    public int GetRemainingTime()
+    
+
+    public double GetServerTime()
     {
-        return _remainingTime;
+        return DateTime.UtcNow.Ticks / 10000000.0; // 초 단위 변환 (1 Tick = 100ns)
     }
+
+    private void 
 }

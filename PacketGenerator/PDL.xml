@@ -46,12 +46,18 @@
 		</map>
 	</packet>
 	<packet name="S_StartGame">
-		<int name="sessionId"/>
-		<int name="gameId"/>
-		<string name="mapData"/>
+		<string name="gameId"/>
 	</packet>
 
 	<!-- 게임 -->
+	<packet name="S_InitGame">
+		<list name="cardCombination">
+			<int name ="lv"/>
+			<string name="uid"/>
+		</list>
+		<int name="size"/>
+	</packet>
+	
 	<packet name="S_GameUpdate">
 		<list name="pool">
 			<int name="unitId"/>
@@ -61,21 +67,28 @@
 		</list>
 	</packet>
 	<packet name="C_ReqSummon">
-		<int name="reqSessionID"/>
-		<int name="uid"/>
-		<int name="needMana"/>
 		<float name="x"/>
 		<float name="y"/>
+		<int name="oid"/>
+		<int name="needMana"/>
+		<int name="reqSessionID"/>
+		<double name="clientSendTime"/>
 	</packet>
 	<packet name="S_AnsSummon">
-		<int name="reqSessionID"/>
-		<int name="uid"/>
-		<int name="reducedMana"/>
 		<float name="x"/>
 		<float name="y"/>
+		<int name="oid"/>
+		<int name="reducedMana"/>
+		<int name="reqSessionID"/>
+		<double name="summonTime"/>
+		<double name="serverReceiveTime"/>
+		<double name="clientSendTime"/>
 	</packet>
 	<packet name="C_RequestManaStatus">
 		<int name="playerId"/>
+	</packet>
+	<packet name="S_SyncTime">
+		<double name="serverTime"/>
 	</packet>
 	<packet name="S_GameStateUpdate">
 		<list name="units">

@@ -56,6 +56,10 @@ using System.Text;
     {
 
     }
+    public static void S_SyncTimeHandler (PacketSession session, IPacket packet)
+    {
+
+    }
     public static void S_UnitActionHandler(PacketSession session, IPacket packet)
     {
 

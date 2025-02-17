@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-    public class Card
+﻿public class Card
+{
+    public int ID;
+    public int LV;
+    public Card(int iD, int lV)
     {
-        public int ID;
-        public int LV;
+        ID = iD;
+        LV = lV;
     }
+}

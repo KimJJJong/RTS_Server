@@ -21,7 +21,7 @@ namespace Server
 
         public GameRoom()
         {
-            RoomId = Guid.NewGuid().ToString();
+            RoomId = Guid.NewGuid().ToString().Substring(0, 5);
             _roomState = RoomState.Waiting;
         }
 
@@ -70,8 +70,11 @@ namespace Server
             {
                 GameLogic.AddPlayer(session);
             }
+            GameLogic.Init();
 
-            S_StartGame startPacket = new S_StartGame { mapData = "" };
+            S_StartGame startPacket = new S_StartGame();
+            startPacket.gameId = RoomId;
+
             BroadCast(startPacket.Write());
         }
 

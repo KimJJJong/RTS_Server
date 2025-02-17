@@ -45,7 +45,7 @@ namespace PacketGenerator
 				File.WriteAllText("ServerPacketManager.cs", serverManagerText);
 			}
 
-			PacketExcelGenerator.Init();
+			//PacketExcelGenerator.Init();
 		}
 
 		public static void ParsePacket(XmlReader r)

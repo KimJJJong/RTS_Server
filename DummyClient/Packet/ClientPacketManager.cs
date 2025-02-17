@@ -31,10 +31,14 @@ public class PacketManager
 		_handler.Add((ushort)PacketID.S_Ready, PacketHandler.S_ReadyHandler);
 		_makeFunc.Add((ushort)PacketID.S_StartGame, MakePacket<S_StartGame>);
 		_handler.Add((ushort)PacketID.S_StartGame, PacketHandler.S_StartGameHandler);
+		_makeFunc.Add((ushort)PacketID.S_InitGame, MakePacket<S_InitGame>);
+		_handler.Add((ushort)PacketID.S_InitGame, PacketHandler.S_InitGameHandler);
 		_makeFunc.Add((ushort)PacketID.S_GameUpdate, MakePacket<S_GameUpdate>);
 		_handler.Add((ushort)PacketID.S_GameUpdate, PacketHandler.S_GameUpdateHandler);
 		_makeFunc.Add((ushort)PacketID.S_AnsSummon, MakePacket<S_AnsSummon>);
 		_handler.Add((ushort)PacketID.S_AnsSummon, PacketHandler.S_AnsSummonHandler);
+		_makeFunc.Add((ushort)PacketID.S_SyncTime, MakePacket<S_SyncTime>);
+		_handler.Add((ushort)PacketID.S_SyncTime, PacketHandler.S_SyncTimeHandler);
 		_makeFunc.Add((ushort)PacketID.S_GameStateUpdate, MakePacket<S_GameStateUpdate>);
 		_handler.Add((ushort)PacketID.S_GameStateUpdate, PacketHandler.S_GameStateUpdateHandler);
 		_makeFunc.Add((ushort)PacketID.S_ManaUpdate, MakePacket<S_ManaUpdate>);
