@@ -25,14 +25,15 @@ namespace Server
         }*/
         static void FlushLobby()
         {
-//            Console.WriteLine(DateTime.UtcNow.Ticks );
+    //        Console.WriteLine(  (DateTime.UtcNow.Ticks * 1e-7 - currentTime).ToString("F3"));
             Lobby.Push(() => Lobby.Flush());
             JobTimer.Instance.Push(FlushLobby, 250);
         }
 
-
+        public static double currentTime;
         static void Main(string[] args)
         {
+            currentTime = DateTime.UtcNow.Ticks * 1e-7;
             // DNS (Domain Name System)
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);

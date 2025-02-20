@@ -121,6 +121,11 @@ class PacketHandler
         {
             double summonTime = room.GameLogic.GetServerTime()+ 0.5/*summonDelay*/;
 
+            Console.WriteLine($" serverTime          : { summonTime -0.5}" +
+                              $" summonTime          : { summonTime}" +
+                              $" clientSendTime      : { sumPacket.clientSendTime}" +
+                              $" serverReceiveTime   : { room.GameLogic.GetServerTime()}");
+
             S_AnsSummon ansPacket = new S_AnsSummon();
             ansPacket.x = sumPacket.x;
             ansPacket.y = sumPacket.y;

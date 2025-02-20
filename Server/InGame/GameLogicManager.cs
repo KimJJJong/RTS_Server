@@ -35,22 +35,28 @@ class GameLogicManager
     {
         List<Card> testSet01 = new List<Card>
         {
-            new Card("123", 1),
-            new Card("asd", 1),
-            new Card("zxc", 1),
-            new Card("a", 1),
-            new Card("qwd", 1)
+            new Card("U-JOS-001", 1),
+            new Card("U-JOS-002", 1),
+            new Card("U-JOS-003", 1),
+            new Card("U-JOS-004", 1),
+            new Card("SP-PNT-001", 1),
+            new Card("SP-SUP-001", 1),
+            new Card("TWR-ATK-001", 1),
+            new Card("TWR-DEF-001", 1),
         };
         List<Card> testSet02 = new List<Card>
         {
-            new Card("sd", 1),
-            new Card("1dx", 1),
-            new Card("4dhh", 1),
-            new Card("zxcqq", 1),
-            new Card("bhyrf", 1)
+            new Card("U-JOS-001", 1),
+            new Card("U-JOS-002", 1),
+            new Card("U-JOS-003", 1),
+            new Card("U-JOS-004", 1),
+            new Card("SP-PNT-001", 1),
+            new Card("SP-SUP-001", 1),
+            new Card("TWR-ATK-001", 1),
+            new Card("TWR-DEF-001", 1),       
         };
-        SetCards( testSet01, testSet02 );
 
+        SetCards( testSet01, testSet02 );
         int poolSize = 10;
         SetPool(poolSize);    
 
@@ -58,13 +64,8 @@ class GameLogicManager
         foreach (var card in _cardCombination)
         {
             initPackt.cardCombinations.Add(new S_InitGame.CardCombination { uid = card.ID.ToString(), lv = card.LV });
-            Console.WriteLine(card.ID);
         }
-        Console.WriteLine("=================");
-        for (int i = 0; i < 10; i++)
-        {
-            Console.WriteLine(initPackt.cardCombinations[i].uid);
-        }
+        
         initPackt.size = poolSize;
         _room.BroadCast(initPackt.Write());
 
