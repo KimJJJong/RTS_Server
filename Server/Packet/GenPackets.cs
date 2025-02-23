@@ -631,6 +631,8 @@ public class S_InitGame : IPacket
 	}
 	public List<CardCombination> cardCombinations = new List<CardCombination>();
 	public int size;
+	public double gameStartTime;
+	public double duration;
 
 	public ushort Protocol { get { return (ushort)PacketID.S_InitGame; } }
 
@@ -652,6 +654,10 @@ public class S_InitGame : IPacket
 		}
 		this.size = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
+		this.gameStartTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
+		count += sizeof(double);
+		this.duration = BitConverter.ToDouble(s.Slice(count, s.Length - count));
+		count += sizeof(double);
 	}
 
 	public ArraySegment<byte> Write()
@@ -671,6 +677,10 @@ public class S_InitGame : IPacket
 			success &= cardCombination.Write(s, ref count);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.size);
 		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.gameStartTime);
+		count += sizeof(double);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.duration);
+		count += sizeof(double);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;

@@ -119,23 +119,20 @@ class PacketHandler
         // Mana Check
         if( room.GameLogic.Manas[sumPacket.reqSessionID].UseMana(sumPacket.needMana))
         {
-            double summonTime = room.GameLogic.GetServerTime()+ 0.5/*summonDelay*/;
+            double summonTime = room.GameLogic.Timer.GetServerTime()+ 1f/*summonDelay*/;
 
-            Console.WriteLine($" serverTime          : { summonTime -0.5}" +
+            Console.WriteLine($" serverTime          : { summonTime - 1f }" +
                               $" summonTime          : { summonTime}" +
-                              $" clientSendTime      : { sumPacket.clientSendTime}" +
-                              $" serverReceiveTime   : { room.GameLogic.GetServerTime()}");
+                              $" summonSession       : { sumPacket.reqSessionID}");
 
             S_AnsSummon ansPacket = new S_AnsSummon();
             ansPacket.x = sumPacket.x;
             ansPacket.y = sumPacket.y;
             ansPacket.oid = sumPacket.oid;  
-            ansPacket.reqSessionID = cliSsession.SessionID;
+            ansPacket.reqSessionID = sumPacket.reqSessionID;
             ansPacket.reducedMana = room.GameLogic.Manas[sumPacket.reqSessionID].GetMana();
             ansPacket.summonTime = summonTime;
-            ansPacket.serverReceiveTime = room.GameLogic.GetServerTime();
-            ansPacket.clientSendTime = sumPacket.clientSendTime;
-
+            
             Console.WriteLine($"uid : {sumPacket.oid}\nx : {sumPacket.x} y : {sumPacket.y} sumTime : {summonTime:F6}");
             room.BroadCast(ansPacket.Write());
         }

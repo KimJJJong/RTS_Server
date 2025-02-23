@@ -25,7 +25,7 @@ namespace Server
         }*/
         static void FlushLobby()
         {
-    //        Console.WriteLine(  (DateTime.UtcNow.Ticks * 1e-7 - currentTime).ToString("F3"));
+            //Console.WriteLine((180 - (DateTime.UtcNow.Ticks * 1e-7 - currentTime)));
             Lobby.Push(() => Lobby.Flush());
             JobTimer.Instance.Push(FlushLobby, 250);
         }

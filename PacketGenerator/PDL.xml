@@ -62,6 +62,8 @@
 			<string name="uid"/>
 		</list>
 		<int name="size"/>
+		<double name ="gameStartTime"/>
+		<double name ="duration"/>
 	</packet>
 	
 	<packet name="S_GameUpdate">
