@@ -16,12 +16,14 @@ namespace Server
         public Timer()
         {
             _gameDuration = 180;
-            _gameStartTime = DateTime.UtcNow.Ticks * 1e7;
+            _gameStartTime = DateTime.UtcNow.Ticks * 1e-7;
         }
         public double GetServerTime()
         {
             _gameCurrentTime = DateTime.UtcNow.Ticks * 1e-7;
-            return _gameDuration + (_gameStartTime -  _gameCurrentTime ); // 초 단위 변환 (1 Tick = 100ns) / 밀리초(1ms = 0.001s) 단위 반환 (1 Tick = 100ns = 0.0001ms = 0.0000001s)
+            double currentTime = _gameDuration + (_gameStartTime - _gameCurrentTime);
+            Console.WriteLine($"CurrentServerTime : { currentTime }");
+            return currentTime; // 초 단위 변환 (1 Tick = 100ns) / 밀리초(1ms = 0.001s) 단위 반환 (1 Tick = 100ns = 0.0001ms = 0.0000001s)
         }
     }
 }

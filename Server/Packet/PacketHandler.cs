@@ -119,9 +119,9 @@ class PacketHandler
         // Mana Check
         if( room.GameLogic.Manas[sumPacket.reqSessionID].UseMana(sumPacket.needMana))
         {
-            double summonTime = room.GameLogic.Timer.GetServerTime()+ 1f/*summonDelay*/;
+            double summonTime = room.GameLogic.Timer.GetServerTime()+1d/*summonDelay*/;
 
-            Console.WriteLine($" serverTime          : { summonTime - 1f }\n" +
+            Console.WriteLine($" serverTime          : { summonTime-1d }\n" +
                               $" summonTime          : { summonTime}\n" +
                               $" summonSession       : { sumPacket.reqSessionID}");
 

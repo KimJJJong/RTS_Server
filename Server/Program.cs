@@ -25,7 +25,7 @@ namespace Server
         }*/
         static void FlushLobby()
         {
-            //Console.WriteLine((180 - (DateTime.UtcNow.Ticks * 1e-7 - currentTime)));
+           // Console.WriteLine((180 - (DateTime.UtcNow.Ticks * 1e-7 - currentTime)));
             Lobby.Push(() => Lobby.Flush());
             JobTimer.Instance.Push(FlushLobby, 250);
         }
@@ -33,8 +33,10 @@ namespace Server
         public static double currentTime;
         static void Main(string[] args)
         {
-            currentTime = DateTime.UtcNow.Ticks * 1e-7;
+            //currentTime = DateTime.UtcNow.Ticks * 1e-7;
             // DNS (Domain Name System)
+
+            Lobby.CreateRoom();         // TODO : Del this code when Test Over
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
             IPAddress ipAddr = ipHost.AddressList[0];

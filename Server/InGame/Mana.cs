@@ -28,7 +28,7 @@ class Mana
         if (_currentMana < _maxMana)
         {
             _currentMana += _regenRate;
-            Console.WriteLine($"마나 회복됨: 현재 마나 {_currentMana}");
+            //Console.WriteLine($"마나 회복됨: 현재 마나 {_currentMana}");
         }
     }
 }
