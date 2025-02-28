@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "ve4tTV4c0NY=",
+  "dgSpecHash": "k504iJpQJQw7+ryIUIe2HWOmbYA8npJgsfDuLvjkUc0v7QlYTcK0uH1gUi4W/OBLvlBxskwUBKEsoyvqw/6BPA==",
   "success": true,
-  "projectFilePath": "D:\\Git\\Server\\RTS_Server\\ServerCore\\ServerCore.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\dejuj\\Desktop\\My_Projects\\RTS_Server\\ServerCore\\ServerCore.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\dejuj\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\3.1.0\\microsoft.windowsdesktop.app.ref.3.1.0.nupkg.sha512",
+    "C:\\Users\\dejuj\\.nuget\\packages\\microsoft.netcore.app.ref\\3.1.0\\microsoft.netcore.app.ref.3.1.0.nupkg.sha512",
+    "C:\\Users\\dejuj\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.10\\microsoft.aspnetcore.app.ref.3.1.10.nupkg.sha512"
+  ],
   "logs": []
 }

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Git\\Server\\RTS_Server\\DummyClient\\DummyClient.csproj": {}
+    "C:\\Users\\dejuj\\Desktop\\My_Projects\\RTS_Server\\DummyClient\\DummyClient.csproj": {}
   },
   "projects": {
-    "D:\\Git\\Server\\RTS_Server\\DummyClient\\DummyClient.csproj": {
+    "C:\\Users\\dejuj\\Desktop\\My_Projects\\RTS_Server\\DummyClient\\DummyClient.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Git\\Server\\RTS_Server\\DummyClient\\DummyClient.csproj",
+        "projectUniqueName": "C:\\Users\\dejuj\\Desktop\\My_Projects\\RTS_Server\\DummyClient\\DummyClient.csproj",
         "projectName": "DummyClient",
-        "projectPath": "D:\\Git\\Server\\RTS_Server\\DummyClient\\DummyClient.csproj",
-        "packagesPath": "C:\\Users\\JJONG\\.nuget\\packages\\",
-        "outputPath": "D:\\Git\\Server\\RTS_Server\\DummyClient\\obj\\",
+        "projectPath": "C:\\Users\\dejuj\\Desktop\\My_Projects\\RTS_Server\\DummyClient\\DummyClient.csproj",
+        "packagesPath": "C:\\Users\\dejuj\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dejuj\\Desktop\\My_Projects\\RTS_Server\\DummyClient\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\JJONG\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\dejuj\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -33,8 +33,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "D:\\Git\\Server\\RTS_Server\\ServerCore\\ServerCore.csproj": {
-                "projectPath": "D:\\Git\\Server\\RTS_Server\\ServerCore\\ServerCore.csproj"
+              "C:\\Users\\dejuj\\Desktop\\My_Projects\\RTS_Server\\ServerCore\\ServerCore.csproj": {
+                "projectPath": "C:\\Users\\dejuj\\Desktop\\My_Projects\\RTS_Server\\ServerCore\\ServerCore.csproj"
               }
             }
           }
@@ -43,11 +43,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -70,29 +65,47 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.1.10, 3.1.10]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[3.1.32, 3.1.32]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[3.1.0, 3.1.0]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[3.1.0, 3.1.0]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\Git\\Server\\RTS_Server\\ServerCore\\ServerCore.csproj": {
+    "C:\\Users\\dejuj\\Desktop\\My_Projects\\RTS_Server\\ServerCore\\ServerCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Git\\Server\\RTS_Server\\ServerCore\\ServerCore.csproj",
+        "projectUniqueName": "C:\\Users\\dejuj\\Desktop\\My_Projects\\RTS_Server\\ServerCore\\ServerCore.csproj",
         "projectName": "ServerCore",
-        "projectPath": "D:\\Git\\Server\\RTS_Server\\ServerCore\\ServerCore.csproj",
-        "packagesPath": "C:\\Users\\JJONG\\.nuget\\packages\\",
-        "outputPath": "D:\\Git\\Server\\RTS_Server\\ServerCore\\obj\\",
+        "projectPath": "C:\\Users\\dejuj\\Desktop\\My_Projects\\RTS_Server\\ServerCore\\ServerCore.csproj",
+        "packagesPath": "C:\\Users\\dejuj\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dejuj\\Desktop\\My_Projects\\RTS_Server\\ServerCore\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\JJONG\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\dejuj\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -114,11 +127,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -135,12 +143,26 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.1.10, 3.1.10]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[3.1.0, 3.1.0]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[3.1.0, 3.1.0]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     }

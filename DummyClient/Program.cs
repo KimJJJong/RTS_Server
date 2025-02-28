@@ -14,10 +14,10 @@ namespace DummyClient
 		static void Main(string[] args)
 		{
 			// DNS (Domain Name System)
-			string host = Dns.GetHostName();
+			/*string host = Dns.GetHostName();
 			IPHostEntry ipHost = Dns.GetHostEntry(host);
-			IPAddress ipAddr = ipHost.AddressList[0];
-			IPEndPoint endPoint = new IPEndPoint(/*IPAddress.Parse("172.30.1.5")*/ipAddr, 13221);
+			IPAddress ipAddr = ipHost.AddressList[0];*/
+			IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("192.168.78.190")/*ipAddr*/, 13221);
 
 			Connector connector = new Connector();
 
