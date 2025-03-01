@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServerCore;
+using System;
 using System.Collections.Generic;
 
 namespace Server
@@ -16,18 +17,29 @@ namespace Server
         {
             lock (_lock)
             {
-                int sessionId = ++_sessionId;
+                //int sessionId = ++_sessionId;
 
                 ClientSession session = new ClientSession();
-                session.SessionID = sessionId;
+                //session.SessionID = sessionId;
 
-                _sessions.Add(sessionId, session);
-                Console.WriteLine($"Connected : {sessionId}");
+                //_sessions.Add(sessionId, session);
+                //Console.WriteLine($"Connected : {sessionId}");
 
                 return session;
 
             }
+        }
+        public void Add(ClientSession clientSession)
+        {
+          lock ( _lock)
+            {
+                int sessionId = ++_sessionId;
 
+                clientSession.SessionID = sessionId;
+
+                _sessions.Add(sessionId, clientSession);
+                Console.WriteLine($"Connected : {sessionId}");
+            }
         }
         public ClientSession Find(int id)
         {

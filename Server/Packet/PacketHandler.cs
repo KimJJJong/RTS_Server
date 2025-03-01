@@ -7,11 +7,43 @@ using System.Text;
 class PacketHandler
 {
     #region Lobby BroadCast
+    public static void C_LoginAuthHandler(PacketSession session, IPacket packet)
+    {
+        ClientSession clientSession = session as ClientSession;
+        C_LoginAuth authPacket = packet as C_LoginAuth;
+
+        Console.WriteLine($"JWT 토큰 검증 시도: {authPacket.accessToken}");
+
+        if (clientSession.Authenticate(authPacket.accessToken))
+        {
+            Console.WriteLine("인증 성공! 세션을 활성화합니다.");
+            SessionManager.Instance.Add(clientSession);
+
+            Console.WriteLine($"===============\n" +
+                  $"SessionID : {clientSession.SessionID}\n" +
+                  $"===============");
+
+            Program.Lobby.Push(() => Program.Lobby.Enter(clientSession));
+
+            S_Login s_Login = new S_Login();
+            s_Login.message = $"[{clientSession.SessionID}] Connect";
+            Program.Lobby.Push(() => clientSession.Send(s_Login.Write()));
+        }
+        else
+        {
+            Console.WriteLine("인증 실패! 연결을 종료합니다.");
+            clientSession.Disconnect();
+        }
+    }
+
     public static void C_LoginHandler(PacketSession session, IPacket packet)
     {
         // 근데 login은 내가 처리 안하는거 아닌감..;
         C_Login logPacket = packet as C_Login;
         ClientSession clientSession = session as ClientSession;
+
+        //Console.WriteLine($"Received Login Packet with Token: {logPacket.accessToken}");
+
 
         Console.WriteLine($"===============\n" +
                           $"SessionID : {clientSession.SessionID}\n" +

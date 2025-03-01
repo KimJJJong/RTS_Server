@@ -57,6 +57,10 @@
             "EPPlus": {
               "target": "Package",
               "version": "[7.5.3, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.6.0, )"
             }
           },
           "imports": [

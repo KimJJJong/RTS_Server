@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <PDL>
 	<!-- 로그인 -->
+	<packet name="C_LoginAuth">
+		<string name="accessToken"/>
+	</packet>
+	
 	<packet name="C_Login">
 		<string name="username"/>
 		<string name="password"/>

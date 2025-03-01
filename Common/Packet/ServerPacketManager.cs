@@ -19,6 +19,8 @@ public class PacketManager
 		
 	public void Register()
 	{
+		_makeFunc.Add((ushort)PacketID.C_LoginAuth, MakePacket<C_LoginAuth>);
+		_handler.Add((ushort)PacketID.C_LoginAuth, PacketHandler.C_LoginAuthHandler);
 		_makeFunc.Add((ushort)PacketID.C_Login, MakePacket<C_Login>);
 		_handler.Add((ushort)PacketID.C_Login, PacketHandler.C_LoginHandler);
 		_makeFunc.Add((ushort)PacketID.C_EnterLobby, MakePacket<C_EnterLobby>);

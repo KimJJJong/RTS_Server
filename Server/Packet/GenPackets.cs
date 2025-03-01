@@ -6,29 +6,30 @@ using ServerCore;
 
 public enum PacketID
 {
-	C_Login = 1,
-	S_Login = 2,
-	C_EnterLobby = 3,
-	S_EnterLobby = 4,
-	C_CreateRoom = 5,
-	S_CreateRoom = 6,
-	C_JoinRoom = 7,
-	S_JoinRoom = 8,
-	C_Ready = 9,
-	S_Ready = 10,
-	S_StartGame = 11,
-	C_SceneLoaded = 12,
-	S_SceneLoad = 13,
-	S_InitGame = 14,
-	S_GameUpdate = 15,
-	C_ReqSummon = 16,
-	S_AnsSummon = 17,
-	C_RequestManaStatus = 18,
-	S_SyncTime = 19,
-	S_GameStateUpdate = 20,
-	S_ManaUpdate = 21,
-	S_UnitAction = 22,
-	S_GameOver = 23,
+	C_LoginAuth = 1,
+	C_Login = 2,
+	S_Login = 3,
+	C_EnterLobby = 4,
+	S_EnterLobby = 5,
+	C_CreateRoom = 6,
+	S_CreateRoom = 7,
+	C_JoinRoom = 8,
+	S_JoinRoom = 9,
+	C_Ready = 10,
+	S_Ready = 11,
+	S_StartGame = 12,
+	C_SceneLoaded = 13,
+	S_SceneLoad = 14,
+	S_InitGame = 15,
+	S_GameUpdate = 16,
+	C_ReqSummon = 17,
+	S_AnsSummon = 18,
+	C_RequestManaStatus = 19,
+	S_SyncTime = 20,
+	S_GameStateUpdate = 21,
+	S_ManaUpdate = 22,
+	S_UnitAction = 23,
+	S_GameOver = 24,
 	
 }
 
@@ -39,6 +40,47 @@ public  interface IPacket
 	ArraySegment<byte> Write();
 }
 
+
+public class C_LoginAuth : IPacket
+{
+	public string accessToken;
+
+	public ushort Protocol { get { return (ushort)PacketID.C_LoginAuth; } }
+
+	public void Read(ArraySegment<byte> segment)
+	{
+		ushort count = 0;
+
+		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
+		count += sizeof(ushort);
+		count += sizeof(ushort);
+		ushort accessTokenLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+		count += sizeof(ushort);
+		this.accessToken = Encoding.Unicode.GetString(s.Slice(count, accessTokenLen));
+		count += accessTokenLen;
+	}
+
+	public ArraySegment<byte> Write()
+	{
+		ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+		ushort count = 0;
+		bool success = true;
+
+		Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
+
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.C_LoginAuth);
+		count += sizeof(ushort);
+		ushort accessTokenLen = (ushort)Encoding.Unicode.GetBytes(this.accessToken, 0, this.accessToken.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), accessTokenLen);
+		count += sizeof(ushort);
+		count += accessTokenLen;
+		success &= BitConverter.TryWriteBytes(s, count);
+		if (success == false)
+			return null;
+		return SendBufferHelper.Close(count);
+	}
+}
 
 public class C_Login : IPacket
 {
