@@ -8,23 +8,23 @@
     ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "C:\\Users\\JJONG\\.nuget\\packages\\": {},
+    "C:\\Users\\JJW\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Git\\Server\\RTS_Server\\ServerCore\\ServerCore.csproj",
+      "projectUniqueName": "X:\\GitHub\\RTS_Server\\ServerCore\\ServerCore.csproj",
       "projectName": "ServerCore",
-      "projectPath": "D:\\Git\\Server\\RTS_Server\\ServerCore\\ServerCore.csproj",
-      "packagesPath": "C:\\Users\\JJONG\\.nuget\\packages\\",
-      "outputPath": "D:\\Git\\Server\\RTS_Server\\ServerCore\\obj\\",
+      "projectPath": "X:\\GitHub\\RTS_Server\\ServerCore\\ServerCore.csproj",
+      "packagesPath": "C:\\Users\\JJW\\.nuget\\packages\\",
+      "outputPath": "X:\\GitHub\\RTS_Server\\ServerCore\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\JJONG\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\JJW\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -51,7 +51,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "netcoreapp3.1": {
@@ -67,12 +68,26 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[3.1.10, 3.1.10]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[3.1.0, 3.1.0]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[3.1.0, 3.1.0]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200\\RuntimeIdentifierGraph.json"
       }
     }
   }
