@@ -37,25 +37,33 @@ class GameLogicManager
 
         List<Card> testSet01 = new List<Card>
         {
-            new Card("U-JOS-001", 1),
-            new Card("U-JOS-002", 1),
-            new Card("U-JOS-003", 1),
-            new Card("U-JOS-004", 1),
-            new Card("SP-PNT-001", 1),
-            new Card("SP-SUP-001", 1),
-            new Card("TWR-ATK-001", 1),
-            new Card("TWR-DEF-001", 1),
+           new Card("TWR-ATK-001", 1),
+           new Card("TWR-DEF-001", 1),
+           new Card("U-JOS-001", 1),
+           new Card("U-JOS-002", 1),
+           new Card("U-JOS-003", 1),
+           new Card("U-JOS-004", 1),
+           new Card("SP-PNT-001", 1),
+           new Card("SP-SUP-001", 1),
+           new Card("PRJ-TWR-ATK-001", 1),
+           new Card("PRJ-U-JOS-003", 1),
+           new Card("TMR-SP-001", 1),
+           new Card("POS-SP-SUP-001", 1),
         };
         List<Card> testSet02 = new List<Card>
-        {
-            new Card("U-JOS-001", 1),
-            new Card("U-JOS-002", 1),
-            new Card("U-JOS-003", 1),
-            new Card("U-JOS-004", 1),
-            new Card("SP-PNT-001", 1),
-            new Card("SP-SUP-001", 1),
-            new Card("TWR-ATK-001", 1),
-            new Card("TWR-DEF-001", 1),       
+       {
+           new Card("TWR-ATK-001", 1),
+           new Card("TWR-DEF-001", 1),
+           new Card("U-JOS-001", 1),
+           new Card("U-JOS-002", 1),
+           new Card("U-JOS-003", 1),
+           new Card("U-JOS-004", 1),
+           new Card("SP-PNT-001", 1),
+           new Card("SP-SUP-001", 1),
+           new Card("PRJ-TWR-ATK-001", 1),
+           new Card("PRJ-U-JOS-003", 1),
+           new Card("TMR-SP-001", 1),
+           new Card("POS-SP-SUP-001", 1),
         };
 
         int poolSize = 10;

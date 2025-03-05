@@ -164,6 +164,7 @@ class PacketHandler
             ansPacket.reqSessionID = sumPacket.reqSessionID;
             ansPacket.reducedMana = room.GameLogic.Manas[sumPacket.reqSessionID].GetMana();
             ansPacket.summonTime = summonTime;
+            ansPacket.serverReceiveTime = DateTime.UtcNow.Ticks * 1e-7;    // 이거 Packet구조 바꿔야 합니다 귀찮아서 재활용 한거라
             
             Console.WriteLine($"uid : {sumPacket.oid}\nx : {sumPacket.x} y : {sumPacket.y} sumTime : {summonTime:F6}");
             room.BroadCast(ansPacket.Write());
