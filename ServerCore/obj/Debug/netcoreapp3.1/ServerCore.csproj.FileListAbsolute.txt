@@ -27,3 +27,13 @@ C:\Users\baeso\Documents\GitHub\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\Se
 C:\Users\baeso\Documents\GitHub\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.CoreCompileInputs.cache
 C:\Users\baeso\Documents\GitHub\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.dll
 C:\Users\baeso\Documents\GitHub\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb
+C:\Users\dejuj\Desktop\My_Projects\RTS_Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.deps.json
+C:\Users\dejuj\Desktop\My_Projects\RTS_Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.dll
+C:\Users\dejuj\Desktop\My_Projects\RTS_Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.pdb
+C:\Users\dejuj\Desktop\My_Projects\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.AssemblyReference.cache
+C:\Users\dejuj\Desktop\My_Projects\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\dejuj\Desktop\My_Projects\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfoInputs.cache
+C:\Users\dejuj\Desktop\My_Projects\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfo.cs
+C:\Users\dejuj\Desktop\My_Projects\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.CoreCompileInputs.cache
+C:\Users\dejuj\Desktop\My_Projects\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.dll
+C:\Users\dejuj\Desktop\My_Projects\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb

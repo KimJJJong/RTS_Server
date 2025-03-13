@@ -37,10 +37,10 @@ namespace Server
             // DNS (Domain Name System)
 
             Lobby.CreateRoom();         // TODO : Del this code when Test Over
-            string host = Dns.GetHostName();
+            /*string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
-            IPAddress ipAddr = ipHost.AddressList[0];
-            IPEndPoint endPoint = new IPEndPoint(/*IPAddress.Parse("192.168.45.53")*/ipAddr, 13221);
+            IPAddress ipAddr = ipHost.AddressList[0];*/
+            IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("192.168.0.82"), 13221);
 
             _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
             Console.WriteLine("Listening...");
