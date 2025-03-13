@@ -17,3 +17,13 @@ D:\Git\Server\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb
 D:\Git\Server\RTS_Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.deps.json
 D:\Git\Server\RTS_Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.dll
 D:\Git\Server\RTS_Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.pdb
+C:\Users\admin\Documents\GitHub\RTS_Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.deps.json
+C:\Users\admin\Documents\GitHub\RTS_Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.dll
+C:\Users\admin\Documents\GitHub\RTS_Server\ServerCore\bin\Debug\netcoreapp3.1\ServerCore.pdb
+C:\Users\admin\Documents\GitHub\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\admin\Documents\GitHub\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfoInputs.cache
+C:\Users\admin\Documents\GitHub\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.AssemblyInfo.cs
+C:\Users\admin\Documents\GitHub\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.csproj.CoreCompileInputs.cache
+C:\Users\admin\Documents\GitHub\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.sourcelink.json
+C:\Users\admin\Documents\GitHub\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.dll
+C:\Users\admin\Documents\GitHub\RTS_Server\ServerCore\obj\Debug\netcoreapp3.1\ServerCore.pdb
