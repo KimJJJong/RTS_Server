@@ -17,7 +17,7 @@ namespace DummyClient
 			string host = Dns.GetHostName();
 			IPHostEntry ipHost = Dns.GetHostEntry(host);
 			IPAddress ipAddr = ipHost.AddressList[0];
-			IPEndPoint endPoint = new IPEndPoint(/*IPAddress.Parse("172.30.1.5")*/ipAddr, 13221);
+			IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("192.168.82.195")/*ipAddr*/, 13221);
 
 			Connector connector = new Connector();
 

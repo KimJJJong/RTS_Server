@@ -42,7 +42,7 @@ namespace Server
         public string CreateRoom()
         {
             GameRoom room = new GameRoom();
-            //   _rooms.Add(room.RoomId, room);
+            //_rooms.Add(room.RoomId, room);
             _rooms.Add("testRoom", room);       // TODO : Del this code when Test Over
             return room.RoomId;
         }
