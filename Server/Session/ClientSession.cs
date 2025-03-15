@@ -13,6 +13,7 @@ namespace Server
 
         public bool isReady { get; set; }
         public bool isLoad {  get; set; }
+        public bool isMatching {  get; set; }
         public int SessionID { get; set; }
         public GameRoom Room { get; set; }
         public Lobby Lobby { get; set; }

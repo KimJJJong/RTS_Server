@@ -66,8 +66,9 @@ class PacketHandler
     public static void C_MatchRequestHandler(PacketSession session, IPacket packet)
     {
         ClientSession clientSession = session as ClientSession;
-        if (clientSession == null)
+        if (clientSession == null || clientSession.isMatching)
             return;
+        clientSession.isMatching = true;
 
         Program.Lobby.Push(() => clientSession.Lobby.EnterMatchQueue(clientSession));
        // Program.Lobby.EnterMatchQueue(clientSession);
