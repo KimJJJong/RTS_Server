@@ -17,13 +17,13 @@ namespace Server
         {
             lock (_lock)
             {
-                //int sessionId = ++_sessionId;
+                int sessionId = ++_sessionId;
 
                 ClientSession session = new ClientSession();
-                //session.SessionID = sessionId;
+                session.SessionID = sessionId;
 
-                //_sessions.Add(sessionId, session);
-                //Console.WriteLine($"Connected : {sessionId}");
+                _sessions.Add(sessionId, session);
+                Console.WriteLine($"Connected : {sessionId}");
 
                 return session;
 

@@ -6,9 +6,13 @@ namespace Server
     class Lobby : IJobQueue
     {
         Dictionary<string, GameRoom> _rooms = new Dictionary<string, GameRoom>();
+        Dictionary<string, GameRoom> _matchingRoom = new Dictionary<string, GameRoom>();
+        Queue<ClientSession> _waitingQueue = new Queue<ClientSession>(); // 매칭 대기열
+
         List<ClientSession> _sessions = new List<ClientSession>();
         List<ArraySegment<byte>> _pendingList =new List<ArraySegment<byte>>();
         JobQueue _jobQueue = new JobQueue();
+
 
         public void Push(Action action)
         {
@@ -67,6 +71,46 @@ namespace Server
             return new List<string>(_rooms.Keys);
         }
 
+
+        #endregion
+
+        #region MatchingRoom
+        public void EnterMatchQueue(ClientSession session)
+        {
+
+                _waitingQueue.Enqueue(session);
+                TryMatch();
+        }
+        private void TryMatch()
+        {
+            while (_waitingQueue.Count >= 2) // 1vs1 기준
+            {
+                ClientSession player1 = _waitingQueue.Dequeue();
+                ClientSession player2 = _waitingQueue.Dequeue();
+
+                string roomId = Guid.NewGuid().ToString().Substring(0, 6); ; // 랜덤 ID 생성
+                GameRoom room = new GameRoom(roomId);
+                _matchingRoom[roomId] = room;
+
+                room.Push(() => room.Enter(player1));
+                room.Push(() => room.Enter(player2));
+
+                Console.WriteLine($"Matched {player1.SessionID} vs {player2.SessionID} in Room {roomId}");
+                
+                room.StartGame();
+            }
+        }
+
+        public void LeaveMatchQueue(ClientSession session)
+        {
+     
+                if (_waitingQueue.Contains(session))
+                {
+                    List<ClientSession> tempList = new List<ClientSession>(_waitingQueue);
+                    tempList.Remove(session);
+                    _waitingQueue = new Queue<ClientSession>(tempList);
+                }
+        }
 
         #endregion
 
