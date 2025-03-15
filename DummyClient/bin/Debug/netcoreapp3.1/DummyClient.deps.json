@@ -382,7 +382,10 @@
       "System.Threading.Tasks.Extensions/4.5.4": {},
       "ServerCore/1.0.0": {
         "runtime": {
-          "ServerCore.dll": {}
+          "ServerCore.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }

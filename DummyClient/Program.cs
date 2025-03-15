@@ -13,7 +13,7 @@ namespace DummyClient
     {
         public static async Task Main(string[] args)
         {
-            string authServerUrl = "http://13.124.197.216:3000"; // Auth 서버 주소
+            string authServerUrl = "https://leeyoungwoo.shop"; // Auth 서버 주소
             var client = new AuthClient(authServerUrl);
 
             Console.WriteLine("\n로그인을 진행합니다.");
