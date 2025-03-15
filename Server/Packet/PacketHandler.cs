@@ -38,31 +38,39 @@ class PacketHandler
 
     public static void C_LoginHandler(PacketSession session, IPacket packet)
     {
-        // 근데 login은 내가 처리 안하는거 아닌감..;
+        // ToDo : 이후 처리는 Api 서버로 넘기고 지금은 연결만 설정 해 줍시다
         C_Login logPacket = packet as C_Login;
         ClientSession clientSession = session as ClientSession;
-
-        //Console.WriteLine($"Received Login Packet with Token: {logPacket.accessToken}");
 
 
         Console.WriteLine($"===============\n" +
                           $"SessionID : {clientSession.SessionID}\n" +
-                          $"UserName  : {logPacket.username}\n" +
-                          $"PassWord  : {logPacket.password}\n" +
+                         // $"UserName  : {logPacket.username}\n" +
+                         // $"PassWord  : {logPacket.password}\n" +
                           $"===============");
 
         Program.Lobby.Push(() => Program.Lobby.Enter(clientSession));
 
         S_Login sLogPacket = new S_Login();
         sLogPacket.success = true;
-        sLogPacket.message = "TestLogin";
+        sLogPacket.message = $"{clientSession.SessionID}";
 
         Program.Lobby.Push(() => clientSession.Send(sLogPacket.Write()));
 
     }
     public static void C_EnterLobbyHandler(PacketSession session, IPacket packet)
     {
+        // 일단 기본적으로 Lobby에 접속을 하기때문에 따로 handler가 필요 없다
+    }
 
+    public static void C_MatchRequestHandler(PacketSession session, IPacket packet)
+    {
+        ClientSession clientSession = session as ClientSession;
+        if (clientSession == null)
+            return;
+
+        Program.Lobby.Push(() => clientSession.Lobby.EnterMatchQueue(clientSession));
+       // Program.Lobby.EnterMatchQueue(clientSession);
     }
     public static void C_CreateRoomHandler(PacketSession session, IPacket packet)
     {
@@ -164,7 +172,7 @@ class PacketHandler
             ansPacket.reqSessionID = sumPacket.reqSessionID;
             ansPacket.reducedMana = room.GameLogic.Manas[sumPacket.reqSessionID].GetMana();
             ansPacket.summonTime = summonTime;
-            ansPacket.serverReceiveTime = DateTime.UtcNow.Ticks * 1e-7;    // 이거 Packet구조 바꿔야 합니다 귀찮아서 재활용 한거라
+            ansPacket.ranValue = DateTime.UtcNow.Ticks * 1e-7;    // 이거 Packet구조 바꿔야 합니다 귀찮아서 재활용 한거라
             
             Console.WriteLine($"uid : {sumPacket.oid}\nx : {sumPacket.x} y : {sumPacket.y} sumTime : {summonTime:F6}");
             room.BroadCast(ansPacket.Write());

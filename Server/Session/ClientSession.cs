@@ -19,7 +19,7 @@ namespace Server
         public override void OnConnected(EndPoint endPoint)
         {
             // tmp : Check PlayerNum
-            //Console.WriteLine($"OnConnected : {endPoint}\n Player {SessionID} In");
+            // Console.WriteLine($"OnConnected : {SessionID} In");
 
             // TODO : Client 요청에 따른 Enter 관리
             //Program.Room.Enter(this); 직접 처리 하지 않고 JobQueue : Push
@@ -27,7 +27,7 @@ namespace Server
 
             //Program.Room.Push(() => Program.Room.Enter(this));
             //Program.Room.Enter(this);
-            Console.WriteLine($"GameServer와 연결되었습니다: {endPoint}");
+            //Console.WriteLine($"GameServer와 연결되었습니다: {endPoint}");
 
         
 

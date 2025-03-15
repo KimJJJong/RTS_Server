@@ -15,21 +15,22 @@ public enum PacketID
 	S_CreateRoom = 7,
 	C_JoinRoom = 8,
 	S_JoinRoom = 9,
-	C_Ready = 10,
-	S_Ready = 11,
-	S_StartGame = 12,
-	C_SceneLoaded = 13,
-	S_SceneLoad = 14,
-	S_InitGame = 15,
-	S_GameUpdate = 16,
-	C_ReqSummon = 17,
-	S_AnsSummon = 18,
-	C_RequestManaStatus = 19,
-	S_SyncTime = 20,
-	S_GameStateUpdate = 21,
-	S_ManaUpdate = 22,
-	S_UnitAction = 23,
-	S_GameOver = 24,
+	C_MatchRequest = 10,
+	C_Ready = 11,
+	S_Ready = 12,
+	S_StartGame = 13,
+	C_SceneLoaded = 14,
+	S_SceneLoad = 15,
+	S_InitGame = 16,
+	S_GameUpdate = 17,
+	C_ReqSummon = 18,
+	S_AnsSummon = 19,
+	C_RequestManaStatus = 20,
+	S_SyncTime = 21,
+	S_GameStateUpdate = 22,
+	S_ManaUpdate = 23,
+	S_UnitAction = 24,
+	S_GameOver = 25,
 	
 }
 
@@ -448,6 +449,41 @@ public class S_JoinRoom : IPacket
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), roomIdLen);
 		count += sizeof(ushort);
 		count += roomIdLen;
+		success &= BitConverter.TryWriteBytes(s, count);
+		if (success == false)
+			return null;
+		return SendBufferHelper.Close(count);
+	}
+}
+
+public class C_MatchRequest : IPacket
+{
+	
+
+	public ushort Protocol { get { return (ushort)PacketID.C_MatchRequest; } }
+
+	public void Read(ArraySegment<byte> segment)
+	{
+		ushort count = 0;
+
+		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
+		count += sizeof(ushort);
+		count += sizeof(ushort);
+		
+	}
+
+	public ArraySegment<byte> Write()
+	{
+		ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+		ushort count = 0;
+		bool success = true;
+
+		Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
+
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.C_MatchRequest);
+		count += sizeof(ushort);
+		
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;
@@ -881,7 +917,7 @@ public class S_AnsSummon : IPacket
 	public int reducedMana;
 	public int reqSessionID;
 	public double summonTime;
-	public double serverReceiveTime;
+	public double ranValue;
 	public double clientSendTime;
 
 	public ushort Protocol { get { return (ushort)PacketID.S_AnsSummon; } }
@@ -905,7 +941,7 @@ public class S_AnsSummon : IPacket
 		count += sizeof(int);
 		this.summonTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
 		count += sizeof(double);
-		this.serverReceiveTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
+		this.ranValue = BitConverter.ToDouble(s.Slice(count, s.Length - count));
 		count += sizeof(double);
 		this.clientSendTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
 		count += sizeof(double);
@@ -934,7 +970,7 @@ public class S_AnsSummon : IPacket
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.summonTime);
 		count += sizeof(double);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.serverReceiveTime);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ranValue);
 		count += sizeof(double);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.clientSendTime);
 		count += sizeof(double);

@@ -24,6 +24,11 @@ namespace Server
             RoomId = Guid.NewGuid().ToString().Substring(0, 5);
             _roomState = RoomState.Waiting;
         }
+        public GameRoom(string roomId)
+        {
+            RoomId = roomId;
+            _roomState = RoomState.Waiting;
+        }
 
         public void Push(Action action) => _jobQueue.Push(action);
 
