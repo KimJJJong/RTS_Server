@@ -169,8 +169,7 @@
               "RelativeToolTip": "Server\\Packet\\PacketHandler.cs",
               "ViewState": "AgIAADMAAAAAAAAAAAAIwEEAAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-17T05:55:13.588Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-17T05:55:13.588Z"
             },
             {
               "$type": "Document",
@@ -180,7 +179,7 @@
               "RelativeDocumentMoniker": "Server\\Lobby.cs",
               "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\RTS_Server\\Server\\Lobby.cs",
               "RelativeToolTip": "Server\\Lobby.cs",
-              "ViewState": "AgIAAE0AAAAAAAAAAAA1wGUAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAE4AAAAAAAAAAAAUwGUAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-25T06:58:45.678Z",
               "EditorCaption": ""
@@ -195,8 +194,7 @@
               "RelativeToolTip": "Server\\GameRoom.cs",
               "ViewState": "AgIAADgAAAAAAAAAAAAkwDcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-17T06:30:46.236Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-17T06:30:46.236Z"
             },
             {
               "$type": "Document",
@@ -208,8 +206,7 @@
               "RelativeToolTip": "Server\\Session\\ClientSession.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-17T04:59:38.342Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-17T04:59:38.342Z"
             },
             {
               "$type": "Document",
@@ -233,8 +230,7 @@
               "RelativeToolTip": "Server\\Packet\\ServerPacketManager.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAWwCAAAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-17T10:15:27.06Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-17T10:15:27.06Z"
             },
             {
               "$type": "Document",
@@ -246,8 +242,7 @@
               "RelativeToolTip": "Server\\Session\\SessionManager.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwA8AAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-09T12:27:33.955Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-09T12:27:33.955Z"
             },
             {
               "$type": "Document",

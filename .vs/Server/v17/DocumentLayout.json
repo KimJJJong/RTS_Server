@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\admin\\Documents\\GitHub\\RTS_Server\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|c:\\users\\admin\\documents\\github\\rts_server\\packetgenerator\\pdl.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|solutionrelative:packetgenerator\\pdl.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|c:\\users\\admin\\documents\\github\\rts_server\\server\\lobby.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\lobby.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -25,10 +29,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|c:\\users\\admin\\documents\\github\\rts_server\\server\\gameroom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|solutionrelative:server\\gameroom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|c:\\users\\admin\\documents\\github\\rts_server\\packetgenerator\\pdl.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{1F142840-782A-4EC1-B41B-F78ECD84B42A}|PacketGenerator\\PacketGenerator.csproj|solutionrelative:packetgenerator\\pdl.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{ECE354A8-1AEB-4ABA-A3C1-013A029AF560}|Server\\Server.csproj|c:\\users\\admin\\documents\\github\\rts_server\\server\\jobtimer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -145,7 +145,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 210,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -161,7 +161,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "PacketHandler.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\RTS_Server\\Server\\Packet\\PacketHandler.cs",
               "RelativeDocumentMoniker": "Server\\Packet\\PacketHandler.cs",
@@ -169,25 +169,24 @@
               "RelativeToolTip": "Server\\Packet\\PacketHandler.cs",
               "ViewState": "AgIAADMAAAAAAAAAAAAIwEEAAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-17T05:55:13.588Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-17T05:55:13.588Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Lobby.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\RTS_Server\\Server\\Lobby.cs",
               "RelativeDocumentMoniker": "Server\\Lobby.cs",
               "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\RTS_Server\\Server\\Lobby.cs",
               "RelativeToolTip": "Server\\Lobby.cs",
-              "ViewState": "AgIAAE0AAAAAAAAAAAA1wGUAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAE4AAAAAAAAAAAAUwHYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-25T06:58:45.678Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "GameRoom.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\RTS_Server\\Server\\GameRoom.cs",
               "RelativeDocumentMoniker": "Server\\GameRoom.cs",
@@ -195,12 +194,11 @@
               "RelativeToolTip": "Server\\GameRoom.cs",
               "ViewState": "AgIAADgAAAAAAAAAAAAkwDcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-17T06:30:46.236Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-17T06:30:46.236Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "ClientSession.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\RTS_Server\\Server\\Session\\ClientSession.cs",
               "RelativeDocumentMoniker": "Server\\Session\\ClientSession.cs",
@@ -208,24 +206,24 @@
               "RelativeToolTip": "Server\\Session\\ClientSession.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-17T04:59:38.342Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-17T04:59:38.342Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
               "Title": "PDL.xml",
               "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\RTS_Server\\PacketGenerator\\PDL.xml",
               "RelativeDocumentMoniker": "PacketGenerator\\PDL.xml",
               "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\RTS_Server\\PacketGenerator\\PDL.xml",
               "RelativeToolTip": "PacketGenerator\\PDL.xml",
-              "ViewState": "AgIAAEgAAAAAAAAAAAAAAGIAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAACcAAAAAAAAAAAAAAD4AAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003576|",
-              "WhenOpened": "2025-02-16T08:36:50.508Z"
+              "WhenOpened": "2025-02-16T08:36:50.508Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "ServerPacketManager.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\RTS_Server\\Server\\Packet\\ServerPacketManager.cs",
               "RelativeDocumentMoniker": "Server\\Packet\\ServerPacketManager.cs",
@@ -233,12 +231,11 @@
               "RelativeToolTip": "Server\\Packet\\ServerPacketManager.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAWwCAAAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-17T10:15:27.06Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-17T10:15:27.06Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "SessionManager.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\RTS_Server\\Server\\Session\\SessionManager.cs",
               "RelativeDocumentMoniker": "Server\\Session\\SessionManager.cs",
@@ -246,8 +243,7 @@
               "RelativeToolTip": "Server\\Session\\SessionManager.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwA8AAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-09T12:27:33.955Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-09T12:27:33.955Z"
             },
             {
               "$type": "Document",
@@ -522,7 +518,8 @@
               "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\RTS_Server\\Server\\Server.csproj",
               "RelativeToolTip": "Server\\Server.csproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-02-23T16:14:12.283Z"
+              "WhenOpened": "2025-02-23T16:14:12.283Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -545,7 +542,8 @@
               "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\RTS_Server\\PacketGenerator\\PacketGenerator.csproj",
               "RelativeToolTip": "PacketGenerator\\PacketGenerator.csproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-02-09T07:16:36.076Z"
+              "WhenOpened": "2025-02-09T07:16:36.076Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
