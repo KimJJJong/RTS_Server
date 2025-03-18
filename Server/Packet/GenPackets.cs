@@ -720,7 +720,8 @@ public class C_SceneLoaded : IPacket
 
 public class S_SceneLoad : IPacket
 {
-	
+	public double StartTime;
+	public double ServerSendTime;
 
 	public ushort Protocol { get { return (ushort)PacketID.S_SceneLoad; } }
 
@@ -731,7 +732,10 @@ public class S_SceneLoad : IPacket
 		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 		count += sizeof(ushort);
 		count += sizeof(ushort);
-		
+		this.StartTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
+		count += sizeof(double);
+		this.ServerSendTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
+		count += sizeof(double);
 	}
 
 	public ArraySegment<byte> Write()
@@ -745,7 +749,10 @@ public class S_SceneLoad : IPacket
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_SceneLoad);
 		count += sizeof(ushort);
-		
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.StartTime);
+		count += sizeof(double);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ServerSendTime);
+		count += sizeof(double);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;
@@ -1006,7 +1013,6 @@ public class C_ReqSummon : IPacket
 	public int oid;
 	public int needMana;
 	public int reqSessionID;
-	public double clientSendTime;
 
 	public ushort Protocol { get { return (ushort)PacketID.C_ReqSummon; } }
 
@@ -1027,8 +1033,6 @@ public class C_ReqSummon : IPacket
 		count += sizeof(int);
 		this.reqSessionID = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
-		this.clientSendTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
-		count += sizeof(double);
 	}
 
 	public ArraySegment<byte> Write()
@@ -1052,8 +1056,6 @@ public class C_ReqSummon : IPacket
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.reqSessionID);
 		count += sizeof(int);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.clientSendTime);
-		count += sizeof(double);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;
@@ -1068,9 +1070,9 @@ public class S_AnsSummon : IPacket
 	public int oid;
 	public int reducedMana;
 	public int reqSessionID;
-	public double summonTime;
+	public double ServersummonTime;
+	public double ServerSendTime;
 	public double ranValue;
-	public double clientSendTime;
 
 	public ushort Protocol { get { return (ushort)PacketID.S_AnsSummon; } }
 
@@ -1091,11 +1093,11 @@ public class S_AnsSummon : IPacket
 		count += sizeof(int);
 		this.reqSessionID = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
-		this.summonTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
+		this.ServersummonTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
+		count += sizeof(double);
+		this.ServerSendTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
 		count += sizeof(double);
 		this.ranValue = BitConverter.ToDouble(s.Slice(count, s.Length - count));
-		count += sizeof(double);
-		this.clientSendTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
 		count += sizeof(double);
 	}
 
@@ -1120,11 +1122,11 @@ public class S_AnsSummon : IPacket
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.reqSessionID);
 		count += sizeof(int);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.summonTime);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ServersummonTime);
+		count += sizeof(double);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ServerSendTime);
 		count += sizeof(double);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ranValue);
-		count += sizeof(double);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.clientSendTime);
 		count += sizeof(double);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)

@@ -84,10 +84,10 @@ namespace Server
             }
             GameLogic.Init();
 
-   /*         S_StartGame startPacket = new S_StartGame();
+            S_StartGame startPacket = new S_StartGame();
             startPacket.gameId = RoomId;
 
-            BroadCast(startPacket.Write());*/
+            BroadCast(startPacket.Write());
         }
 
         public void Leave(ClientSession session)

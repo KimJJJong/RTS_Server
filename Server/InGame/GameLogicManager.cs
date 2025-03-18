@@ -39,46 +39,7 @@ class GameLogicManager
     {
         S_InitGame initPackt= new S_InitGame();
 
-      /*  List<Card> testSet01 = new List<Card>
-        {
-           new Card("TWR-ATK-001", 1),
-           new Card("TWR-DEF-001", 1),
-           new Card("U-JOS-001", 1),
-           new Card("U-JOS-002", 1),
-           new Card("U-JOS-003", 1),
-           new Card("U-JOS-004", 1),
-           new Card("SP-PNT-001", 1),
-           new Card("SP-SUP-001", 1),
-           new Card("PRJ-TWR-ATK-001", 1),
-           new Card("PRJ-U-JOS-003", 1),
-           new Card("TMR-SP-001", 1),
-           new Card("POS-SP-SUP-001", 1),
-        };
-        List<Card> testSet02 = new List<Card>
-       {
-           new Card("TWR-ATK-001", 1),
-           new Card("TWR-DEF-001", 1),
-           new Card("U-JOS-001", 1),
-           new Card("U-JOS-002", 1),
-           new Card("U-JOS-003", 1),
-           new Card("U-JOS-004", 1),
-           new Card("SP-PNT-001", 1),
-           new Card("SP-SUP-001", 1),
-           new Card("PRJ-TWR-ATK-001", 1),
-           new Card("PRJ-U-JOS-003", 1),
-           new Card("TMR-SP-001", 1),
-           new Card("POS-SP-SUP-001", 1),
-        };
-
-        int poolSize = 10;
-        SetCards( testSet01, testSet02 );
-        SetPool(poolSize);    
-
-        foreach (var card in _cardCombination)
-        {
-            initPackt.cardCombinations.Add(new S_InitGame.CardCombination { uid = card.ID, lv = card.LV });
-        }
-        initPackt.size = poolSize;*/
+    
 
         _timer = new Timer();
         initPackt.gameStartTime = _timer.GameStartTime;
@@ -138,31 +99,6 @@ class GameLogicManager
         }
     }
 
-
-
-    public void SetCards(List<Card> p1, List<Card> p2)
-    {
-        _cardCombination = new List<Card>(p1);
-        _cardCombination.AddRange(p2);
-    }
-    public void SetPool(int size)
-    {
-        _unitPool = new List<Unit>();
-
-        int index = 0;
-        for(int i=0; i< _cardCombination.Count; i++)
-        {
-           //int uid = _cardCombination[i].ID;
-            for(int ii=0; ii< size; ii++)
-            {
-                index++;
-                _unitPool.Add(new Unit(index));
-            }
-        }
-        Console.WriteLine($"GameRoom[{_room.RoomId}] SetPool Size[{size}] Compl");
-    }
-
-    
 
 
     public void AddPlayer(ClientSession session)

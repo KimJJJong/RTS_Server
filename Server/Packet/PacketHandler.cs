@@ -147,10 +147,13 @@ class PacketHandler
                 foreach(var player in gameRoom.Sessions.Values)
                 clientSession.Room.GameLogic.OnReceiveDeck(player, c_SetCardPool);
 
-                S_StartGame startPacket = new S_StartGame();
+
+                /// 이부분을 없애고 클라에서 로딩 끝나면 호출 부분을 시간과 함께 셋팅 해야함
+    /*            S_StartGame startPacket = new S_StartGame();
                 startPacket.gameId = gameRoom.RoomId;
 
-                gameRoom.BroadCast(startPacket.Write());
+                gameRoom.BroadCast(startPacket.Write());*/
+                ///
             }
             else
             {
@@ -168,16 +171,19 @@ class PacketHandler
     }
     public static void C_SceneLoadedHandler(PacketSession session, IPacket packet)
     {
-        
-        
-        
-        
-        
-        /*
+
+
+/*        S_StartGame startPacket = new S_StartGame();
+        startPacket.gameId = gameRoom.RoomId;
+
+        gameRoom.BroadCast(startPacket.Write());*/
+
+
+
         C_SceneLoaded loadpacket = packet as C_SceneLoaded;
         ClientSession clientSession = session as ClientSession;
         GameRoom gameRoom = clientSession.Room;
-        
+
         clientSession.isLoad = loadpacket.isLoad;
 
         if (gameRoom.Sessions.Count == 2)
@@ -187,13 +193,16 @@ class PacketHandler
                 if (_session.isLoad == false) return;
             }
             S_SceneLoad sPakcet = new S_SceneLoad();
+            sPakcet.ServerSendTime = DateTime.UtcNow.Ticks * 1e-7;
+            sPakcet.StartTime = sPakcet.ServerSendTime + 2d; /*after Load Delay*/
+
             gameRoom.BroadCast(sPakcet.Write());
         }
         else
         {
             Console.WriteLine($"err : RoomCound[{gameRoom.Sessions.Count}]");
             return;
-        }*/
+        }
 
     }
     public static void C_GameActionHandler(PacketSession session, IPacket packet)
@@ -216,14 +225,16 @@ class PacketHandler
                               $" summonSession       : { sumPacket.reqSessionID}");
 
             S_AnsSummon ansPacket = new S_AnsSummon();
+            sumPacket.x = (float)Math.Round(sumPacket.x, 3, MidpointRounding.ToZero);
+            sumPacket.y = (float)Math.Round(sumPacket.y, 3, MidpointRounding.ToZero);
             ansPacket.x = sumPacket.x;
             ansPacket.y = sumPacket.y;
             ansPacket.oid = sumPacket.oid;  
             ansPacket.reqSessionID = sumPacket.reqSessionID;
             ansPacket.reducedMana = room.GameLogic.Manas[sumPacket.reqSessionID].GetMana();
-            ansPacket.summonTime = summonTime;
-            ansPacket.ranValue = DateTime.UtcNow.Ticks * 1e-7;    // 이거 Packet구조 바꿔야 합니다 귀찮아서 재활용 한거라
-            
+            ansPacket.ServersummonTime = summonTime;
+            ansPacket.ServerSendTime = summonTime - 1d;    
+            ansPacket.ranValue = new Random().Next(0, 10);
             Console.WriteLine($"uid : {sumPacket.oid}\nx : {sumPacket.x} y : {sumPacket.y} sumTime : {summonTime:F6}");
             room.BroadCast(ansPacket.Write());
         }

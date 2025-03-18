@@ -64,6 +64,8 @@
 	</packet>
 	
 	<packet name="S_SceneLoad">
+		<double name="StartTime"/>
+		<double name="ServerSendTime"/>
 	</packet>
 
 	<!-- 게임 -->
@@ -98,7 +100,6 @@
 		<int name="oid"/>
 		<int name="needMana"/>
 		<int name="reqSessionID"/>
-		<double name="clientSendTime"/>
 	</packet>
 	<packet name="S_AnsSummon">
 		<float name="x"/>
@@ -106,9 +107,9 @@
 		<int name="oid"/>
 		<int name="reducedMana"/>
 		<int name="reqSessionID"/>
-		<double name="summonTime"/>
+		<double name="ServersummonTime"/>
+		<double name="ServerSendTime"/>
 		<double name="ranValue"/>
-		<double name="clientSendTime"/>
 	</packet>
 	<packet name="C_RequestManaStatus">
 		<int name="playerId"/>
