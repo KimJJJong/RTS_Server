@@ -39,7 +39,7 @@ class GameLogicManager
     {
         S_InitGame initPackt= new S_InitGame();
 
-        List<Card> testSet01 = new List<Card>
+      /*  List<Card> testSet01 = new List<Card>
         {
            new Card("TWR-ATK-001", 1),
            new Card("TWR-DEF-001", 1),
@@ -78,7 +78,7 @@ class GameLogicManager
         {
             initPackt.cardCombinations.Add(new S_InitGame.CardCombination { uid = card.ID, lv = card.LV });
         }
-        initPackt.size = poolSize;
+        initPackt.size = poolSize;*/
 
         _timer = new Timer();
         initPackt.gameStartTime = _timer.GameStartTime;
@@ -124,6 +124,11 @@ class GameLogicManager
                     uid = card.ID,
                     lv = card.LV
                 });
+            }
+
+            foreach (var card in poolPacket.cardCombinations)
+            {
+                Console.WriteLine($"UID : {card.uid}");
             }
 
             // 양쪽 플레이어에게 카드 풀 전송

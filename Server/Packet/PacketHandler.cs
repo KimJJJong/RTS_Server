@@ -9,7 +9,7 @@ class PacketHandler
     #region Lobby BroadCast
     public static void C_LoginAuthHandler(PacketSession session, IPacket packet)
     {
-        ClientSession clientSession = session as ClientSession;
+     /*   ClientSession clientSession = session as ClientSession;
         C_LoginAuth authPacket = packet as C_LoginAuth;
 
         Console.WriteLine($"JWT 토큰 검증 시도: {authPacket.accessToken}");
@@ -33,7 +33,7 @@ class PacketHandler
         {
             Console.WriteLine("인증 실패! 연결을 종료합니다.");
             clientSession.Disconnect();
-        }
+        }*/
     }
 
     public static void C_LoginHandler(PacketSession session, IPacket packet)
@@ -69,6 +69,8 @@ class PacketHandler
         if (clientSession == null || clientSession.isMatching)
             return;
         clientSession.isMatching = true;
+
+        Console.WriteLine($"Client :{ clientSession.SessionID } Mtaching...");
 
         Program.Lobby.Push(() => clientSession.Lobby.EnterMatchQueue(clientSession));
        // Program.Lobby.EnterMatchQueue(clientSession);
@@ -113,7 +115,7 @@ class PacketHandler
             {
                 if (_session.isReady == false) return;
             }
-            clientSession.Room.StartGame();
+            clientSession.Room.ReadyStartGame();
         }
         else
         {
@@ -128,7 +130,39 @@ class PacketHandler
         ClientSession clientSession = session as ClientSession;
         C_SetCardPool c_SetCardPool = pacekt as C_SetCardPool;
 
-        clientSession.Room.GameLogic.OnReceiveDeck(clientSession, c_SetCardPool);
+        GameRoom gameRoom = clientSession.Room;
+        clientSession.isReady = true;
+        //Console.WriteLine($"Client[{clientSession.SessionID}] Ready[{clientSession.isReady}]");
+
+        try
+        {
+            if (gameRoom.Sessions.Count == 2)
+            {
+                Console.WriteLine("GetTwo");
+                foreach (ClientSession _session in gameRoom.Sessions.Values)
+                {
+                    if (_session.isReady == false) return;
+                }
+                clientSession.Room.ReadyStartGame();
+                foreach(var player in gameRoom.Sessions.Values)
+                clientSession.Room.GameLogic.OnReceiveDeck(player, c_SetCardPool);
+
+                S_StartGame startPacket = new S_StartGame();
+                startPacket.gameId = gameRoom.RoomId;
+
+                gameRoom.BroadCast(startPacket.Write());
+            }
+            else
+            {
+                Console.WriteLine($"Not Enough Room Cound{gameRoom.Sessions.Count}");
+                return;
+            }
+
+
+        }catch (Exception e)
+        {
+            Console.WriteLine(e.ToString()); return;
+        }
 
 
     }
