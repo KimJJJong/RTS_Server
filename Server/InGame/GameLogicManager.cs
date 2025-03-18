@@ -11,8 +11,12 @@ class GameLogicManager
     private bool[][] _grid;
     private GameRoom _room;
     private List<Unit> _unitPool;
+
     private List<Card> _cardCombination; // int = unitID;
 
+    ////////
+    private Dictionary<int, List<Card>> playerDecks = new Dictionary<int, List<Card>>();
+    private List<Card> cardPool = new List<Card>();
 
     private bool _gameOver = false;
     private Timer _timer;
@@ -85,6 +89,51 @@ class GameLogicManager
         JobTimer.Instance.Push(Update);
 
     }
+    /////////
+    public void OnReceiveDeck(ClientSession session, C_SetCardPool packet)
+    {
+        if (!playerDecks.ContainsKey(session.SessionID))
+            playerDecks[session.SessionID] = new List<Card>();
+
+        playerDecks[session.SessionID].Clear();
+
+        // CardData -> Card 변환 후 저장
+        foreach (var cardData in packet.cardCombinations)
+        {
+            Card newCard = new Card(cardData.uid, cardData.lv);
+            playerDecks[session.SessionID].Add(newCard);
+        }
+
+
+        Console.WriteLine($"Player {session.SessionID} sent their deck.");
+
+        if (playerDecks.Count == 2) // 두 플레이어의 덱을 모두 받았으면 카드 풀 생성
+        {
+            cardPool.Clear();
+            foreach (var deck in playerDecks.Values)
+                cardPool.AddRange(deck);
+
+            Console.WriteLine("Card pool is ready, sending to players.");
+
+            S_CardPool poolPacket = new S_CardPool();
+            // Card -> CardData 변환 후 패킷에 추가
+            foreach (var card in cardPool)
+            {
+                poolPacket.cardCombinations.Add(new S_CardPool.CardCombination
+                {
+                    uid = card.ID,
+                    lv = card.LV
+                });
+            }
+
+            // 양쪽 플레이어에게 카드 풀 전송
+            _room.BroadCast(poolPacket.Write());
+            
+            
+        }
+    }
+
+
 
     public void SetCards(List<Card> p1, List<Card> p2)
     {

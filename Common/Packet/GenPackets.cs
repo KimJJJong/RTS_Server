@@ -19,18 +19,20 @@ public enum PacketID
 	C_Ready = 11,
 	S_Ready = 12,
 	S_StartGame = 13,
-	C_SceneLoaded = 14,
-	S_SceneLoad = 15,
-	S_InitGame = 16,
-	S_GameUpdate = 17,
-	C_ReqSummon = 18,
-	S_AnsSummon = 19,
-	C_RequestManaStatus = 20,
-	S_SyncTime = 21,
-	S_GameStateUpdate = 22,
-	S_ManaUpdate = 23,
-	S_UnitAction = 24,
-	S_GameOver = 25,
+	C_SetCardPool = 14,
+	C_SceneLoaded = 15,
+	S_SceneLoad = 16,
+	S_InitGame = 17,
+	S_CardPool = 18,
+	S_GameUpdate = 19,
+	C_ReqSummon = 20,
+	S_AnsSummon = 21,
+	C_RequestManaStatus = 22,
+	S_SyncTime = 23,
+	S_GameStateUpdate = 24,
+	S_ManaUpdate = 25,
+	S_UnitAction = 26,
+	S_GameOver = 27,
 	
 }
 
@@ -604,6 +606,81 @@ public class S_StartGame : IPacket
 	}
 }
 
+public class C_SetCardPool : IPacket
+{
+	public class CardCombination
+	{
+		public int lv;
+		public string uid;
+	
+		public void Read(ReadOnlySpan<byte> s, ref ushort count)
+		{
+			this.lv = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+			count += sizeof(int);
+			ushort uidLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+			count += sizeof(ushort);
+			this.uid = Encoding.Unicode.GetString(s.Slice(count, uidLen));
+			count += uidLen;
+		}
+	
+		public bool Write(Span<byte> s, ref ushort count)
+		{
+			ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+	
+			bool success = true;
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.lv);
+			count += sizeof(int);
+			ushort uidLen = (ushort)Encoding.Unicode.GetBytes(this.uid, 0, this.uid.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), uidLen);
+			count += sizeof(ushort);
+			count += uidLen;
+			return success;
+		}	
+	}
+	public List<CardCombination> cardCombinations = new List<CardCombination>();
+
+	public ushort Protocol { get { return (ushort)PacketID.C_SetCardPool; } }
+
+	public void Read(ArraySegment<byte> segment)
+	{
+		ushort count = 0;
+
+		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
+		count += sizeof(ushort);
+		count += sizeof(ushort);
+		this.cardCombinations.Clear();
+		ushort cardCombinationLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+		count += sizeof(ushort);
+		for (int i = 0; i < cardCombinationLen; i++)
+		{
+			CardCombination cardCombination = new CardCombination();
+			cardCombination.Read(s, ref count);
+			cardCombinations.Add(cardCombination);
+		}
+	}
+
+	public ArraySegment<byte> Write()
+	{
+		ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+		ushort count = 0;
+		bool success = true;
+
+		Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
+
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.C_SetCardPool);
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)this.cardCombinations.Count);
+		count += sizeof(ushort);
+		foreach (CardCombination cardCombination in this.cardCombinations)
+			success &= cardCombination.Write(s, ref count);
+		success &= BitConverter.TryWriteBytes(s, count);
+		if (success == false)
+			return null;
+		return SendBufferHelper.Close(count);
+	}
+}
+
 public class C_SceneLoaded : IPacket
 {
 	public bool isLoad;
@@ -759,6 +836,81 @@ public class S_InitGame : IPacket
 		count += sizeof(double);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.duration);
 		count += sizeof(double);
+		success &= BitConverter.TryWriteBytes(s, count);
+		if (success == false)
+			return null;
+		return SendBufferHelper.Close(count);
+	}
+}
+
+public class S_CardPool : IPacket
+{
+	public class CardCombination
+	{
+		public int lv;
+		public string uid;
+	
+		public void Read(ReadOnlySpan<byte> s, ref ushort count)
+		{
+			this.lv = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+			count += sizeof(int);
+			ushort uidLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+			count += sizeof(ushort);
+			this.uid = Encoding.Unicode.GetString(s.Slice(count, uidLen));
+			count += uidLen;
+		}
+	
+		public bool Write(Span<byte> s, ref ushort count)
+		{
+			ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+	
+			bool success = true;
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.lv);
+			count += sizeof(int);
+			ushort uidLen = (ushort)Encoding.Unicode.GetBytes(this.uid, 0, this.uid.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), uidLen);
+			count += sizeof(ushort);
+			count += uidLen;
+			return success;
+		}	
+	}
+	public List<CardCombination> cardCombinations = new List<CardCombination>();
+
+	public ushort Protocol { get { return (ushort)PacketID.S_CardPool; } }
+
+	public void Read(ArraySegment<byte> segment)
+	{
+		ushort count = 0;
+
+		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
+		count += sizeof(ushort);
+		count += sizeof(ushort);
+		this.cardCombinations.Clear();
+		ushort cardCombinationLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+		count += sizeof(ushort);
+		for (int i = 0; i < cardCombinationLen; i++)
+		{
+			CardCombination cardCombination = new CardCombination();
+			cardCombination.Read(s, ref count);
+			cardCombinations.Add(cardCombination);
+		}
+	}
+
+	public ArraySegment<byte> Write()
+	{
+		ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+		ushort count = 0;
+		bool success = true;
+
+		Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
+
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_CardPool);
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)this.cardCombinations.Count);
+		count += sizeof(ushort);
+		foreach (CardCombination cardCombination in this.cardCombinations)
+			success &= cardCombination.Write(s, ref count);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;

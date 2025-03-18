@@ -47,14 +47,18 @@
 		<bool name="isReady"/>
 	</packet>
 	<packet name="S_Ready">
-		<map name="playerReadyState">
-			<int name="playerId"/>
-			<bool name="isReady"/>
-		</map>
 	</packet>
 	<packet name="S_StartGame">
 		<string name="gameId"/>
 	</packet>
+	
+	<packet name ="C_SetCardPool">
+		<list name="cardCombination">
+			<int name ="lv"/>
+			<string name="uid"/>
+		</list>
+	</packet>
+	
 	<packet name ="C_SceneLoaded">
 		<bool name="isLoad"/>
 	</packet>
@@ -71,6 +75,13 @@
 		<int name="size"/>
 		<double name ="gameStartTime"/>
 		<double name ="duration"/>
+	</packet>
+	
+	<packet name ="S_CardPool">
+		<list name="cardCombination">
+			<int name ="lv"/>
+			<string name="uid"/>
+		</list>	
 	</packet>
 	
 	<packet name="S_GameUpdate">

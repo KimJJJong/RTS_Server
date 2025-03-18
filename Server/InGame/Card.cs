@@ -2,9 +2,9 @@
 {
     public string ID;
     public int LV;
-    public Card(string iD, int lV)
+    public Card(string ID, int LV)
     {
-        ID = iD;
-        LV = lV;
+        this.ID = ID;
+        this.LV = LV;
     }
 }

@@ -96,8 +96,9 @@ namespace Server
                 room.Push(() => room.Enter(player2));
 
                 Console.WriteLine($"Matched {player1.SessionID} vs {player2.SessionID} in Room {roomId}");
-                
-                room.StartGame();
+
+                room.BothReady();
+                //room.StartGame();
             }
         }
 

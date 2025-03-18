@@ -123,8 +123,23 @@ class PacketHandler
 
         
     }
+    public static void C_SetCardPoolHandler(PacketSession session, IPacket pacekt)
+    {
+        ClientSession clientSession = session as ClientSession;
+        C_SetCardPool c_SetCardPool = pacekt as C_SetCardPool;
+
+        clientSession.Room.GameLogic.OnReceiveDeck(clientSession, c_SetCardPool);
+
+
+    }
     public static void C_SceneLoadedHandler(PacketSession session, IPacket packet)
     {
+        
+        
+        
+        
+        
+        /*
         C_SceneLoaded loadpacket = packet as C_SceneLoaded;
         ClientSession clientSession = session as ClientSession;
         GameRoom gameRoom = clientSession.Room;
@@ -144,7 +159,7 @@ class PacketHandler
         {
             Console.WriteLine($"err : RoomCound[{gameRoom.Sessions.Count}]");
             return;
-        }
+        }*/
 
     }
     public static void C_GameActionHandler(PacketSession session, IPacket packet)

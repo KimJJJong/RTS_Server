@@ -65,6 +65,13 @@ namespace Server
 
         }
 
+        public void BothReady()
+        {
+            S_Ready s_Ready = new S_Ready();
+
+            BroadCast(s_Ready.Write());
+        }
+
         public void StartGame()
         {
             _roomState = RoomState.InGame;

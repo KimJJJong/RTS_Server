@@ -33,6 +33,8 @@ public class PacketManager
 		_handler.Add((ushort)PacketID.C_MatchRequest, PacketHandler.C_MatchRequestHandler);
 		_makeFunc.Add((ushort)PacketID.C_Ready, MakePacket<C_Ready>);
 		_handler.Add((ushort)PacketID.C_Ready, PacketHandler.C_ReadyHandler);
+		_makeFunc.Add((ushort)PacketID.C_SetCardPool, MakePacket<C_SetCardPool>);
+		_handler.Add((ushort)PacketID.C_SetCardPool, PacketHandler.C_SetCardPoolHandler);
 		_makeFunc.Add((ushort)PacketID.C_SceneLoaded, MakePacket<C_SceneLoaded>);
 		_handler.Add((ushort)PacketID.C_SceneLoaded, PacketHandler.C_SceneLoadedHandler);
 		_makeFunc.Add((ushort)PacketID.C_ReqSummon, MakePacket<C_ReqSummon>);
