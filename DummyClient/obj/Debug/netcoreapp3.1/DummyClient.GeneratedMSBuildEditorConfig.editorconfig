@@ -1,6 +1,6 @@
 is_global = true
 build_property.RootNamespace = DummyClient
-build_property.ProjectDir = C:\Users\admin\Documents\GitHub\RTS_Server\DummyClient\
+build_property.ProjectDir = X:\GitHub\RTS_Server\DummyClient\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.CsWinRTUseWindowsUIXamlProjections = false
