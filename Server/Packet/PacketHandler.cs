@@ -225,8 +225,8 @@ class PacketHandler
                               $" summonSession       : { sumPacket.reqSessionID}");
 
             S_AnsSummon ansPacket = new S_AnsSummon();
-            sumPacket.x = (float)Math.Round(sumPacket.x, 3, MidpointRounding.ToZero);
-            sumPacket.y = (float)Math.Round(sumPacket.y, 3, MidpointRounding.ToZero);
+//            sumPacket.x = (float)Math.Round(sumPacket.x, 3, MidpointRounding.ToZero);
+//          sumPacket.y = (float)Math.Round(sumPacket.y, 3, MidpointRounding.ToZero);
             ansPacket.x = sumPacket.x;
             ansPacket.y = sumPacket.y;
             ansPacket.oid = sumPacket.oid;  

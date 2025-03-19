@@ -127,20 +127,15 @@ class GameLogicManager
         }
 
 
-        //Time Sync : 일단 안쓸겁니다 TODO 단발성 이벤트 시간 동기화 먼저 처리하고 진행
-      /*  S_SyncTime syncPacket = new S_SyncTime();
-        syncPacket.serverTime = GetServerTime();
-        _room.BroadCast(syncPacket.Write());*/
-
 
         JobTimer.Instance.Push(Update, 1000);
     }
 
-    private void EndGame()
+    public void EndGame()
     {
         _gameOver = true;
         //_room.BroadcastToAll("시간 초과! 게임이 종료되었습니다!");
-        _room.EndGame();
+       // _room.EndGame();
     }
 
 }

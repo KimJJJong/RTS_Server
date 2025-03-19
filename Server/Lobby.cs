@@ -38,6 +38,8 @@ namespace Server
         }
         public void Leave(ClientSession session)
         {
+            LeaveMatchQueue(session);
+
             Console.WriteLine($"클라이언트 {session.SessionID}가 로비 에서 퇴장 ");
             _sessions.Remove(session);
         }
@@ -92,8 +94,10 @@ namespace Server
                 GameRoom room = new GameRoom(roomId);
                 _matchingRoom[roomId] = room;
 
-                room.Push(() => room.Enter(player1));
-                room.Push(() => room.Enter(player2));
+                //room.Push(() => 
+                room.Enter(player1);
+                //room.Push(() => 
+                room.Enter(player2);
 
                 Console.WriteLine($"Matched {player1.SessionID} vs {player2.SessionID} in Room {roomId}");
 
@@ -110,6 +114,7 @@ namespace Server
                     List<ClientSession> tempList = new List<ClientSession>(_waitingQueue);
                     tempList.Remove(session);
                     _waitingQueue = new Queue<ClientSession>(tempList);
+                Console.WriteLine($"Cleint [{ session.SessionID }] Leave MatchQueue");
                 }
         }
 

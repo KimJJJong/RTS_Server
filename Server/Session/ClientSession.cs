@@ -80,51 +80,5 @@ namespace Server
             // Console.WriteLine($"Transferred bytes: {numOfBytes}");
         }
 
-
-
-        public bool Authenticate(string token)
-        {
-            try
-            {
-                var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-                var jwtToken = handler.ReadJwtToken(token);
-
-                if (jwtToken != null)
-                {
-                    IsAuthenticated = true;
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"JWT 검증 실패: {ex.Message}");
-            }
-
-            return false;
-        }
-        private bool ValidateToken(string token)
-        {
-            var validationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = false,
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ValidateLifetime = false,
-                ClockSkew = TimeSpan.Zero
-            };
-
-            var handler = new JwtSecurityTokenHandler();
-
-            try
-            {
-                handler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"토큰 검증 실패: {ex.Message}");
-                return false;
-            }
-        }
     }
 }

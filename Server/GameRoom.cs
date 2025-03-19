@@ -16,7 +16,7 @@ namespace Server
         private Dictionary<int, ClientSession> _sessions = new Dictionary<int, ClientSession>();
         private JobQueue _jobQueue = new JobQueue();
         private RoomState _roomState;
-        public GameLogicManager GameLogic { get; private set; }
+        public GameLogicManager GameLogic { get;  set; }
         public IReadOnlyDictionary<int, ClientSession> Sessions => _sessions;
 
         public GameRoom()
@@ -108,6 +108,7 @@ namespace Server
         public void EndGame()
         {
             Console.WriteLine($"방 {RoomId} 게임 종료");
+            GameLogic.EndGame();
             _roomState = RoomState.Finished;
             // 필요한 후처리 추가 가능
         }
