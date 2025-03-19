@@ -29,7 +29,7 @@ namespace Server
 
             }
         }
-        public void Add(ClientSession clientSession)
+/*        public void Add(ClientSession clientSession)
         {
           lock ( _lock)
             {
@@ -40,7 +40,7 @@ namespace Server
                 _sessions.Add(sessionId, clientSession);
                 Console.WriteLine($"Connected : {sessionId}");
             }
-        }
+        }*/
         public ClientSession Find(int id)
         {
             lock (_lock)

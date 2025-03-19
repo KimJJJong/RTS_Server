@@ -172,14 +172,6 @@ class PacketHandler
     public static void C_SceneLoadedHandler(PacketSession session, IPacket packet)
     {
 
-
-/*        S_StartGame startPacket = new S_StartGame();
-        startPacket.gameId = gameRoom.RoomId;
-
-        gameRoom.BroadCast(startPacket.Write());*/
-
-
-
         C_SceneLoaded loadpacket = packet as C_SceneLoaded;
         ClientSession clientSession = session as ClientSession;
         GameRoom gameRoom = clientSession.Room;
@@ -194,7 +186,7 @@ class PacketHandler
             }
             S_SceneLoad sPakcet = new S_SceneLoad();
             sPakcet.ServerSendTime = DateTime.UtcNow.Ticks * 1e-7;
-            sPakcet.StartTime = sPakcet.ServerSendTime + 2d; /*after Load Delay*/
+            sPakcet.StartTime = gameRoom.GameLogic.Timer.GetServerTime() + 2d; /*after Load Delay*/
 
             gameRoom.BroadCast(sPakcet.Write());
         }
@@ -225,15 +217,14 @@ class PacketHandler
                               $" summonSession       : { sumPacket.reqSessionID}");
 
             S_AnsSummon ansPacket = new S_AnsSummon();
-//            sumPacket.x = (float)Math.Round(sumPacket.x, 3, MidpointRounding.ToZero);
-//          sumPacket.y = (float)Math.Round(sumPacket.y, 3, MidpointRounding.ToZero);
+
             ansPacket.x = sumPacket.x;
             ansPacket.y = sumPacket.y;
             ansPacket.oid = sumPacket.oid;  
             ansPacket.reqSessionID = sumPacket.reqSessionID;
             ansPacket.reducedMana = room.GameLogic.Manas[sumPacket.reqSessionID].GetMana();
             ansPacket.ServersummonTime = summonTime;
-            ansPacket.ServerSendTime = summonTime - 1d;    
+            ansPacket.ServerSendTime = DateTime.UtcNow.Ticks * 1e-7;    
             ansPacket.ranValue = new Random().Next(0, 10);
             Console.WriteLine($"uid : {sumPacket.oid}\nx : {sumPacket.x} y : {sumPacket.y} sumTime : {summonTime:F6}");
             room.BroadCast(ansPacket.Write());
