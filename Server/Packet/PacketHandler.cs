@@ -9,31 +9,7 @@ class PacketHandler
     #region Lobby BroadCast
     public static void C_LoginAuthHandler(PacketSession session, IPacket packet)
     {
-     /*   ClientSession clientSession = session as ClientSession;
-        C_LoginAuth authPacket = packet as C_LoginAuth;
 
-        Console.WriteLine($"JWT 토큰 검증 시도: {authPacket.accessToken}");
-
-        if (clientSession.Authenticate(authPacket.accessToken))
-        {
-            Console.WriteLine("인증 성공! 세션을 활성화합니다.");
-            SessionManager.Instance.Add(clientSession);
-
-            Console.WriteLine($"===============\n" +
-                  $"SessionID : {clientSession.SessionID}\n" +
-                  $"===============");
-
-            Program.Lobby.Push(() => Program.Lobby.Enter(clientSession));
-
-            S_Login s_Login = new S_Login();
-            s_Login.message = $"[{clientSession.SessionID}] Connect";
-            Program.Lobby.Push(() => clientSession.Send(s_Login.Write()));
-        }
-        else
-        {
-            Console.WriteLine("인증 실패! 연결을 종료합니다.");
-            clientSession.Disconnect();
-        }*/
     }
 
     public static void C_LoginHandler(PacketSession session, IPacket packet)
@@ -60,7 +36,6 @@ class PacketHandler
     }
     public static void C_EnterLobbyHandler(PacketSession session, IPacket packet)
     {
-        // 일단 기본적으로 Lobby에 접속을 하기때문에 따로 handler가 필요 없다
     }
 
     public static void C_MatchRequestHandler(PacketSession session, IPacket packet)
@@ -73,7 +48,6 @@ class PacketHandler
         Console.WriteLine($"Client :{ clientSession.SessionID } Mtaching...");
 
         Program.Lobby.Push(() => clientSession.Lobby.EnterMatchQueue(clientSession));
-       // Program.Lobby.EnterMatchQueue(clientSession);
     }
     public static void C_CreateRoomHandler(PacketSession session, IPacket packet)
     {
@@ -85,7 +59,6 @@ class PacketHandler
         Program.Lobby.Push(() => s_CreateRoom.roomId = clientSession.Lobby.CreateRoom());
         Console.WriteLine($"Client [{clientSession.SessionID}] Create Room [{s_CreateRoom.roomId}]");
 
-        // s_CreateRoom.roomId = clientSession.Lobby.CreateRoom(); // MainThread에서 처리 하지 않아도 괜찮은가?
         Program.Lobby.Push(() => clientSession.Lobby.FindRoom(s_CreateRoom.roomId).Enter(clientSession));
         Program.Lobby.Push(() => clientSession.Send(s_CreateRoom.Write()));
 
@@ -132,7 +105,6 @@ class PacketHandler
 
         GameRoom gameRoom = clientSession.Room;
         clientSession.isReady = true;
-        //Console.WriteLine($"Client[{clientSession.SessionID}] Ready[{clientSession.isReady}]");
 
         try
         {
@@ -146,14 +118,6 @@ class PacketHandler
                 clientSession.Room.ReadyStartGame();
                 foreach(var player in gameRoom.Sessions.Values)
                 clientSession.Room.GameLogic.OnReceiveDeck(player, c_SetCardPool);
-
-
-                /// 이부분을 없애고 클라에서 로딩 끝나면 호출 부분을 시간과 함께 셋팅 해야함
-    /*            S_StartGame startPacket = new S_StartGame();
-                startPacket.gameId = gameRoom.RoomId;
-
-                gameRoom.BroadCast(startPacket.Write());*/
-                ///
             }
             else
             {

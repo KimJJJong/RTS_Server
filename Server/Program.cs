@@ -35,7 +35,7 @@ namespace Server
         {
             //currentTime = DateTime.UtcNow.Ticks * 1e-7;
             // DNS (Domain Name System)
-
+            
             Lobby.CreateRoom();         // TODO : Del this code when Test Over
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
@@ -44,7 +44,8 @@ namespace Server
 
             _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
             Console.WriteLine("Listening...");
-            
+
+
             //Flush();
             //JobTimer.Instance.Push(FlushRoom);
             JobTimer.Instance.Push(FlushLobby);

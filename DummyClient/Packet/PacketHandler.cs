@@ -36,6 +36,10 @@ using System.Text;
     {
 
     }
+    public static void S_CardPoolHandler(PacketSession session, IPacket packet)
+    {
+
+    }
     public static void S_InitGameHandler(PacketSession session, IPacket packet)
     {
 

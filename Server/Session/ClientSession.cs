@@ -3,14 +3,12 @@ using System;
 using System.Net;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using System.Net.Sockets;
 
 namespace Server
 {
     class ClientSession : PacketSession
     {
-        public string AccessToken { get; set; } // JWT 토큰 저장
-        public bool IsAuthenticated { get; private set; } = false;
-
         public bool isReady { get; set; }
         public bool isLoad {  get; set; }
         public bool isMatching {  get; set; }
@@ -51,7 +49,7 @@ namespace Server
 
         public override void OnDisconnected(EndPoint endPoint)
         {
-            SessionManager.Instance.Remove(this);
+            //SessionManager.Instance.Remove(this);
 
 
             if (Room != null)
@@ -62,7 +60,6 @@ namespace Server
                 //room.Push(() => room.Leave(this));
                 room.Leave(this);
                 Room = null;
-
             }
 
             if (Lobby != null)
@@ -72,6 +69,12 @@ namespace Server
                 Lobby = null;
             }
 
+
+            //CleanUp(); // 새로운 정리 메서드 호출
+            SessionManager.Instance.Remove(this);
+            //ClientSessionPool.Instance.ReturnSession(this); //Pool로 반환
+
+            
             Console.WriteLine($"OnDisconnected : {endPoint}");
         }
 
@@ -79,6 +82,47 @@ namespace Server
         {
             // Console.WriteLine($"Transferred bytes: {numOfBytes}");
         }
+
+
+        public void Reset()
+        {
+            isReady = false;
+            isLoad = false;
+            isMatching = false;
+            Room = null;
+            Lobby = null;
+        }
+
+        /// <summary>
+        /// Used Memory CleanUp
+        /// </summary>
+        public void CleanUp()
+        {
+            try
+            {
+                // 네트워크 소켓 해제
+                Socket socket = GetSocket();
+                if (socket != null)
+                {
+                    Console.WriteLine("CleanUp");
+                    socket.Shutdown(SocketShutdown.Both);
+                    socket.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Cleanup] Socket Error: {ex.Message}");
+            }
+
+          
+        }
+
+        private Socket GetSocket()
+        {
+            // PacketSession에 _socket이 private이라면, 이를 상속받아 가져오거나, 네트워크 정리 로직을 내부에 추가할 필요가 있음.
+            return null;
+        }
+
 
     }
 }

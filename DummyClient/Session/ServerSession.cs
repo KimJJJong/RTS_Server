@@ -15,7 +15,7 @@ namespace DummyClient
         {
             Console.WriteLine($"OnConnected [Cli]: {endPoint}");
 
-            if (!string.IsNullOrEmpty(AccessToken))
+   /*         if (!string.IsNullOrEmpty(AccessToken))
             {
                 Console.WriteLine("인증을 위해 C_LoginAuth 패킷을 전송합니다.");
 
@@ -27,7 +27,7 @@ namespace DummyClient
             {
                 Console.WriteLine("AccessToken이 존재하지 않습니다. 연결을 종료합니다.");
                 Disconnect();
-            }
+            }*/
         }
 
         public override void OnDisconnected(EndPoint endPoint)
