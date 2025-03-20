@@ -53,17 +53,26 @@ namespace ServerCore
 		// Multi Threading Start : BeCareful RaceCondition 
 		void OnAcceptCompleted(object sender, SocketAsyncEventArgs args /* CallBack Parameter : Clinet delegate Socket */ )
 		{
-			if (args.SocketError == SocketError.Success)
+			try
 			{
-				Session session = _sessionFactory.Invoke();
-				session.Start(args.AcceptSocket);
-				session.OnConnected(args.AcceptSocket.RemoteEndPoint);
+                if (args.SocketError == SocketError.Success)
+                {
+                    Session session = _sessionFactory.Invoke();
+                    session.Start(args.AcceptSocket);
+                    session.OnConnected(args.AcceptSocket.RemoteEndPoint);
+                }
+                else
+                    Console.WriteLine(args.SocketError.ToString());
+            }
+			catch (Exception e)
+			{
+				Console.WriteLine($"Err Connect Fail : { e.Message }");
 			}
-			else
-				Console.WriteLine(args.SocketError.ToString());
-
+			finally
+			{
 			// Re Casting
 			RegisterAccept(args);
+			}
 		}
 	}
 }

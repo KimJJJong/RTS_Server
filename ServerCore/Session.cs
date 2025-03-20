@@ -197,11 +197,24 @@ namespace ServerCore
                 if (pending == false)
                     OnRecvCompleted(null, _recvArgs);
             }
-			catch (Exception ex)
-			{
-                Console.WriteLine($"RegisterRecv Failed : {ex }");
+            catch (ObjectDisposedException)
+            {
+                Console.WriteLine("소켓이 이미 닫혀 있음");
             }
-		}
+            catch (SocketException ex)
+            {
+                Console.WriteLine($"소켓 오류 발생: {ex.SocketErrorCode}");
+                Disconnect(); // 연결 종료
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"RegisterRecv Failed {e}");
+            }
+            /*catch (Exception e)
+			{
+                Console.WriteLine($"RegisterRecv Failed : {e }");
+            }*/
+        }
 
 		// Memory 충돌 다소 안전 : 내부 argument만사용
 		void OnRecvCompleted(object sender, SocketAsyncEventArgs args)

@@ -8,11 +8,8 @@ class GameLogicManager
 {
     private Dictionary<int,ClientSession> _sessions = new Dictionary<int, ClientSession>();
     private Dictionary<int, Mana> _playerMana = new Dictionary<int, Mana>(); // Mana
-    private bool[][] _grid;
     private GameRoom _room;
-    private List<Unit> _unitPool;
-
-    private List<Card> _cardCombination; // int = unitID;
+   
 
     ////////
     private Dictionary<int, List<Card>> playerDecks = new Dictionary<int, List<Card>>();
@@ -20,7 +17,7 @@ class GameLogicManager
 
     private bool _gameOver = false;
     private Timer _timer;
-    public IReadOnlyDictionary<int,ClientSession> Sessions => _sessions;
+    //public IReadOnlyDictionary<int,ClientSession> Sessions => _sessions;
     public IReadOnlyDictionary<int, Mana> Manas => _playerMana;
     public Timer Timer
     {

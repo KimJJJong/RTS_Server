@@ -10,11 +10,10 @@ namespace Server
         Finished   // 게임 종료됨
     }
 
-    class GameRoom : IJobQueue
+    class GameRoom 
     {
         public string RoomId { get; }
         private Dictionary<int, ClientSession> _sessions = new Dictionary<int, ClientSession>();
-        private JobQueue _jobQueue = new JobQueue();
         private RoomState _roomState;
         public GameLogicManager GameLogic { get;  set; }
         public IReadOnlyDictionary<int, ClientSession> Sessions => _sessions;
@@ -30,13 +29,19 @@ namespace Server
             _roomState = RoomState.Waiting;
         }
 
-        public void Push(Action action) => _jobQueue.Push(action);
 
         public void BroadCast(ArraySegment<byte> segment)
         {
             foreach (var session in _sessions.Values)
             {
-                session.Send(segment);
+                try
+                {
+                    session.Send(segment);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"BroadCast 오류: {ex.Message}");
+                }
             }
         }
 
@@ -105,10 +110,13 @@ namespace Server
             }
         }
 
-        public void EndGame()
+        private void EndGame()
         {
+            //_sessions.Clear();
+            _sessions = null;
             Console.WriteLine($"방 {RoomId} 게임 종료");
-            GameLogic.EndGame();
+            GameLogic?.EndGame();
+            GameLogic = null;
             _roomState = RoomState.Finished;
             // 필요한 후처리 추가 가능
         }

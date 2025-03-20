@@ -49,6 +49,15 @@ class PacketHandler
 
         Program.Lobby.Push(() => clientSession.Lobby.EnterMatchQueue(clientSession));
     }
+    public static void C_MatchCancelHandler(PacketSession session, IPacket packet)
+    {
+        ClientSession clientSession = session as ClientSession;
+       
+        if (clientSession == null)
+            return;
+
+        Program.Lobby.Push(() => Program.Lobby.LeaveMatchQueue(clientSession));
+    }
     public static void C_CreateRoomHandler(PacketSession session, IPacket packet)
     {
         ClientSession clientSession = session as ClientSession;
@@ -68,7 +77,7 @@ class PacketHandler
     {
         C_JoinRoom c_JoinRoom = packet as C_JoinRoom;
         ClientSession clientSession = session as ClientSession;
-        clientSession.Lobby.Push(() => clientSession.Lobby.FindRoom(c_JoinRoom.roomId)?.Enter(clientSession));
+        Program.Lobby.Push(() => clientSession.Lobby.FindRoom(c_JoinRoom.roomId)?.Enter(clientSession));
 
     }
     #endregion

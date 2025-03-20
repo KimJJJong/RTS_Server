@@ -16,23 +16,24 @@ public enum PacketID
 	C_JoinRoom = 8,
 	S_JoinRoom = 9,
 	C_MatchRequest = 10,
-	C_Ready = 11,
-	S_Ready = 12,
-	S_StartGame = 13,
-	C_SetCardPool = 14,
-	C_SceneLoaded = 15,
-	S_SceneLoad = 16,
-	S_InitGame = 17,
-	S_CardPool = 18,
-	S_GameUpdate = 19,
-	C_ReqSummon = 20,
-	S_AnsSummon = 21,
-	C_RequestManaStatus = 22,
-	S_SyncTime = 23,
-	S_GameStateUpdate = 24,
-	S_ManaUpdate = 25,
-	S_UnitAction = 26,
-	S_GameOver = 27,
+	C_MatchCancel = 11,
+	C_Ready = 12,
+	S_Ready = 13,
+	S_StartGame = 14,
+	C_SetCardPool = 15,
+	C_SceneLoaded = 16,
+	S_SceneLoad = 17,
+	S_InitGame = 18,
+	S_CardPool = 19,
+	S_GameUpdate = 20,
+	C_ReqSummon = 21,
+	S_AnsSummon = 22,
+	C_RequestManaStatus = 23,
+	S_SyncTime = 24,
+	S_GameStateUpdate = 25,
+	S_ManaUpdate = 26,
+	S_UnitAction = 27,
+	S_GameOver = 28,
 	
 }
 
@@ -484,6 +485,41 @@ public class C_MatchRequest : IPacket
 
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.C_MatchRequest);
+		count += sizeof(ushort);
+		
+		success &= BitConverter.TryWriteBytes(s, count);
+		if (success == false)
+			return null;
+		return SendBufferHelper.Close(count);
+	}
+}
+
+public class C_MatchCancel : IPacket
+{
+	
+
+	public ushort Protocol { get { return (ushort)PacketID.C_MatchCancel; } }
+
+	public void Read(ArraySegment<byte> segment)
+	{
+		ushort count = 0;
+
+		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
+		count += sizeof(ushort);
+		count += sizeof(ushort);
+		
+	}
+
+	public ArraySegment<byte> Write()
+	{
+		ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+		ushort count = 0;
+		bool success = true;
+
+		Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
+
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.C_MatchCancel);
 		count += sizeof(ushort);
 		
 		success &= BitConverter.TryWriteBytes(s, count);

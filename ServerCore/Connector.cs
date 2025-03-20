@@ -41,15 +41,22 @@ namespace ServerCore
 
 		void OnConnectCompleted(object sender, SocketAsyncEventArgs args)
 		{
-			if (args.SocketError == SocketError.Success)
+			try
 			{
-				Session session = _sessionFactory.Invoke();
-				session.Start(args.ConnectSocket ); // args.UserToken as Socket : 두가지 방법
-                session.OnConnected(args.RemoteEndPoint);
-			}
-			else
+                if (args.SocketError == SocketError.Success)
+                {
+                    Session session = _sessionFactory.Invoke();
+                    session.Start(args.ConnectSocket); // args.UserToken as Socket : 두가지 방법
+                    session.OnConnected(args.RemoteEndPoint);
+                }
+                else
+                {
+                    Console.WriteLine($"OnConnectCompleted Fail: {args.SocketError}");
+                }
+            }
+			catch(Exception e)
 			{
-				Console.WriteLine($"OnConnectCompleted Fail: {args.SocketError}");
+				Console.WriteLine($"Err during Connect :{e.Message}");
 			}
 		}
 	}

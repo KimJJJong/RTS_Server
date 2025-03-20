@@ -15,17 +15,9 @@ namespace Server
 	{
 		static Listener _listener = new Listener();
         public static Lobby Lobby = new Lobby();
-		public static GameRoom Room = new GameRoom();
-        public static double initTime;
-       /* static void FlushRoom()
-        {
-            Room.Push(() => Room.Flush());
-            JobTimer.Instance.Push(FlushRoom, 1000);
-            
-        }*/
+
         static void FlushLobby()
         {
-           // Console.WriteLine((180 - (DateTime.UtcNow.Ticks * 1e-7 - currentTime)));
             Lobby.Push(() => Lobby.Flush());
             JobTimer.Instance.Push(FlushLobby, 250);
         }
@@ -33,7 +25,6 @@ namespace Server
         public static double currentTime;
         static void Main(string[] args)
         {
-            //currentTime = DateTime.UtcNow.Ticks * 1e-7;
             // DNS (Domain Name System)
             
             Lobby.CreateRoom();         // TODO : Del this code when Test Over
@@ -45,11 +36,7 @@ namespace Server
             _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
             Console.WriteLine("Listening...");
 
-
-            //Flush();
-            //JobTimer.Instance.Push(FlushRoom);
             JobTimer.Instance.Push(FlushLobby);
-            //Room.StartSyncTimer();
 
             while (true)
             {
