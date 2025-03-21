@@ -28,7 +28,6 @@ namespace Server
             //Program.Room.Enter(this);
             //Console.WriteLine($"GameServer와 연결되었습니다: {endPoint}");
 
-        
 
 
         }
@@ -73,6 +72,7 @@ namespace Server
 
         public void Reset()
         {
+            FlagSet();  // Session을 건드림 _disconnect;
             isReady = false;
             isLoad = false;
             isMatching = false;

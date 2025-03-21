@@ -66,12 +66,17 @@ namespace ServerCore
 		public abstract void OnSend(int numOfBytes);
 		public abstract void OnDisconnected(EndPoint endPoint);
 
+		public void FlagSet()
+		{
+			_disconnected = 0;
+		}
 		void Clear()
 		{
 			lock (_lock)
 			{
 				_sendQueue.Clear();
 				_pendingList.Clear();
+				//_disconnected = 0;
 			}
 		}
 

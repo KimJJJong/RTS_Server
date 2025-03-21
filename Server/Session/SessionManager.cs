@@ -87,6 +87,7 @@ namespace Server
                 int sessionId = ++_sessionId;
                 session.SessionID = sessionId;
                 _sessions.Add(sessionId, session);
+                
 
                 Console.WriteLine($"Connected : {sessionId}");
                 return session;
