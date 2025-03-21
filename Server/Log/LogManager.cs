@@ -51,6 +51,7 @@ namespace Server.Log
         private readonly BlockingCollection<LogEntry> _logQueue = new BlockingCollection<LogEntry>();
 
         // 로그 파일 경로 (실행 파일 위치의 logs 폴더 아래에 생성)
+        // 이건 나중에 수정하긴 해야될 듯, 호스팅하면 어케될지 진짜 모름 ㅋㅋ
         private readonly string _logFilePath;
         private volatile bool _running = true;
 
@@ -64,12 +65,12 @@ namespace Server.Log
             }
             _logFilePath = Path.Combine(logDirectory, $"Log_{DateTime.Now:yyyyMMdd_HHmmss}.txt");
 
-            // 별도의 스레드에서 로그 큐를 처리하여 I/O 작업을 분리합니다.
+            // 별도의 스레드에서 로그 큐를 처리
             Task.Factory.StartNew(ProcessLogQueue, TaskCreationOptions.LongRunning);
         }
 
         /// <summary>
-        /// 로그를 기록합니다.
+        /// 로그 기록
         /// </summary>
         /// <param name="level">로그 레벨</param>
         /// <param name="source">로그 발생 위치 또는 클래스명</param>
@@ -107,7 +108,9 @@ namespace Server.Log
         public void LogDebug(string source, string message) => Log(LogLevel.Debug, source, message);
 
         /// <summary>
-        /// 로그 큐를 지속적으로 처리하며, 로그 항목을 파일과 콘솔에 기록
+        /// 로그 큐를 지속적으로 처리
+        /// 파일, 콘솔에 기록함
+        /// 개발 단계에서는 콘솔에 남기고 운영 환경에서는 진짜 중요한 거만 남기는 것이 좋다고 함
         /// </summary>
         private void ProcessLogQueue()
         {
@@ -128,6 +131,8 @@ namespace Server.Log
                         {
                             break;
                         }
+                        // 로그를 바로바로 기록하기 위해 flush 해줌
+                        // 실무에서도 로그 손실 방지를 위해 바로바로 flush 한다고 함
                         streamWriter.WriteLine(entry.ToString());
                         streamWriter.Flush();
 
@@ -143,7 +148,7 @@ namespace Server.Log
         }
 
         /// <summary>
-        /// 서버 종료 시 호출하여 로그 큐 처리를 마무리합니다.
+        /// 서버 종료 시 호출
         /// </summary>
         public void Shutdown()
         {
