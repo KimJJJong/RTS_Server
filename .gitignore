@@ -1,11 +1,33 @@
-
-
-# 컴파일된 파일
+# === [컴파일 결과물] ===
 *.exe
 *.dll
-*.bat
+*.pdb
+*.cache
+*.ilk
+*.obj
+*.log
+*.tmp
 
-# Visual Studio 개발툴 관련
+# === [Visual Studio 관련] ===
 .vs/
-*.user
 *.suo
+*.user
+*.userosscache
+*.sln.docstates
+bin/
+obj/
+
+# === [NuGet] ===
+packages/
+*.nupkg
+
+# === [운영체제] ===
+.DS_Store
+Thumbs.db
+
+# === [JetBrains Rider] ===
+.idea/
+*.sln.iml
+
+# === [ File ]
+GenPackets.bat
