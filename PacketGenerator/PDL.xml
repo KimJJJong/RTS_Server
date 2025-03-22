@@ -41,6 +41,8 @@
 	<packet name ="C_MatchRequest">
 	</packet>
 
+	<packet name ="C_MatchCancel">
+	</packet>
 	
 	<!-- 준비 상태 -->
 	<packet name="C_Ready">
@@ -51,6 +53,7 @@
 	<packet name="S_StartGame">
 		<string name="gameId"/>
 	</packet>
+	
 	
 	<packet name ="C_SetCardPool">
 		<list name="cardCombination">

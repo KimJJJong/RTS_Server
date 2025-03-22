@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System;
 using ServerCore;
 using System.Net.Sockets;
+using Shared;
 
 class GameLogicManager
 {
     private Dictionary<int,ClientSession> _sessions = new Dictionary<int, ClientSession>();
     private Dictionary<int, Mana> _playerMana = new Dictionary<int, Mana>(); // Mana
-    private bool[][] _grid;
     private GameRoom _room;
-    private List<Unit> _unitPool;
-
-    private List<Card> _cardCombination; // int = unitID;
+   
 
     ////////
     private Dictionary<int, List<Card>> playerDecks = new Dictionary<int, List<Card>>();
@@ -20,7 +18,7 @@ class GameLogicManager
 
     private bool _gameOver = false;
     private Timer _timer;
-    public IReadOnlyDictionary<int,ClientSession> Sessions => _sessions;
+    //public IReadOnlyDictionary<int,ClientSession> Sessions => _sessions;
     public IReadOnlyDictionary<int, Mana> Manas => _playerMana;
     public Timer Timer
     {
@@ -75,6 +73,7 @@ class GameLogicManager
                 cardPool.AddRange(deck);
 
             Console.WriteLine("Card pool is ready, sending to players.");
+            LogManager.Instance.LogInfo("GameLogic", $"CardPool sent to players");
 
             S_CardPool poolPacket = new S_CardPool();
             // Card -> CardData 변환 후 패킷에 추가

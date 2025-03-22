@@ -31,6 +31,8 @@ public class PacketManager
 		_handler.Add((ushort)PacketID.C_JoinRoom, PacketHandler.C_JoinRoomHandler);
 		_makeFunc.Add((ushort)PacketID.C_MatchRequest, MakePacket<C_MatchRequest>);
 		_handler.Add((ushort)PacketID.C_MatchRequest, PacketHandler.C_MatchRequestHandler);
+		_makeFunc.Add((ushort)PacketID.C_MatchCancel, MakePacket<C_MatchCancel>);
+		_handler.Add((ushort)PacketID.C_MatchCancel, PacketHandler.C_MatchCancelHandler);
 		_makeFunc.Add((ushort)PacketID.C_Ready, MakePacket<C_Ready>);
 		_handler.Add((ushort)PacketID.C_Ready, PacketHandler.C_ReadyHandler);
 		_makeFunc.Add((ushort)PacketID.C_SetCardPool, MakePacket<C_SetCardPool>);
