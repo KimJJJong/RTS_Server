@@ -1,0 +1,11 @@
+
+
+# 컴파일된 파일
+*.exe
+*.dll
+*.bat
+
+# Visual Studio 개발툴 관련
+.vs/
+*.user
+*.suo
