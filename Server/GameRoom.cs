@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Shared;
 
 namespace Server
 {
@@ -65,8 +66,8 @@ namespace Server
                 sessionID = session.SessionID
             };
             session.Send(joinPacket.Write());
-
             Console.WriteLine($"클라이언트 {session.SessionID}가 방 {RoomId}에 입장");
+            LogManager.Instance.LogInfo("GameRoom", $"[{RoomId}] Player {session.SessionID} entered room");
 
         }
 
@@ -81,6 +82,7 @@ namespace Server
         {
             _roomState = RoomState.InGame;
             Console.WriteLine($"게임 시작! Room ID: {RoomId}");
+            LogManager.Instance.LogInfo("GameRoom", $"[{RoomId}] Game started");
 
             GameLogic = new GameLogicManager(this);
             foreach (var session in _sessions.Values)
@@ -113,6 +115,7 @@ namespace Server
         private void EndGame()
         {
             //_sessions.Clear();
+            LogManager.Instance.LogInfo("GameRoom", $"[{RoomId}] Distroy");
             _sessions = null;
             Console.WriteLine($"방 {RoomId} 게임 종료");
             GameLogic?.EndGame();

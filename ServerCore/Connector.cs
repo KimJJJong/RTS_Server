@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Shared;
 
 namespace ServerCore
 {
@@ -48,6 +49,8 @@ namespace ServerCore
                     Session session = _sessionFactory.Invoke();
                     session.Start(args.ConnectSocket); // args.UserToken as Socket : 두가지 방법
                     session.OnConnected(args.RemoteEndPoint);
+                    LogManager.Instance.LogInfo("Connector", "Connected to server!");
+
                 }
                 else
                 {
@@ -56,7 +59,8 @@ namespace ServerCore
             }
 			catch(Exception e)
 			{
-				Console.WriteLine($"Err during Connect :{e.Message}");
+                LogManager.Instance.LogError("Connector", $"Connect failed: {args.SocketError}");
+                Console.WriteLine($"Err during Connect :{e.Message}");
 			}
 		}
 	}

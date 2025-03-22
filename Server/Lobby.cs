@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Shared;
 
 namespace Server
 {
@@ -33,6 +34,8 @@ namespace Server
         public void Enter(ClientSession session)
         {
             Console.WriteLine($"Player {session.SessionID} join Lobby");
+            LogManager.Instance.LogInfo("Lobby", $"Player {session.SessionID} joined lobby");
+
             _sessions.Add(session);
             session.Lobby = this;
         }
@@ -103,6 +106,7 @@ namespace Server
                 room.Enter(player2);
 
                 Console.WriteLine($"Matched {player1.SessionID} vs {player2.SessionID} in Room {roomId}");
+                LogManager.Instance.LogInfo("Lobby", $"Matched {player1.SessionID} vs {player2.SessionID} in {roomId}");
 
                 room.BothReady();
                 //room.StartGame();

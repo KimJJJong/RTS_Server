@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
+using Shared;
 
 namespace ServerCore
 {
@@ -66,7 +65,8 @@ namespace ServerCore
             }
 			catch (Exception e)
 			{
-				Console.WriteLine($"Err Connect Fail : { e.Message }");
+                LogManager.Instance.LogError("Listener", $"AcceptSocket Error: {args.SocketError}");
+                Console.WriteLine($"Err Connect Fail : { e.Message }");
 			}
 			finally
 			{

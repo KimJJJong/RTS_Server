@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using ServerCore;
 using System.Net.Sockets;
+using Shared;
 
 class GameLogicManager
 {
@@ -72,6 +73,7 @@ class GameLogicManager
                 cardPool.AddRange(deck);
 
             Console.WriteLine("Card pool is ready, sending to players.");
+            LogManager.Instance.LogInfo("GameLogic", $"CardPool sent to players");
 
             S_CardPool poolPacket = new S_CardPool();
             // Card -> CardData 변환 후 패킷에 추가

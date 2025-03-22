@@ -1,12 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Text;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
+using System;
 
-namespace Server.Log
+namespace Shared
 {
     /// <summary>
     /// 로그 단계(정보, 경고, 에러, 디버그)
