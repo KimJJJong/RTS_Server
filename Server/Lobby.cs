@@ -33,7 +33,7 @@ namespace Server
         }
         public void Enter(ClientSession session)
         {
-            Console.WriteLine($"Player {session.SessionID} join Lobby");
+            //Console.WriteLine($"Player {session.SessionID} join Lobby");
             LogManager.Instance.LogInfo("Lobby", $"Player {session.SessionID} joined lobby");
 
             _sessions.Add(session);
@@ -105,7 +105,7 @@ namespace Server
                 //room.Push(() => 
                 room.Enter(player2);
 
-                Console.WriteLine($"Matched {player1.SessionID} vs {player2.SessionID} in Room {roomId}");
+                // Console.WriteLine($"Matched {player1.SessionID} vs {player2.SessionID} in Room {roomId}");
                 LogManager.Instance.LogInfo("Lobby", $"Matched {player1.SessionID} vs {player2.SessionID} in {roomId}");
 
                 room.BothReady();

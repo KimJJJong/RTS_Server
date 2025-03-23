@@ -60,7 +60,7 @@ namespace ServerCore
 			catch(Exception e)
 			{
                 LogManager.Instance.LogError("Connector", $"Connect failed: {args.SocketError}");
-                Console.WriteLine($"Err during Connect :{e.Message}");
+                //Console.WriteLine($"Err during Connect :{e.Message}");
 			}
 		}
 	}

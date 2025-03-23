@@ -4,6 +4,7 @@ using System.Net;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Net.Sockets;
+using Shared;
 
 namespace Server
 {
@@ -43,8 +44,6 @@ namespace Server
 
             if (Room != null)
             {
-                // JobQueue를 이용시 명령어 처리가 순차적으로 미뤄지는 상황에 따라
-                // Room.Leave(this) -> GameRoom room = Room; : 상태 저장 후 명령어 요청
                 GameRoom room = Room;
                 room.Leave(this);
                 Room = null;
@@ -59,9 +58,9 @@ namespace Server
 
 
             SessionManager.Instance.Remove(this);
+            LogManager.Instance.LogInfo("ClientSession", $"Disconnected: {endPoint}");
 
-            
-            Console.WriteLine($"OnDisconnected : {endPoint}");
+            //Console.WriteLine($"OnDisconnected : {endPoint}");
         }
 
         public override void OnSend(int numOfBytes)
@@ -69,6 +68,14 @@ namespace Server
             // Console.WriteLine($"Transferred bytes: {numOfBytes}");
         }
 
+        public void CleanUp()
+        {
+            Lobby?.Leave(this);
+            Room?.Leave(this);
+
+            Lobby = null ;
+            Room = null ;
+        }
 
         public void Reset()
         {

@@ -66,7 +66,7 @@ namespace Server
                 sessionID = session.SessionID
             };
             session.Send(joinPacket.Write());
-            Console.WriteLine($"클라이언트 {session.SessionID}가 방 {RoomId}에 입장");
+            //Console.WriteLine($"클라이언트 {session.SessionID}가 방 {RoomId}에 입장");
             LogManager.Instance.LogInfo("GameRoom", $"[{RoomId}] Player {session.SessionID} entered room");
 
         }
@@ -81,7 +81,7 @@ namespace Server
         public void ReadyStartGame()
         {
             _roomState = RoomState.InGame;
-            Console.WriteLine($"게임 시작! Room ID: {RoomId}");
+            //Console.WriteLine($"게임 시작! Room ID: {RoomId}");
             LogManager.Instance.LogInfo("GameRoom", $"[{RoomId}] Game started");
 
             GameLogic = new GameLogicManager(this);
@@ -101,7 +101,8 @@ namespace Server
         {
             if (_sessions.ContainsKey(session.SessionID))
             {
-                Console.WriteLine($"클라이언트 {session.SessionID}가 방 {RoomId}에서 퇴장");
+                //Console.WriteLine($"클라이언트 {session.SessionID}가 방 {RoomId}에서 퇴장");
+                LogManager.Instance.LogInfo("GameRoom", $"클라이언트 {session.SessionID}가 방 {RoomId}에서 퇴장");
                 _sessions.Remove(session.SessionID);
                 session.Room = null;
             }
@@ -117,7 +118,7 @@ namespace Server
             //_sessions.Clear();
             LogManager.Instance.LogInfo("GameRoom", $"[{RoomId}] Distroy");
             _sessions = null;
-            Console.WriteLine($"방 {RoomId} 게임 종료");
+           // Console.WriteLine($"방 {RoomId} 게임 종료");
             GameLogic?.EndGame();
             GameLogic = null;
             _roomState = RoomState.Finished;

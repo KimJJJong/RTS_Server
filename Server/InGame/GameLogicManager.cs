@@ -72,7 +72,7 @@ class GameLogicManager
             foreach (var deck in playerDecks.Values)
                 cardPool.AddRange(deck);
 
-            Console.WriteLine("Card pool is ready, sending to players.");
+            //Console.WriteLine("Card pool is ready, sending to players.");
             LogManager.Instance.LogInfo("GameLogic", $"CardPool sent to players");
 
             S_CardPool poolPacket = new S_CardPool();
@@ -104,7 +104,7 @@ class GameLogicManager
     {
         _playerMana[session.SessionID] = new Mana();
         _sessions[session.SessionID] = session;
-
+        
         
         Console.WriteLine($"[게임 로직] 플레이어 {session.SessionID} 추가");
     }

@@ -59,14 +59,15 @@ namespace ServerCore
                     Session session = _sessionFactory.Invoke();
                     session.Start(args.AcceptSocket);
                     session.OnConnected(args.AcceptSocket.RemoteEndPoint);
+                    LogManager.Instance.LogInfo("Listener", $"Accepted connection from {args.AcceptSocket.RemoteEndPoint}");
                 }
-                else
-                    Console.WriteLine(args.SocketError.ToString());
+                /*else
+                    Console.WriteLine(args.SocketError.ToString());*/
             }
 			catch (Exception e)
 			{
-                LogManager.Instance.LogError("Listener", $"AcceptSocket Error: {args.SocketError}");
-                Console.WriteLine($"Err Connect Fail : { e.Message }");
+                LogManager.Instance.LogError("Listener", $"AcceptSocket Error: {e}");
+                //Console.WriteLine($"Err Connect Fail : { e.Message }");
 			}
 			finally
 			{
