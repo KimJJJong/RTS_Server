@@ -29,7 +29,7 @@ public enum PacketID
 	C_ReqSummon = 21,
 	S_AnsSummon = 22,
 	C_RequestManaStatus = 23,
-	S_SyncTime = 24,
+	S_SyncTick = 24,
 	S_GameStateUpdate = 25,
 	S_ManaUpdate = 26,
 	S_UnitAction = 27,
@@ -1049,6 +1049,7 @@ public class C_ReqSummon : IPacket
 	public int oid;
 	public int needMana;
 	public int reqSessionID;
+	public int clientTick;
 
 	public ushort Protocol { get { return (ushort)PacketID.C_ReqSummon; } }
 
@@ -1068,6 +1069,8 @@ public class C_ReqSummon : IPacket
 		this.needMana = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
 		this.reqSessionID = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+		this.clientTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
 	}
 
@@ -1092,6 +1095,8 @@ public class C_ReqSummon : IPacket
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.reqSessionID);
 		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.clientTick);
+		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;
@@ -1106,8 +1111,7 @@ public class S_AnsSummon : IPacket
 	public int oid;
 	public int reducedMana;
 	public int reqSessionID;
-	public double ServersummonTime;
-	public double ServerSendTime;
+	public int serverSummonTick;
 	public double ranValue;
 
 	public ushort Protocol { get { return (ushort)PacketID.S_AnsSummon; } }
@@ -1129,10 +1133,8 @@ public class S_AnsSummon : IPacket
 		count += sizeof(int);
 		this.reqSessionID = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
-		this.ServersummonTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
-		count += sizeof(double);
-		this.ServerSendTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
-		count += sizeof(double);
+		this.serverSummonTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
 		this.ranValue = BitConverter.ToDouble(s.Slice(count, s.Length - count));
 		count += sizeof(double);
 	}
@@ -1158,10 +1160,8 @@ public class S_AnsSummon : IPacket
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.reqSessionID);
 		count += sizeof(int);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ServersummonTime);
-		count += sizeof(double);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ServerSendTime);
-		count += sizeof(double);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.serverSummonTick);
+		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ranValue);
 		count += sizeof(double);
 		success &= BitConverter.TryWriteBytes(s, count);
@@ -1208,11 +1208,13 @@ public class C_RequestManaStatus : IPacket
 	}
 }
 
-public class S_SyncTime : IPacket
+public class S_SyncTick : IPacket
 {
-	public double serverTime;
+	public int startTick;
+	public double serverStartTime;
+	public int tickIntervalMs;
 
-	public ushort Protocol { get { return (ushort)PacketID.S_SyncTime; } }
+	public ushort Protocol { get { return (ushort)PacketID.S_SyncTick; } }
 
 	public void Read(ArraySegment<byte> segment)
 	{
@@ -1221,8 +1223,12 @@ public class S_SyncTime : IPacket
 		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 		count += sizeof(ushort);
 		count += sizeof(ushort);
-		this.serverTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
+		this.startTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+		this.serverStartTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
 		count += sizeof(double);
+		this.tickIntervalMs = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
 	}
 
 	public ArraySegment<byte> Write()
@@ -1234,10 +1240,14 @@ public class S_SyncTime : IPacket
 		Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
 
 		count += sizeof(ushort);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_SyncTime);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_SyncTick);
 		count += sizeof(ushort);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.serverTime);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.startTick);
+		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.serverStartTime);
 		count += sizeof(double);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.tickIntervalMs);
+		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;

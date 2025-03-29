@@ -7,10 +7,10 @@ using Shared;
 
 class GameLogicManager
 {
-    private Dictionary<int,ClientSession> _sessions = new Dictionary<int, ClientSession>();
+    private Dictionary<int, ClientSession> _sessions = new Dictionary<int, ClientSession>();
     private Dictionary<int, Mana> _playerMana = new Dictionary<int, Mana>(); // Mana
     private GameRoom _room;
-   
+
 
     ////////
     private Dictionary<int, List<Card>> playerDecks = new Dictionary<int, List<Card>>();
@@ -28,16 +28,12 @@ class GameLogicManager
     {
         _room = room;
     }
-    /// <summary>
-    /// CardSet Init
-    /// Pooling Init
-    /// Loop Sync Event Init
-    /// </summary>
+
     public void Init()
     {
-        S_InitGame initPackt= new S_InitGame();
+        S_InitGame initPackt = new S_InitGame();
 
-    
+
 
         _timer = new Timer();
         initPackt.gameStartTime = _timer.GameStartTime;
@@ -46,6 +42,8 @@ class GameLogicManager
         _room.BroadCast(initPackt.Write());
 
         JobTimer.Instance.Push(Update);
+
+        JobTimer.Instance.Push(UpdateTick);
 
     }
     /////////
@@ -93,8 +91,8 @@ class GameLogicManager
 
             // 양쪽 플레이어에게 카드 풀 전송
             _room.BroadCast(poolPacket.Write());
-            
-            
+
+
         }
     }
 
@@ -104,8 +102,8 @@ class GameLogicManager
     {
         _playerMana[session.SessionID] = new Mana();
         _sessions[session.SessionID] = session;
-        
-        
+
+
         Console.WriteLine($"[게임 로직] 플레이어 {session.SessionID} 추가");
     }
     /// <summary>
@@ -113,12 +111,12 @@ class GameLogicManager
     /// </summary>
     public void Update()// :TODO Make JobQueue and push all packet 
     {
-        if (_gameOver) 
+        if (_gameOver)
             return;
 
         S_GameStateUpdate updatePacket = new S_GameStateUpdate();
 
-        foreach(var mana in _playerMana)
+        foreach (var mana in _playerMana)
         {
             mana.Value.RegenMana();   //BaseRegen Mana = 1  
             S_ManaUpdate packet = new S_ManaUpdate { currentMana = mana.Value.GetMana() };
@@ -134,7 +132,67 @@ class GameLogicManager
     {
         _gameOver = true;
         //_room.BroadcastToAll("시간 초과! 게임이 종료되었습니다!");
-       // _room.EndGame();
+        // _room.EndGame();
     }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+
+   
+
+    private int _currentTick = 0;
+    private const int COMMAND_EXEC_DELAY_TICK = 10;
+    private Queue<(int tick, C_ReqSummon packet)> _scheduledSummons = new Queue<(int tick, C_ReqSummon packet)>();
+
+    public int GetcurrentTick() => _currentTick;
+
+    public int ScheduleSummon(C_ReqSummon packet)
+    {
+        int scheduledTick = _currentTick + COMMAND_EXEC_DELAY_TICK;
+        _scheduledSummons.Enqueue((scheduledTick, packet));
+
+        // 예약 Tick 포함 응답 전송
+        Random rng = new Random(_currentTick * 1000 + packet.reqSessionID);
+        S_AnsSummon ansPacket = new S_AnsSummon
+        {
+            x = packet.x,
+            y = packet.y,
+            oid = packet.oid,
+            reqSessionID = packet.reqSessionID,
+            reducedMana = Manas[packet.reqSessionID].GetMana(),
+            serverSummonTick = scheduledTick,
+            //serverResponseTime = DateTime.UtcNow.Ticks * 1e-7,
+            ranValue = rng.Next(0, 10)
+        };
+
+        _room.BroadCast(ansPacket.Write());
+
+        return scheduledTick;
+    }
+
+    public void UpdateTick()
+    {
+
+        // Tick 증가 전, 현재 시간을 기준으로 잡는다
+        if (_currentTick % 100 == 0)
+        {
+            double now = DateTime.UtcNow.Ticks * 1e-7;
+            S_SyncTick sync = new S_SyncTick
+            {
+                startTick = _currentTick,
+                serverStartTime = now, // 정확히 Tick 시작 시점의 시간
+                tickIntervalMs = 100
+            };
+
+            Console.WriteLine($"🧩 [ServerSync] Tick={_currentTick}, UtcNow={now:F6}");
+            _room.BroadCast(sync.Write());
+        }
+
+        _currentTick++;
+
+        JobTimer.Instance.Push(UpdateTick, 100);
+    }
+
+
 
 }

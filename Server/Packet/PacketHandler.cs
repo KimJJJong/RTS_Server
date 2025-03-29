@@ -162,6 +162,16 @@ class PacketHandler
             sPakcet.StartTime = gameRoom.GameLogic.Timer.GetServerTime() + 2d; /*after Load Delay*/
 
             gameRoom.BroadCast(sPakcet.Write());
+
+            // Tick Sync Init
+            S_SyncTick sync = new S_SyncTick
+            {
+                startTick = 0,
+                serverStartTime = DateTime.UtcNow.Ticks * 1e-7,
+                tickIntervalMs = 100
+            };
+            gameRoom.BroadCast(sync.Write());
+
         }
         else
         {
@@ -178,32 +188,17 @@ class PacketHandler
     {
         C_ReqSummon sumPacket = packet as C_ReqSummon;
         ClientSession cliSsession = session as ClientSession;
-        GameRoom room = cliSsession.Room;
+        GameLogicManager gameLogic = cliSsession.Room.GameLogic;
 
-        // Mana Check
-        if( room.GameLogic.Manas[sumPacket.reqSessionID].UseMana(sumPacket.needMana))
+        if (gameLogic.Manas[sumPacket.reqSessionID].UseMana(sumPacket.needMana))
         {
-            double summonTime = room.GameLogic.Timer.GetServerTime()+1d/*summonDelay*/;
+            Console.WriteLine($"Send Tick : {gameLogic.GetcurrentTick()}");
 
-            Console.WriteLine($" serverTime          : { summonTime-1d }\n" +
-                              $" summonTime          : { summonTime}\n" +
-                              $" summonSession       : { sumPacket.reqSessionID}");
+            int scheduleSummon = gameLogic.ScheduleSummon(sumPacket);
+            Console.WriteLine($"[소환 요청 : {scheduleSummon}Tick] Player {sumPacket.reqSessionID} summons OID:{sumPacket.oid} at ({sumPacket.x}, {sumPacket.y})");
 
-            S_AnsSummon ansPacket = new S_AnsSummon();
-
-            ansPacket.x = sumPacket.x;
-            ansPacket.y = sumPacket.y;
-            ansPacket.oid = sumPacket.oid;  
-            ansPacket.reqSessionID = sumPacket.reqSessionID;
-            ansPacket.reducedMana = room.GameLogic.Manas[sumPacket.reqSessionID].GetMana();
-            ansPacket.ServersummonTime = summonTime;
-            ansPacket.ServerSendTime = DateTime.UtcNow.Ticks * 1e-7;    
-            ansPacket.ranValue = new Random().Next(0, 10);
-            Console.WriteLine($"uid : {sumPacket.oid}\nx : {sumPacket.x} y : {sumPacket.y} sumTime : {summonTime:F6}");
-            room.BroadCast(ansPacket.Write());
         }
-        // deficient mana
-
+      
     }
     public static void C_RequestManaStatusHandler(PacketSession session, IPacket packet)
     {

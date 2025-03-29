@@ -103,6 +103,7 @@
 		<int name="oid"/>
 		<int name="needMana"/>
 		<int name="reqSessionID"/>
+		<int name ="clientTick"/>
 	</packet>
 	<packet name="S_AnsSummon">
 		<float name="x"/>
@@ -110,15 +111,16 @@
 		<int name="oid"/>
 		<int name="reducedMana"/>
 		<int name="reqSessionID"/>
-		<double name="ServersummonTime"/>
-		<double name="ServerSendTime"/>
+		<int name="serverSummonTick"/>
 		<double name="ranValue"/>
 	</packet>
 	<packet name="C_RequestManaStatus">
 		<int name="playerId"/>
 	</packet>
-	<packet name="S_SyncTime">
-		<double name="serverTime"/>
+	<packet name="S_SyncTick">
+		<int name="startTick"/>
+		<double name="serverStartTime"/>
+		<int name ="tickIntervalMs"/>
 	</packet>
 	<packet name="S_GameStateUpdate">
 		<list name="units">
