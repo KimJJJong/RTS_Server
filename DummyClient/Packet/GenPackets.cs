@@ -1049,6 +1049,7 @@ public class C_ReqSummon : IPacket
 	public int oid;
 	public int needMana;
 	public int reqSessionID;
+	public long ClientSendTimeMs;
 
 	public ushort Protocol { get { return (ushort)PacketID.C_ReqSummon; } }
 
@@ -1069,6 +1070,8 @@ public class C_ReqSummon : IPacket
 		count += sizeof(int);
 		this.reqSessionID = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
+		this.ClientSendTimeMs = BitConverter.ToInt64(s.Slice(count, s.Length - count));
+		count += sizeof(long);
 	}
 
 	public ArraySegment<byte> Write()
@@ -1092,6 +1095,8 @@ public class C_ReqSummon : IPacket
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.reqSessionID);
 		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ClientSendTimeMs);
+		count += sizeof(long);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;
@@ -1106,9 +1111,11 @@ public class S_AnsSummon : IPacket
 	public int oid;
 	public int reducedMana;
 	public int reqSessionID;
-	public double ServersummonTime;
-	public double ServerSendTime;
-	public double ranValue;
+	public int ExcuteTick;
+	public int randomValue;
+	public long ServerReceiveTimeMs;
+	public long ServerStartTimeMs;
+	public long ClientSendTimeMs;
 
 	public ushort Protocol { get { return (ushort)PacketID.S_AnsSummon; } }
 
@@ -1129,12 +1136,16 @@ public class S_AnsSummon : IPacket
 		count += sizeof(int);
 		this.reqSessionID = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
-		this.ServersummonTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
-		count += sizeof(double);
-		this.ServerSendTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
-		count += sizeof(double);
-		this.ranValue = BitConverter.ToDouble(s.Slice(count, s.Length - count));
-		count += sizeof(double);
+		this.ExcuteTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+		this.randomValue = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+		this.ServerReceiveTimeMs = BitConverter.ToInt64(s.Slice(count, s.Length - count));
+		count += sizeof(long);
+		this.ServerStartTimeMs = BitConverter.ToInt64(s.Slice(count, s.Length - count));
+		count += sizeof(long);
+		this.ClientSendTimeMs = BitConverter.ToInt64(s.Slice(count, s.Length - count));
+		count += sizeof(long);
 	}
 
 	public ArraySegment<byte> Write()
@@ -1158,12 +1169,16 @@ public class S_AnsSummon : IPacket
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.reqSessionID);
 		count += sizeof(int);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ServersummonTime);
-		count += sizeof(double);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ServerSendTime);
-		count += sizeof(double);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ranValue);
-		count += sizeof(double);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ExcuteTick);
+		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.randomValue);
+		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ServerReceiveTimeMs);
+		count += sizeof(long);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ServerStartTimeMs);
+		count += sizeof(long);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ClientSendTimeMs);
+		count += sizeof(long);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;

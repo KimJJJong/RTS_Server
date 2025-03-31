@@ -4,51 +4,43 @@ using System;
 using ServerCore;
 using System.Net.Sockets;
 using Shared;
+using System.Diagnostics;
 
 class GameLogicManager
 {
     private Dictionary<int,ClientSession> _sessions = new Dictionary<int, ClientSession>();
     private Dictionary<int, Mana> _playerMana = new Dictionary<int, Mana>(); // Mana
-    private GameRoom _room;
-   
-
-    ////////
     private Dictionary<int, List<Card>> playerDecks = new Dictionary<int, List<Card>>();
+    private GameRoom _room;
     private List<Card> cardPool = new List<Card>();
+    private Timer _timer;
+    private TickManager _tickManager;
 
     private bool _gameOver = false;
-    private Timer _timer;
-    //public IReadOnlyDictionary<int,ClientSession> Sessions => _sessions;
     public IReadOnlyDictionary<int, Mana> Manas => _playerMana;
-    public Timer Timer
-    {
-        get => _timer;
-    }
+    public Timer Timer => _timer;
+    public TickManager TickManager => _tickManager;
     public GameLogicManager(GameRoom room)
     {
         _room = room;
     }
-    /// <summary>
-    /// CardSet Init
-    /// Pooling Init
-    /// Loop Sync Event Init
-    /// </summary>
+
+
     public void Init()
     {
-        S_InitGame initPackt= new S_InitGame();
-
-    
-
         _timer = new Timer();
+        _tickManager = new TickManager();
+        
+
+        S_InitGame initPackt= new S_InitGame();
         initPackt.gameStartTime = _timer.GameStartTime;
         initPackt.duration = _timer.GameDuration;
-
         _room.BroadCast(initPackt.Write());
 
         JobTimer.Instance.Push(Update);
 
     }
-    /////////
+    
     public void OnReceiveDeck(ClientSession session, C_SetCardPool packet)
     {
         if (!playerDecks.ContainsKey(session.SessionID))
@@ -62,7 +54,6 @@ class GameLogicManager
             Card newCard = new Card(cardData.uid, cardData.lv);
             playerDecks[session.SessionID].Add(newCard);
         }
-
 
         Console.WriteLine($"Player {session.SessionID} sent their deck.");
 
@@ -98,7 +89,33 @@ class GameLogicManager
         }
     }
 
+    public void OnReceiveSummon(ClientSession clientSession, C_ReqSummon packet)
+    {
+        int delayTick = 10;
+        int currentTick = _tickManager.GetCurrentTick();
+        int executeTick = currentTick + delayTick;
 
+        S_AnsSummon response = new S_AnsSummon
+        {
+            oid = packet.oid,
+            reqSessionID = clientSession.SessionID,
+            x = packet.x,
+            y = packet.y,
+            reducedMana = packet.needMana,
+            ExcuteTick = executeTick,
+            ServerReceiveTimeMs= _tickManager.GetNowTimeMs(),
+            ServerStartTimeMs = _tickManager.GetStartTimeMs(),
+            ClientSendTimeMs = packet.ClientSendTimeMs // 클라이언트가 보낸 시각 그대로 회신
+        };
+        Console.WriteLine($"Player [ {response.reqSessionID} ]" +
+                          $" || Oid[ {response.oid} ]" +
+                          $" || Position [ {response.x}, {response.y} ]" +
+                          $" || Excute Tick [ {executeTick} ]" +
+                          $" || CurrentTick [ {currentTick} ]" +
+                          $" || CurrentTimeMs [ {response.ServerReceiveTimeMs} ]");
+        clientSession.Room.BroadCast(response.Write());
+    }
+  
 
     public void AddPlayer(ClientSession session)
     {
