@@ -79,7 +79,6 @@ namespace Server
 
         public void Reset()
         {
-            FlagSet();  // Session을 건드림 _disconnect;
             isReady = false;
             isLoad = false;
             isMatching = false;

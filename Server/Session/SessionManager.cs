@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace Server
 {
-    /*class SessionManager
+    class SessionManager
     {
         static SessionManager _session = new SessionManager();
         public static SessionManager Instance { get { return _session; } }
@@ -23,8 +23,9 @@ namespace Server
             {
                 int sessionId = ++_sessionId;
 
-                ClientSession session = ClientSessionPool.Instance.GetSession();
+                ClientSession session = new ClientSession();
                 session.SessionID = sessionId;
+
                 _sessions.Add(sessionId, session);
                 Console.WriteLine($"Connected : {sessionId}");
 
@@ -32,9 +33,9 @@ namespace Server
 
             }
         }
-*//*        public void Add(ClientSession clientSession)
+        public void Add(ClientSession clientSession)
         {
-          lock ( _lock)
+            lock (_lock)
             {
                 int sessionId = ++_sessionId;
 
@@ -43,7 +44,7 @@ namespace Server
                 _sessions.Add(sessionId, clientSession);
                 Console.WriteLine($"Connected : {sessionId}");
             }
-        }*//*
+        }
         public ClientSession Find(int id)
         {
             lock (_lock)
@@ -61,7 +62,8 @@ namespace Server
                 _sessions.Remove(session.SessionID);
             }
         }
-    }*/
+    }
+}
     /*  class SessionManager
       {
           static SessionManager _session = new SessionManager();
@@ -120,90 +122,89 @@ namespace Server
           }
       }*/
 
-     class SessionManager
-    {
-        public static SessionManager Instance { get; } = new SessionManager();
+    // class SessionManager
+    //{
+    //    public static SessionManager Instance { get; } = new SessionManager();
 
-        private int _sessionId = 0;
-        private const int MaxPoolSize = 10;
+    //    private int _sessionId = 0;
+    //    private const int MaxPoolSize = 10;
 
-        private readonly object _lock = new object();
-        private readonly Dictionary<int, ClientSession> _sessions = new Dictionary<int, ClientSession>();
-        private readonly ConcurrentBag<ClientSession> _sessionPool = new ConcurrentBag<ClientSession>();
+    //    private readonly object _lock = new object();
+    //    private readonly Dictionary<int, ClientSession> _sessions = new Dictionary<int, ClientSession>();
+    //    private readonly ConcurrentBag<ClientSession> _sessionPool = new ConcurrentBag<ClientSession>();
 
-        public ClientSession Generate()
-        {
-            ClientSession session;
+    //    public ClientSession Generate()
+    //    {
+    //        ClientSession session;
 
-            if (!_sessionPool.TryTake(out session))
-            {
-                session = new ClientSession();
-            }
-            else
-            {
-                session.Reset(); // 풀에서 꺼낸 세션은 초기화
-            }
+    //        if (!_sessionPool.TryTake(out session))
+    //        {
+    //            session = new ClientSession();
+    //        }
+    //        else
+    //        {
+    //            session.Reset(); // 풀에서 꺼낸 세션은 초기화
+    //        }
 
-            session.SessionID = Interlocked.Increment(ref _sessionId);
+    //        session.SessionID = Interlocked.Increment(ref _sessionId);
 
-            lock (_lock)
-            {
-                _sessions[session.SessionID] = session;
-            }
+    //        lock (_lock)
+    //        {
+    //            _sessions[session.SessionID] = session;
+    //        }
 
-            return session;
-        }
+    //        return session;
+    //    }
 
-        public void Remove(ClientSession session)
-        {
-            session.CleanUp();
-            lock (_lock)
-            {
-                _sessions.Remove(session.SessionID);
-            }
+    //    public void Remove(ClientSession session)
+    //    {
+    //        session.CleanUp();
+    //        lock (_lock)
+    //        {
+    //            _sessions.Remove(session.SessionID);
+    //        }
 
-            if (_sessionPool.Count < MaxPoolSize)
-            {
-                _sessionPool.Add(session);
-            }
-            else
-            {
-                LogManager.Instance.LogDebug("SessionManager", $"MaxPoolSize 초과로 세션 폐기: {session.SessionID}");
-                // 필요 시 세션 자원 정리
-            }
-        }
+    //        if (_sessionPool.Count < MaxPoolSize)
+    //        {
+    //            _sessionPool.Add(session);
+    //        }
+    //        else
+    //        {
+    //            LogManager.Instance.LogDebug("SessionManager", $"MaxPoolSize 초과로 세션 폐기: {session.SessionID}");
+    //            // 필요 시 세션 자원 정리
+    //        }
+    //    }
 
-        public ClientSession Get(int sessionId)
-        {
-            lock (_lock)
-            {
-                _sessions.TryGetValue(sessionId, out var session);
-                return session;
-            }
-        }
+    //    public ClientSession Get(int sessionId)
+    //    {
+    //        lock (_lock)
+    //        {
+    //            _sessions.TryGetValue(sessionId, out var session);
+    //            return session;
+    //        }
+    //    }
 
-        public IReadOnlyDictionary<int, ClientSession> Sessions
-        {
-            get
-            {
-                lock (_lock)
-                {
-                    return new Dictionary<int, ClientSession>(_sessions);
-                }
-            }
-        }
+    //    public IReadOnlyDictionary<int, ClientSession> Sessions
+    //    {
+    //        get
+    //        {
+    //            lock (_lock)
+    //            {
+    //                return new Dictionary<int, ClientSession>(_sessions);
+    //            }
+    //        }
+    //    }
 
-        public void Clear()
-        {
-            lock (_lock)
-            {
-                _sessions.Clear();
-            }
+    //    public void Clear()
+    //    {
+    //        lock (_lock)
+    //        {
+    //            _sessions.Clear();
+    //        }
 
-            while (_sessionPool.TryTake(out var _)) { }
-        }
-    }
+    //        while (_sessionPool.TryTake(out var _)) { }
+    //    }
+    //}
 
 
 
-}
