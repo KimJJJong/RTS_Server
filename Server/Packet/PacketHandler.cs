@@ -208,7 +208,8 @@ class PacketHandler
         ClientSession clientSession = session as ClientSession ;
         GameRoom room = clientSession.Room;  // ToDo : 
 
-        room.GameLogic.OnReceiveSummon(clientSession, c_ReqSummon);
+        if ( room.GameLogic.Manas[c_ReqSummon.reqSessionID].UseMana(c_ReqSummon.needMana))
+            room.GameLogic.OnReceiveSummon(clientSession, c_ReqSummon);
 
     }
     public static void C_RequestManaStatusHandler(PacketSession session, IPacket packet)
