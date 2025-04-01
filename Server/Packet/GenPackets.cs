@@ -1047,7 +1047,7 @@ public class C_ReqSummon : IPacket
 	public float x;
 	public float y;
 	public int oid;
-	public int needMana;
+	public float needMana;
 	public int reqSessionID;
 	public long ClientSendTimeMs;
 
@@ -1066,8 +1066,8 @@ public class C_ReqSummon : IPacket
 		count += sizeof(float);
 		this.oid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
-		this.needMana = BitConverter.ToInt32(s.Slice(count, s.Length - count));
-		count += sizeof(int);
+		this.needMana = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
 		this.reqSessionID = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
 		this.ClientSendTimeMs = BitConverter.ToInt64(s.Slice(count, s.Length - count));
@@ -1092,7 +1092,7 @@ public class C_ReqSummon : IPacket
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.oid);
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.needMana);
-		count += sizeof(int);
+		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.reqSessionID);
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ClientSendTimeMs);
@@ -1108,11 +1108,11 @@ public class S_AnsSummon : IPacket
 {
 	public float x;
 	public float y;
+	public float reducedMana;
 	public int oid;
-	public int reducedMana;
 	public int reqSessionID;
-	public int ExcuteTick;
 	public int randomValue;
+	public int ExcuteTick;
 	public long ServerReceiveTimeMs;
 	public long ServerStartTimeMs;
 	public long ClientSendTimeMs;
@@ -1130,15 +1130,15 @@ public class S_AnsSummon : IPacket
 		count += sizeof(float);
 		this.y = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
+		this.reducedMana = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
 		this.oid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
-		count += sizeof(int);
-		this.reducedMana = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
 		this.reqSessionID = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
-		this.ExcuteTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
-		count += sizeof(int);
 		this.randomValue = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+		this.ExcuteTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
 		this.ServerReceiveTimeMs = BitConverter.ToInt64(s.Slice(count, s.Length - count));
 		count += sizeof(long);
@@ -1163,15 +1163,15 @@ public class S_AnsSummon : IPacket
 		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.y);
 		count += sizeof(float);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.oid);
-		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.reducedMana);
+		count += sizeof(float);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.oid);
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.reqSessionID);
 		count += sizeof(int);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ExcuteTick);
-		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.randomValue);
+		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ExcuteTick);
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ServerReceiveTimeMs);
 		count += sizeof(long);
@@ -1305,13 +1305,13 @@ public class S_GameStateUpdate : IPacket
 	public List<Units> unitss = new List<Units>();
 	public class Mana
 	{
-		public int playerMana;
+		public float playerMana;
 		public int sessionID;
 	
 		public void Read(ReadOnlySpan<byte> s, ref ushort count)
 		{
-			this.playerMana = BitConverter.ToInt32(s.Slice(count, s.Length - count));
-			count += sizeof(int);
+			this.playerMana = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+			count += sizeof(float);
 			this.sessionID = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 			count += sizeof(int);
 		}
@@ -1322,7 +1322,7 @@ public class S_GameStateUpdate : IPacket
 	
 			bool success = true;
 			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.playerMana);
-			count += sizeof(int);
+			count += sizeof(float);
 			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.sessionID);
 			count += sizeof(int);
 			return success;
@@ -1393,7 +1393,7 @@ public class S_GameStateUpdate : IPacket
 public class S_ManaUpdate : IPacket
 {
 	public int playerId;
-	public int currentMana;
+	public float currentMana;
 
 	public ushort Protocol { get { return (ushort)PacketID.S_ManaUpdate; } }
 
@@ -1406,8 +1406,8 @@ public class S_ManaUpdate : IPacket
 		count += sizeof(ushort);
 		this.playerId = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
-		this.currentMana = BitConverter.ToInt32(s.Slice(count, s.Length - count));
-		count += sizeof(int);
+		this.currentMana = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
 	}
 
 	public ArraySegment<byte> Write()
@@ -1424,7 +1424,7 @@ public class S_ManaUpdate : IPacket
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.playerId);
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.currentMana);
-		count += sizeof(int);
+		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;

@@ -101,15 +101,15 @@
 		<float name="x"/>
 		<float name="y"/>
 		<int name="oid"/>
-		<int name="needMana"/>
+		<float name="needMana"/>
 		<int name="reqSessionID"/>
 		<long name="ClientSendTimeMs"/>
 	</packet>
 	<packet name="S_AnsSummon">
 		<float name="x"/>
 		<float name="y"/>
+		<float name="reducedMana"/>
 		<int name="oid"/>
-		<int name="reducedMana"/>
 		<int name="reqSessionID"/>
 		<int name="randomValue"/>
 		<int name="ExcuteTick"/>
@@ -132,7 +132,7 @@
 			<int name="hp"/>
 		</list>
 		<list name="mana">
-			<int name="playerMana"/>
+			<float name="playerMana"/>
 			<int name="sessionID"/>
 		</list>
 		<double name="serverTime"/>
@@ -140,7 +140,7 @@
 
 	<packet name="S_ManaUpdate">
 		<int name="playerId"/>
-		<int name="currentMana"/>
+		<float name="currentMana"/>
 	</packet>
 
 	<packet name="S_UnitAction">
