@@ -798,37 +798,6 @@ public class S_SceneLoad : IPacket
 
 public class S_InitGame : IPacket
 {
-	public class CardCombination
-	{
-		public int lv;
-		public string uid;
-	
-		public void Read(ReadOnlySpan<byte> s, ref ushort count)
-		{
-			this.lv = BitConverter.ToInt32(s.Slice(count, s.Length - count));
-			count += sizeof(int);
-			ushort uidLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
-			count += sizeof(ushort);
-			this.uid = Encoding.Unicode.GetString(s.Slice(count, uidLen));
-			count += uidLen;
-		}
-	
-		public bool Write(Span<byte> s, ref ushort count)
-		{
-			ArraySegment<byte> segment = SendBufferHelper.Open(4096);
-	
-			bool success = true;
-			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.lv);
-			count += sizeof(int);
-			ushort uidLen = (ushort)Encoding.Unicode.GetBytes(this.uid, 0, this.uid.Length, segment.Array, segment.Offset + count + sizeof(ushort));
-			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), uidLen);
-			count += sizeof(ushort);
-			count += uidLen;
-			return success;
-		}	
-	}
-	public List<CardCombination> cardCombinations = new List<CardCombination>();
-	public int size;
 	public double gameStartTime;
 	public double duration;
 
@@ -841,17 +810,6 @@ public class S_InitGame : IPacket
 		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 		count += sizeof(ushort);
 		count += sizeof(ushort);
-		this.cardCombinations.Clear();
-		ushort cardCombinationLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
-		count += sizeof(ushort);
-		for (int i = 0; i < cardCombinationLen; i++)
-		{
-			CardCombination cardCombination = new CardCombination();
-			cardCombination.Read(s, ref count);
-			cardCombinations.Add(cardCombination);
-		}
-		this.size = BitConverter.ToInt32(s.Slice(count, s.Length - count));
-		count += sizeof(int);
 		this.gameStartTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
 		count += sizeof(double);
 		this.duration = BitConverter.ToDouble(s.Slice(count, s.Length - count));
@@ -869,12 +827,6 @@ public class S_InitGame : IPacket
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_InitGame);
 		count += sizeof(ushort);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)this.cardCombinations.Count);
-		count += sizeof(ushort);
-		foreach (CardCombination cardCombination in this.cardCombinations)
-			success &= cardCombination.Write(s, ref count);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.size);
-		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.gameStartTime);
 		count += sizeof(double);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.duration);
@@ -888,6 +840,7 @@ public class S_InitGame : IPacket
 
 public class S_CardPool : IPacket
 {
+	public int size;
 	public class CardCombination
 	{
 		public int lv;
@@ -928,6 +881,8 @@ public class S_CardPool : IPacket
 		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 		count += sizeof(ushort);
 		count += sizeof(ushort);
+		this.size = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
 		this.cardCombinations.Clear();
 		ushort cardCombinationLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
 		count += sizeof(ushort);
@@ -950,6 +905,8 @@ public class S_CardPool : IPacket
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_CardPool);
 		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.size);
+		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)this.cardCombinations.Count);
 		count += sizeof(ushort);
 		foreach (CardCombination cardCombination in this.cardCombinations)

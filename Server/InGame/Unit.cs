@@ -2,21 +2,30 @@
 
 class Unit
 {
-    public int ObjectID {  get; set; }
-    public int UnitID { get; private set; }
+
+
+    public string UnitID { get; private set; }
     public int OwnerID { get; private set; }
-    public int Position { get; private set; }
+    public int CardLV {  get; private set; }
+    public int PositionX { get; private set; }
+    public int PositionY { get; private set; }
     public int HP { get; private set; } = 100;
+    public  bool IsActive => _isActive;
+
+    private bool _isActive = false;
     private int _speed = 1;
     private int _attackPower = 10;
     private int _attackRange = 1;
 
-    public Unit(int objectID/*, int unitID, int ownerID, int startPosition*/)
+    public Unit(string unitID, int ownerID)
     {
-        ObjectID = objectID;
-       // UnitID = unitID;
-/*        OwnerID = ownerID;
-        Position = startPosition;*/
+
+        PositionX = -99;
+        PositionY = -99;
+
+        UnitID = unitID;
+        OwnerID = ownerID;
+
     }
 
     public void Update()
@@ -27,5 +36,9 @@ class Unit
     private void Attack()
     {
 
+    }
+    public void SetActive( bool isActive)
+    {
+        _isActive = isActive;
     }
 }

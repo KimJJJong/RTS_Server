@@ -73,16 +73,12 @@
 
 	<!-- 게임 -->
 	<packet name="S_InitGame">
-		<list name="cardCombination">
-			<int name ="lv"/>
-			<string name="uid"/>
-		</list>
-		<int name="size"/>
 		<double name ="gameStartTime"/>
 		<double name ="duration"/>
 	</packet>
 	
 	<packet name ="S_CardPool">
+		<int name ="size"/>
 		<list name="cardCombination">
 			<int name ="lv"/>
 			<string name="uid"/>
