@@ -25,6 +25,7 @@ class GameLogicManager
     
     //state
     private bool _gameOver = false;
+    public List<Unit> UnitPool => unitPool;
     public IReadOnlyDictionary<int, Mana> Manas => _playerMana;
     public Timer Timer => _timer;
     public TickManager TickManager => _tickManager;
