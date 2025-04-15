@@ -8,15 +8,24 @@ using System.Diagnostics;
 
 class GameLogicManager
 {
-    private Dictionary<int,ClientSession> _sessions = new Dictionary<int, ClientSession>();
-    private Dictionary<int, Mana> _playerMana = new Dictionary<int, Mana>(); // Mana
-    private Dictionary<int, List<Card>> playerDecks = new Dictionary<int, List<Card>>();
+    // Admin
     private GameRoom _room;
+    private Dictionary<int, ClientSession> _sessions = new Dictionary<int, ClientSession>();
+    private Dictionary<int, List<Card>> playerDecks = new Dictionary<int, List<Card>>();
+    
+    // Unit
+    private int unitPoolSize;
+    private List<Unit> unitPool = new List<Unit>();
+    
+    // Util
+    private Dictionary<int, Mana> _playerMana = new Dictionary<int, Mana>(); // Mana
     private List<Card> cardPool = new List<Card>();
     private Timer _timer;
     private TickManager _tickManager;
-
+    
+    //state
     private bool _gameOver = false;
+    public List<Unit> UnitPool => unitPool;
     public IReadOnlyDictionary<int, Mana> Manas => _playerMana;
     public Timer Timer => _timer;
     public TickManager TickManager => _tickManager;
@@ -30,9 +39,10 @@ class GameLogicManager
     {
         _timer = new Timer();
         _tickManager = new TickManager();
-        
 
-        S_InitGame initPackt= new S_InitGame();
+        unitPoolSize = 10;
+
+        S_InitGame initPackt = new S_InitGame();
         initPackt.gameStartTime = _timer.GameStartTime;
         initPackt.duration = _timer.GameDuration;
         _room.BroadCast(initPackt.Write());
@@ -40,7 +50,18 @@ class GameLogicManager
         JobTimer.Instance.Push(Update);
 
     }
-    
+    private void SetUnitPool(List<Card> cardList)
+    {
+        foreach (Card card in cardList)
+        {
+            Unit tmp = new Unit(card.ID, card.LV);
+            for(int i = 0; i < unitPoolSize; i++)
+                unitPool.Add(tmp);
+
+        }
+        Console.WriteLine($"SetUnitPool : [ {unitPoolSize} ]");
+    }
+
     public void OnReceiveDeck(ClientSession session, C_SetCardPool packet)
     {
         if (!playerDecks.ContainsKey(session.SessionID))
@@ -67,7 +88,7 @@ class GameLogicManager
             LogManager.Instance.LogInfo("GameLogic", $"CardPool sent to players");
 
             S_CardPool poolPacket = new S_CardPool();
-            // Card -> CardData 변환 후 패킷에 추가
+            poolPacket.size = unitPoolSize;
             foreach (var card in cardPool)
             {
                 poolPacket.cardCombinations.Add(new S_CardPool.CardCombination
@@ -76,34 +97,34 @@ class GameLogicManager
                     lv = card.LV
                 });
             }
-
             foreach (var card in poolPacket.cardCombinations)
             {
                 Console.WriteLine($"UID : {card.uid}");
             }
-
-            // 양쪽 플레이어에게 카드 풀 전송
+            Console.WriteLine("UnitPoolSize");
             _room.BroadCast(poolPacket.Write());
-            
-            
+
+            SetUnitPool(cardPool);
         }
     }
 
     public void OnReceiveSummon(ClientSession clientSession, C_ReqSummon packet)
     {
-        int delayTick = 10;
+        int delayTick = 30;
         int currentTick = _tickManager.GetCurrentTick();
         int executeTick = currentTick + delayTick;
 
+        Random rng = new Random(currentTick * 1000 + packet.reqSessionID);
         S_AnsSummon response = new S_AnsSummon
         {
             oid = packet.oid,
             reqSessionID = clientSession.SessionID,
             x = packet.x,
             y = packet.y,
-            reducedMana = packet.needMana,
+            randomValue = rng.Next(0, 10),
+            reducedMana = Manas[packet.reqSessionID].GetMana(),
             ExcuteTick = executeTick,
-            ServerReceiveTimeMs= _tickManager.GetNowTimeMs(),
+            ServerReceiveTimeMs = _tickManager.GetNowTimeMs(),
             ServerStartTimeMs = _tickManager.GetStartTimeMs(),
             ClientSendTimeMs = packet.ClientSendTimeMs // 클라이언트가 보낸 시각 그대로 회신
         };
@@ -115,14 +136,14 @@ class GameLogicManager
                           $" || CurrentTimeMs [ {response.ServerReceiveTimeMs} ]");
         clientSession.Room.BroadCast(response.Write());
     }
-  
+
 
     public void AddPlayer(ClientSession session)
     {
         _playerMana[session.SessionID] = new Mana();
         _sessions[session.SessionID] = session;
-        
-        
+
+
         Console.WriteLine($"[게임 로직] 플레이어 {session.SessionID} 추가");
     }
     /// <summary>
@@ -130,12 +151,12 @@ class GameLogicManager
     /// </summary>
     public void Update()// :TODO Make JobQueue and push all packet 
     {
-        if (_gameOver) 
+        if (_gameOver)
             return;
 
         S_GameStateUpdate updatePacket = new S_GameStateUpdate();
 
-        foreach(var mana in _playerMana)
+        foreach (var mana in _playerMana)
         {
             mana.Value.RegenMana();   //BaseRegen Mana = 1  
             S_ManaUpdate packet = new S_ManaUpdate { currentMana = mana.Value.GetMana() };
@@ -150,8 +171,6 @@ class GameLogicManager
     public void EndGame()
     {
         _gameOver = true;
-        //_room.BroadcastToAll("시간 초과! 게임이 종료되었습니다!");
-       // _room.EndGame();
     }
 
 }

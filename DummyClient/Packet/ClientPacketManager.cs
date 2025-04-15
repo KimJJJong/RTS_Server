@@ -41,6 +41,12 @@ public class PacketManager
 		_handler.Add((ushort)PacketID.S_GameUpdate, PacketHandler.S_GameUpdateHandler);
 		_makeFunc.Add((ushort)PacketID.S_AnsSummon, MakePacket<S_AnsSummon>);
 		_handler.Add((ushort)PacketID.S_AnsSummon, PacketHandler.S_AnsSummonHandler);
+		_makeFunc.Add((ushort)PacketID.S_VerifyCapture, MakePacket<S_VerifyCapture>);
+		_handler.Add((ushort)PacketID.S_VerifyCapture, PacketHandler.S_VerifyCaptureHandler);
+		_makeFunc.Add((ushort)PacketID.S_AttackConfirm, MakePacket<S_AttackConfirm>);
+		_handler.Add((ushort)PacketID.S_AttackConfirm, PacketHandler.S_AttackConfirmHandler);
+		_makeFunc.Add((ushort)PacketID.S_ShootConfirm, MakePacket<S_ShootConfirm>);
+		_handler.Add((ushort)PacketID.S_ShootConfirm, PacketHandler.S_ShootConfirmHandler);
 		_makeFunc.Add((ushort)PacketID.S_SyncTime, MakePacket<S_SyncTime>);
 		_handler.Add((ushort)PacketID.S_SyncTime, PacketHandler.S_SyncTimeHandler);
 		_makeFunc.Add((ushort)PacketID.S_GameStateUpdate, MakePacket<S_GameStateUpdate>);

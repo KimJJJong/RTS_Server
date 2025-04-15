@@ -76,4 +76,16 @@ using System.Text;
     {
 
     }
+    public static void S_VerifyCaptureHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void S_AttackConfirmHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void S_ShootConfirmHandler(PacketSession session, IPacket packet)
+    {
+
+    }
 }
