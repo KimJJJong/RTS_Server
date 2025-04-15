@@ -181,8 +181,8 @@ class PacketHandler
         ClientSession clientSession = session as ClientSession ;
         GameRoom room = clientSession.Room;  // ToDo : 
 
-        if( room.GameLogic.UnitPool[ c_ReqSummon.oid ].IsActive )
-            c_ReqSummon.oid += 1;   //Client가 동시에 같은 oid를 접근 하는것을 막기 위해서
+        //if( room.GameLogic.UnitPool[ c_ReqSummon.oid ].IsActive )
+        //    c_ReqSummon.oid += 1;   //Client가 동시에 같은 oid를 접근 하는것을 막기 위해서
 
         if ( room.GameLogic.Manas[c_ReqSummon.reqSessionID].UseMana(c_ReqSummon.needMana))
         {
@@ -190,6 +190,14 @@ class PacketHandler
             room.GameLogic.OnReceiveSummon(clientSession, c_ReqSummon);
 
         }
+
+    }
+    public static void C_TargetCaptureHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void C_AttackRequestHandler(PacketSession session, IPacket packet)
+    {
 
     }
     public static void C_RequestManaStatusHandler(PacketSession session, IPacket packet)

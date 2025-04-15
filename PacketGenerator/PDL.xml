@@ -93,6 +93,7 @@
 			<float name="y"/>
 		</list>
 	</packet>
+<!-- UnitSummon -->
 	<packet name="C_ReqSummon">
 		<float name="x"/>
 		<float name="y"/>
@@ -113,6 +114,58 @@
 		<long name="ServerStartTimeMs"/>
 		<long name="ClientSendTimeMs"/>
 	</packet>
+<!--=========-->
+	
+
+<!-- TargetCapture -->
+	<packet name ="C_TargetCapture">
+		<int name="attackerOid"/>
+		<int name="targetOid"/>
+		<float name="attackerX"/>
+		<float name="attackerY"/>
+		<float name="targetX"/>
+		<float name="targetY"/>
+		<int name="localTick"/>
+	</packet>
+
+	<packet name="S_VerifyCapture">
+		<float name="correctedDir"/>
+		<float name="correctedX"/>
+		<float name="correctedY"/>
+		<int name="correctedTick"/>
+	</packet>
+<!--===============-->>
+<!-- Attack -->
+	<packet name="C_AttackRequest">
+		<int name="attackerOid"/>
+		<int name="targetOid"/>
+		<float name="attackerX"/>
+		<float name="attackerY"/>
+		<float name="targetX"/>
+		<float name="targetY"/>
+		<int name="localTick"/>
+	</packet>
+
+	<packet name="S_AttackConfirm">
+		<int name="attackerOid"/>
+		<int name="targetOid"/>
+		<int name="damage"/>
+		<float name="dir"/>
+		<float name="correctedX"/>
+		<float name="correctedY"/>
+		<int name="attackTick"/>
+	</packet>
+
+	<packet name="S_ShootConfirm">
+		<int name="attackerOid"/>
+		<int name="targetOid"/>
+		<float name="projectileDir"/>
+		<float name="startX"/>
+		<float name="startY"/>
+		<int name="shootTick"/>
+	</packet>
+
+<!-- ====== -->
 	<packet name="C_RequestManaStatus">
 		<int name="playerId"/>
 	</packet>
@@ -134,7 +187,7 @@
 		<double name="serverTime"/>
 	</packet>
 
-	<packet name="S_ManaUpdate">
+<packet name="S_ManaUpdate">
 		<int name="playerId"/>
 		<float name="currentMana"/>
 	</packet>

@@ -114,12 +114,14 @@ class GameLogicManager
         int currentTick = _tickManager.GetCurrentTick();
         int executeTick = currentTick + delayTick;
 
+        Random rng = new Random(currentTick * 1000 + packet.reqSessionID);
         S_AnsSummon response = new S_AnsSummon
         {
             oid = packet.oid,
             reqSessionID = clientSession.SessionID,
             x = packet.x,
             y = packet.y,
+            randomValue = rng.Next(0, 10),
             reducedMana = Manas[packet.reqSessionID].GetMana(),
             ExcuteTick = executeTick,
             ServerReceiveTimeMs = _tickManager.GetNowTimeMs(),
