@@ -187,7 +187,6 @@ class PacketHandler
             Console.WriteLine($"[Summon] 잘못된 oid 요청: {c_ReqSummon.oid}");
             return;
         }
-
         // 사용 중이면 같은 카드 그룹 내 빈 OID 탐색
         if (room.GameLogic.UnitPool[c_ReqSummon.oid].IsActive)
         {

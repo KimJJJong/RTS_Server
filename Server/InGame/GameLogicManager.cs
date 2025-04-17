@@ -103,7 +103,7 @@ class GameLogicManager
             }
             foreach (var card in poolPacket.cardCombinations)
             {
-                Console.WriteLine($"UID : {card.uid}");
+                Console.WriteLine($"UID : {card.uid} || LV : { card.lv }");
             }
             Console.WriteLine("UnitPoolSize");
             _room.BroadCast(poolPacket.Write());

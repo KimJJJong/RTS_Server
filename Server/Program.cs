@@ -38,6 +38,8 @@ namespace Server
             //currentTime = DateTime.UtcNow.Ticks * 1e-7;
             // DNS (Domain Name System)
             
+            UnitStatDatabase.Load();
+
             Lobby.CreateRoom();         // TODO : Del this code when Test Over
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
