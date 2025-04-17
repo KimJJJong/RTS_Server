@@ -143,13 +143,14 @@
 		<float name="attackerY"/>
 		<float name="targetX"/>
 		<float name="targetY"/>
-		<int name="localTick"/>
+		<int name ="animationDelayTick"/>
+		<int name="clientAttackTick"/>
 	</packet>
 
 	<packet name="S_AttackConfirm">
 		<int name="attackerOid"/>
 		<int name="targetOid"/>
-		<int name="damage"/>
+		<float name="damage"/>
 		<float name="dir"/>
 		<float name="correctedX"/>
 		<float name="correctedY"/>

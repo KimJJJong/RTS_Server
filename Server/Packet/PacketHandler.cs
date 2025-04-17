@@ -181,16 +181,35 @@ class PacketHandler
         ClientSession clientSession = session as ClientSession ;
         GameRoom room = clientSession.Room;  // ToDo : 
 
-        //if( room.GameLogic.UnitPool[ c_ReqSummon.oid ].IsActive )
-        //    c_ReqSummon.oid += 1;   //Client가 동시에 같은 oid를 접근 하는것을 막기 위해서
-
-        if ( room.GameLogic.Manas[c_ReqSummon.reqSessionID].UseMana(c_ReqSummon.needMana))
+        // 유효성 검사
+        if (c_ReqSummon.oid < 0 || c_ReqSummon.oid >= room.GameLogic.UnitPool.Count)
         {
-            room.GameLogic.UnitPool[c_ReqSummon.oid].SetActive( true );
-            room.GameLogic.OnReceiveSummon(clientSession, c_ReqSummon);
-
+            Console.WriteLine($"[Summon] 잘못된 oid 요청: {c_ReqSummon.oid}");
+            return;
         }
 
+        // 사용 중이면 같은 카드 그룹 내 빈 OID 탐색
+        if (room.GameLogic.UnitPool[c_ReqSummon.oid].IsActive)
+        {
+            int? available = room.GameLogic.GetAvailableOid(c_ReqSummon.oid);
+            if (available == null)
+            {
+                Console.WriteLine($"[Summon] 사용 가능한 유닛 없음 - 카드 OID 기준 {c_ReqSummon.oid}");
+                return;
+            }
+
+            c_ReqSummon.oid = available.Value;
+        }
+
+
+        if (!room.GameLogic.Manas[c_ReqSummon.reqSessionID].UseMana(c_ReqSummon.needMana))
+        {
+            Console.WriteLine($"[Summon] 실패: 마나 부족");
+            return;
+        }
+
+        room.GameLogic.UnitPool[c_ReqSummon.oid].SetActive( true );
+        room.GameLogic.OnReceiveSummon(clientSession, c_ReqSummon);
     }
     public static void C_TargetCaptureHandler(PacketSession session, IPacket packet)
     {
@@ -198,7 +217,14 @@ class PacketHandler
     }
     public static void C_AttackRequestHandler(PacketSession session, IPacket packet)
     {
+        C_AttackRequest req = packet as C_AttackRequest;
+        ClientSession client = session as ClientSession;
+        GameRoom room = client.Room;
 
+        if (room == null || room.GameLogic == null)
+            return;
+
+        room.GameLogic.OnReciveAttack(client, req);
     }
     public static void C_RequestManaStatusHandler(PacketSession session, IPacket packet)
     {

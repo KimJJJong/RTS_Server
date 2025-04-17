@@ -5,6 +5,7 @@ using ServerCore;
 using System.Net.Sockets;
 using Shared;
 using System.Diagnostics;
+using System.Net.Mail;
 
 class GameLogicManager
 {
@@ -15,17 +16,18 @@ class GameLogicManager
     
     // Unit
     private int unitPoolSize;
-    private List<Unit> unitPool = new List<Unit>();
+    private List<Unit> _unitPool = new List<Unit>();
     
     // Util
     private Dictionary<int, Mana> _playerMana = new Dictionary<int, Mana>(); // Mana
     private List<Card> cardPool = new List<Card>();
     private Timer _timer;
     private TickManager _tickManager;
+    private DamageCalculator _damageCalculator;
     
     //state
     private bool _gameOver = false;
-    public List<Unit> UnitPool => unitPool;
+    public List<Unit> UnitPool => _unitPool;
     public IReadOnlyDictionary<int, Mana> Manas => _playerMana;
     public Timer Timer => _timer;
     public TickManager TickManager => _tickManager;
@@ -52,14 +54,16 @@ class GameLogicManager
     }
     private void SetUnitPool(List<Card> cardList)
     {
+        _unitPool.Clear();
         foreach (Card card in cardList)
         {
-            Unit tmp = new Unit(card.ID, card.LV);
-            for(int i = 0; i < unitPoolSize; i++)
-                unitPool.Add(tmp);
+            Unit unit = UnitFactory.CreateUnit(card.ID, card.LV);
+            for (int i = 0; i < unitPoolSize; i++)
+                _unitPool.Add(unit);
 
         }
         Console.WriteLine($"SetUnitPool : [ {unitPoolSize} ]");
+        _damageCalculator = new DamageCalculator(_unitPool);
     }
 
     public void OnReceiveDeck(ClientSession session, C_SetCardPool packet)
@@ -134,7 +138,75 @@ class GameLogicManager
                           $" || Excute Tick [ {executeTick} ]" +
                           $" || CurrentTick [ {currentTick} ]" +
                           $" || CurrentTimeMs [ {response.ServerReceiveTimeMs} ]");
-        clientSession.Room.BroadCast(response.Write());
+        _room.BroadCast(response.Write());
+
+        UnitPool[response.oid].Summon(response);
+    }
+
+    public void OnReciveAttack(ClientSession clientSession, C_AttackRequest packet)
+    {
+        int animationTickDelay = packet.animationDelayTick;
+        int clientAttackTick = packet.clientAttackTick;
+        int currentTick = _tickManager.GetCurrentTick();
+
+        int excuteAttackTick = clientAttackTick + animationTickDelay;
+
+        ///////Check//////////Check//////////Check//////////Check//////////Check//////////Check//////////Check/////
+        if (!ValidateAttackRequest(packet, excuteAttackTick, currentTick, out var reason))
+        {
+            Console.WriteLine($"[Reject] Attack blocked: {reason}");
+            return;
+        }
+        ///////Check//////////Check//////////Check//////////Check//////////Check//////////Check//////////Check/////
+
+
+        //Calcul Damage
+        float damage;
+        bool isDead = _damageCalculator.ApplyDamageAndCheckDeath(packet.attackerOid, packet.targetOid, out damage);
+
+        // Set LastAttackExcuteTick wich UnitPool[oid]
+        UnitPool[packet.attackerOid].SetLastAttackExcuteTick(excuteAttackTick);
+
+        if( isDead )
+        {
+            UnitPool[packet.targetOid].SetDeadTick(excuteAttackTick); // 피격자의 사망 Tick 저장
+            //Console.WriteLine($"Player [ {clientSession.SessionID} ] || CurrentTick [ {currentTick} ] || Target [ {packet.targetOid} died by {packet.attackerOid} in {excuteAttackTick} ]");
+            UnitPool[packet.targetOid].SetActive(false);
+        }
+
+        //Calcul Hit Position
+       
+
+        S_AttackConfirm response = new S_AttackConfirm
+        {
+            attackerOid = packet.attackerOid,
+            targetOid = packet.targetOid,
+            damage = damage,
+            //dir =
+            //correctedX =
+            //correctedY =
+            attackTick = excuteAttackTick,
+        };
+
+        //  응답 전송
+        _room.BroadCast(response.Write());
+
+        Console.WriteLine($"Player [ {clientSession.SessionID} ] || [Attack] {packet.attackerOid} → {packet.targetOid} IsDead? {isDead} | Damage: {damage}, || Tick: {excuteAttackTick} CurrentTick[ { currentTick}");
+    }
+
+    public int? GetAvailableOid(int oid)
+    {
+        int definitionIndex = oid % unitPoolSize;
+        int objectStartIndex = oid - definitionIndex;
+        int endIndex = objectStartIndex + unitPoolSize;
+        
+        for (int i = objectStartIndex; i < endIndex; i++)
+        {
+            if (_unitPool[i].IsActive == false)
+                return i;
+        }
+
+        return null; // 풀 사용 불가
     }
 
 
@@ -172,5 +244,44 @@ class GameLogicManager
     {
         _gameOver = true;
     }
+
+
+    public bool ValidateAttackRequest(C_AttackRequest packet, int executeTick, int currentTick, out string reason)
+    {
+        reason = "";
+
+        if (packet.attackerOid < 0 || packet.targetOid < 0)
+        {
+            reason = "Invalid oid";
+            return false;
+        }
+
+        if (!_unitPool[packet.attackerOid].IsActive || !_unitPool[packet.targetOid].IsActive)
+        {
+            reason = "Inactive unit";
+            return false;
+        }
+
+        if (currentTick - UnitPool[packet.attackerOid].LastAttackExcuteTick < packet.animationDelayTick)
+        {
+            reason = "Too fast attack";
+            return false;
+        }
+
+        if ((currentTick - packet.clientAttackTick) * 2 < packet.animationDelayTick)
+        {
+            reason = "RTT not enough";
+            return false;
+        }
+
+        if (UnitPool[packet.attackerOid].DeadTick < executeTick)
+        {
+            reason = "Attacker will die before attack";
+            return false;
+        }
+
+        return true;
+    }
+
 
 }
