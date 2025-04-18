@@ -211,6 +211,8 @@ class PacketHandler
 
         //room.GameLogic.UnitPool[c_ReqSummon.oid].SetActive( true );
         room.GameLogic.OnReceiveSummon(clientSession, c_ReqSummon);
+
+
     }
     public static void C_TargetCaptureHandler(PacketSession session, IPacket packet)
     {

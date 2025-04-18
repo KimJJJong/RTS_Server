@@ -86,12 +86,12 @@ class GameLogicManager
 
         if (playerDecks.Count == 2) // 두 플레이어의 덱을 모두 받았으면 카드 풀 생성
         {
+            LogManager.Instance.LogInfo("GameLogic", $"CardPool sent to players");
             cardPool.Clear();
             foreach (var deck in playerDecks.Values)
                 cardPool.AddRange(deck);
 
             //Console.WriteLine("Card pool is ready, sending to players.");
-            LogManager.Instance.LogInfo("GameLogic", $"CardPool sent to players");
 
             S_CardPool poolPacket = new S_CardPool();
             poolPacket.size = unitPoolSize;
@@ -144,7 +144,10 @@ class GameLogicManager
 
         UnitPool[response.oid].Summon(response);
         //UnitPool[packet.oid].SetActive(true);
-
+        for (int i = 0; i < UnitPool.Count; i++)
+        {
+            Console.WriteLine($" oid [{i}] : {UnitPool[i].IsActive}");
+        }
     }
 
     public void OnReciveAttack(ClientSession clientSession, C_AttackRequest packet)
@@ -257,13 +260,15 @@ class GameLogicManager
 
         if (packet.attackerOid < 0 || packet.targetOid < 0)
         {
-            reason = "Invalid oid";
+            reason = $"Invalid oid || attacket [ {packet.attackerOid} ] || target[ {packet.targetOid} ]";
             return false;
         }
 
         if (!_unitPool[packet.attackerOid].IsActive || !_unitPool[packet.targetOid].IsActive)
         {
-            reason = "Inactive unit";
+            //reason = "Inactive unit";
+            reason = $"Inactive unit || attacket [ {packet.attackerOid} is [ {UnitPool[packet.attackerOid].IsActive} ] || target[ {packet.targetOid} is [ {UnitPool[packet.targetOid].IsActive} ]";
+
             return false;
         }
 
