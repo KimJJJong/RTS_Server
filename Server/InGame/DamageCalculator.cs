@@ -21,7 +21,7 @@ public class DamageCalculator
         float Damage = attacker.AttackPower;
 
 
-        return Damage; 
+        return Damage;
     }
 
 
@@ -30,9 +30,6 @@ public class DamageCalculator
     {
         damage = 0;
 
-        if (attackerOid < 0 || targetOid < 0) return false;
-        if (!_unitPool[attackerOid].IsActive || !_unitPool[targetOid].IsActive) return false;
-        // IsActive 가 False일 수 있는 상황 1. 소환 전, 2. 사망 로직에서? : TODO - 사망 로직 짤때 고려해서 짜기
         Unit attacker = _unitPool[attackerOid];
         Unit target = _unitPool[targetOid];
 

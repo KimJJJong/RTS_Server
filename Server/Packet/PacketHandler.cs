@@ -181,6 +181,8 @@ class PacketHandler
         ClientSession clientSession = session as ClientSession ;
         GameRoom room = clientSession.Room;  // ToDo : 
 
+        Console.WriteLine($"씨발 {room.GameLogic.UnitPool[c_ReqSummon.oid].IsActive}");
+
         // 유효성 검사
         if (c_ReqSummon.oid < 0 || c_ReqSummon.oid >= room.GameLogic.UnitPool.Count)
         {
@@ -207,7 +209,7 @@ class PacketHandler
             return;
         }
 
-        room.GameLogic.UnitPool[c_ReqSummon.oid].SetActive( true );
+        //room.GameLogic.UnitPool[c_ReqSummon.oid].SetActive( true );
         room.GameLogic.OnReceiveSummon(clientSession, c_ReqSummon);
     }
     public static void C_TargetCaptureHandler(PacketSession session, IPacket packet)

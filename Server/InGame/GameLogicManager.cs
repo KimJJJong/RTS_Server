@@ -13,18 +13,18 @@ class GameLogicManager
     private GameRoom _room;
     private Dictionary<int, ClientSession> _sessions = new Dictionary<int, ClientSession>();
     private Dictionary<int, List<Card>> playerDecks = new Dictionary<int, List<Card>>();
-    
+
     // Unit
     private int unitPoolSize;
     private List<Unit> _unitPool = new List<Unit>();
-    
+
     // Util
     private Dictionary<int, Mana> _playerMana = new Dictionary<int, Mana>(); // Mana
     private List<Card> cardPool = new List<Card>();
     private Timer _timer;
     private TickManager _tickManager;
     private DamageCalculator _damageCalculator;
-    
+
     //state
     private bool _gameOver = false;
     public List<Unit> UnitPool => _unitPool;
@@ -42,7 +42,7 @@ class GameLogicManager
         _timer = new Timer();
         _tickManager = new TickManager();
 
-        unitPoolSize = 10;
+        unitPoolSize = 20;
 
         S_InitGame initPackt = new S_InitGame();
         initPackt.gameStartTime = _timer.GameStartTime;
@@ -57,9 +57,11 @@ class GameLogicManager
         _unitPool.Clear();
         foreach (Card card in cardList)
         {
-            Unit unit = UnitFactory.CreateUnit(card.ID, card.LV);
             for (int i = 0; i < unitPoolSize; i++)
+            {
+            Unit unit = UnitFactory.CreateUnit(card.ID, card.LV);
                 _unitPool.Add(unit);
+            }
 
         }
         Console.WriteLine($"SetUnitPool : [ {unitPoolSize} ]");
@@ -103,7 +105,7 @@ class GameLogicManager
             }
             foreach (var card in poolPacket.cardCombinations)
             {
-                Console.WriteLine($"UID : {card.uid} || LV : { card.lv }");
+                Console.WriteLine($"UID : {card.uid} || LV : {card.lv}");
             }
             Console.WriteLine("UnitPoolSize");
             _room.BroadCast(poolPacket.Write());
@@ -141,6 +143,8 @@ class GameLogicManager
         _room.BroadCast(response.Write());
 
         UnitPool[response.oid].Summon(response);
+        //UnitPool[packet.oid].SetActive(true);
+
     }
 
     public void OnReciveAttack(ClientSession clientSession, C_AttackRequest packet)
@@ -167,7 +171,7 @@ class GameLogicManager
         // Set LastAttackExcuteTick wich UnitPool[oid]
         UnitPool[packet.attackerOid].SetLastAttackExcuteTick(excuteAttackTick);
 
-        if( isDead )
+        if (isDead)
         {
             UnitPool[packet.targetOid].SetDeadTick(excuteAttackTick); // 피격자의 사망 Tick 저장
             //Console.WriteLine($"Player [ {clientSession.SessionID} ] || CurrentTick [ {currentTick} ] || Target [ {packet.targetOid} died by {packet.attackerOid} in {excuteAttackTick} ]");
@@ -175,7 +179,7 @@ class GameLogicManager
         }
 
         //Calcul Hit Position
-       
+
 
         S_AttackConfirm response = new S_AttackConfirm
         {
@@ -191,7 +195,7 @@ class GameLogicManager
         //  응답 전송
         _room.BroadCast(response.Write());
 
-        Console.WriteLine($"Player [ {clientSession.SessionID} ] || [Attack] {packet.attackerOid} → {packet.targetOid} IsDead? {isDead} | Damage: {damage}, || Tick: {excuteAttackTick} CurrentTick[ { currentTick}");
+        Console.WriteLine($"Player [ {clientSession.SessionID} ] || [Attack] {packet.attackerOid} → {packet.targetOid} IsDead? {isDead} | Damage: {damage}, || Tick: {excuteAttackTick} CurrentTick[ {currentTick}");
     }
 
     public int? GetAvailableOid(int oid)
@@ -199,9 +203,10 @@ class GameLogicManager
         int definitionIndex = oid % unitPoolSize;
         int objectStartIndex = oid - definitionIndex;
         int endIndex = objectStartIndex + unitPoolSize;
-        
+
         for (int i = objectStartIndex; i < endIndex; i++)
         {
+            Console.WriteLine($"ReQOID : {oid} / i : {i} is {_unitPool[i].IsActive} ");
             if (_unitPool[i].IsActive == false)
                 return i;
         }
