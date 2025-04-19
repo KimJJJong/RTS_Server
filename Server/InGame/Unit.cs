@@ -34,8 +34,7 @@ public class Unit
 
     public void Summon(S_AnsSummon s_AnsSummon)
     {
-        SetActive(true);
-
+        IsActive = true;
         PlayerID = s_AnsSummon.reqSessionID;
         PositionX = s_AnsSummon.x;
         PositionY = s_AnsSummon.y;
@@ -44,6 +43,7 @@ public class Unit
 
     public void SetStats(float maxHp, float speed, float attackPower, float attackRange)
     {
+        IsActive = false;
         MaxHP = maxHp;
         Speed = speed;
         AttackPower = attackPower;
@@ -57,6 +57,12 @@ public class Unit
         IsActive = isActive;
         if (!IsActive)
             Reset();
+    }
+
+    public void Dead()
+    {
+        IsActive = false;
+        Reset();
     }
 
     public void Reset()

@@ -144,10 +144,10 @@ class GameLogicManager
 
         UnitPool[response.oid].Summon(response);
         //UnitPool[packet.oid].SetActive(true);
-        for (int i = 0; i < UnitPool.Count; i++)
-        {
-            Console.WriteLine($" oid [{i}] : {UnitPool[i].IsActive}");
-        }
+        //for (int i = 0; i < UnitPool.Count; i++)
+        //{
+        //    Console.WriteLine($" oid [{i}] : {UnitPool[i].IsActive}");
+        //}
     }
 
     public void OnReciveAttack(ClientSession clientSession, C_AttackedRequest packet)
@@ -178,7 +178,7 @@ class GameLogicManager
         {
             UnitPool[packet.targetOid].SetDeadTick(clientAttackedTick); // 피격자의 사망 Tick 저장
             Console.WriteLine($"Player [ {clientSession.SessionID} ] || CurrentTick [ {currentTick} ] || Target [ {packet.targetOid} died by {packet.attackerOid} in {clientAttackedTick} ]");
-            UnitPool[packet.targetOid].SetActive(false);
+            UnitPool[packet.targetOid].Dead();
         }
 
         //Calcul Hit Position
