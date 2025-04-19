@@ -218,15 +218,24 @@ class PacketHandler
     {
 
     }
-    public static void C_AttackRequestHandler(PacketSession session, IPacket packet)
+    public static void C_AttackedRequestHandler(PacketSession session, IPacket packet)
     {
-        C_AttackRequest req = packet as C_AttackRequest;
+        C_AttackedRequest req = packet as C_AttackedRequest;
         ClientSession client = session as ClientSession;
         GameRoom room = client.Room;
 
         if (room == null || room.GameLogic == null)
+        {
+            Console.WriteLine("[AttackHandler] ❌ GameRoom or GameLogic is null.");
             return;
+        }
 
+        Console.WriteLine($"[C_AttackRequestHandler]  요청 도착  " +
+                          $"SessionID: {client.SessionID}, " +
+                          $"AttackerOid: {req.attackerOid}, " +
+                          $"TargetOid: {req.targetOid}, " +
+                          $"ClientAttackTick: {req.clientAttackedTick}, " +
+                          $"HPDecreaseTick: {req.hpDecreaseTick}  ");
         room.GameLogic.OnReciveAttack(client, req);
     }
     public static void C_RequestManaStatusHandler(PacketSession session, IPacket packet)

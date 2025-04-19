@@ -150,16 +150,16 @@ class GameLogicManager
         }
     }
 
-    public void OnReciveAttack(ClientSession clientSession, C_AttackRequest packet)
+    public void OnReciveAttack(ClientSession clientSession, C_AttackedRequest packet)
     {
-        int animationTickDelay = packet.animationDelayTick;
-        int clientAttackTick = packet.clientAttackTick;
+        int hpDecreaseTick = packet.hpDecreaseTick;
+        int clientAttackedTick = packet.clientAttackedTick;
         int currentTick = _tickManager.GetCurrentTick();
 
-        int excuteAttackTick = clientAttackTick + animationTickDelay;
+        int excuteAttackVerifyTick = clientAttackedTick + hpDecreaseTick;
 
         ///////Check//////////Check//////////Check//////////Check//////////Check//////////Check//////////Check/////
-        if (!ValidateAttackRequest(packet, excuteAttackTick, currentTick, out var reason))
+        if (!ValidateAttackRequest(packet, excuteAttackVerifyTick, currentTick, out var reason))
         {
             Console.WriteLine($"[Reject] Attack blocked: {reason}");
             return;
@@ -168,16 +168,16 @@ class GameLogicManager
 
 
         //Calcul Damage
-        float damage;
-        bool isDead = _damageCalculator.ApplyDamageAndCheckDeath(packet.attackerOid, packet.targetOid, out damage);
+        float curHp;
+        bool isDead = _damageCalculator.ApplyDamageAndCheckDeath(packet.attackerOid, packet.targetOid, out curHp);
 
         // Set LastAttackExcuteTick wich UnitPool[oid]
-        UnitPool[packet.attackerOid].SetLastAttackExcuteTick(excuteAttackTick);
+        UnitPool[packet.attackerOid].SetLastAttackExcuteTick(clientAttackedTick);
 
         if (isDead)
         {
-            UnitPool[packet.targetOid].SetDeadTick(excuteAttackTick); // 피격자의 사망 Tick 저장
-            //Console.WriteLine($"Player [ {clientSession.SessionID} ] || CurrentTick [ {currentTick} ] || Target [ {packet.targetOid} died by {packet.attackerOid} in {excuteAttackTick} ]");
+            UnitPool[packet.targetOid].SetDeadTick(clientAttackedTick); // 피격자의 사망 Tick 저장
+            Console.WriteLine($"Player [ {clientSession.SessionID} ] || CurrentTick [ {currentTick} ] || Target [ {packet.targetOid} died by {packet.attackerOid} in {clientAttackedTick} ]");
             UnitPool[packet.targetOid].SetActive(false);
         }
 
@@ -188,17 +188,17 @@ class GameLogicManager
         {
             attackerOid = packet.attackerOid,
             targetOid = packet.targetOid,
-            damage = damage,
+            targetVerifyHp = curHp,
             //dir =
             //correctedX =
             //correctedY =
-            attackTick = excuteAttackTick,
+            attackVerifyTick = excuteAttackVerifyTick,
         };
 
         //  응답 전송
         _room.BroadCast(response.Write());
 
-        Console.WriteLine($"Player [ {clientSession.SessionID} ] || [Attack] {packet.attackerOid} → {packet.targetOid} IsDead? {isDead} | Damage: {damage}, || Tick: {excuteAttackTick} CurrentTick[ {currentTick}");
+        Console.WriteLine($"Player [ {clientSession.SessionID} ] || [Attack] {packet.attackerOid} → {packet.targetOid} :  HP[{_unitPool[packet.targetOid].CurrentHP}] IsDead? {isDead} | Damage: {UnitPool[packet.attackerOid].AttackPower}, || VerifyTick: {excuteAttackVerifyTick} CurrentTick[ {currentTick}");
     }
 
     public int? GetAvailableOid(int oid)
@@ -254,7 +254,7 @@ class GameLogicManager
     }
 
 
-    public bool ValidateAttackRequest(C_AttackRequest packet, int executeTick, int currentTick, out string reason)
+    public bool ValidateAttackRequest(C_AttackedRequest packet, int executeTick, int currentTick, out string reason)
     {
         reason = "";
 
@@ -272,23 +272,24 @@ class GameLogicManager
             return false;
         }
 
-        if (currentTick - UnitPool[packet.attackerOid].LastAttackExcuteTick < packet.animationDelayTick)
-        {
-            reason = "Too fast attack";
-            return false;
-        }
+        // 구종 변경으로 인한 수정
+        //if (currentTick - UnitPool[packet.attackerOid].LastAttackExcuteTick < packet.animationDelayTick)
+        //{
+        //    reason = "Too fast attack";
+        //    return false;
+        //}
 
-        if ((currentTick - packet.clientAttackTick) * 2 < packet.animationDelayTick)
-        {
-            reason = "RTT not enough";
-            return false;
-        }
+        //if ((currentTick - packet.clientAttackTick) * 2 < packet.animationDelayTick)
+        //{
+        //    reason = "RTT not enough";
+        //    return false;
+        //}
 
-        if (UnitPool[packet.attackerOid].DeadTick < executeTick)
-        {
-            reason = "Attacker will die before attack";
-            return false;
-        }
+        //if (UnitPool[packet.attackerOid].DeadTick < executeTick)
+        //{
+        //    reason = "Attacker will die before attack";
+        //    return false;
+        //}
 
         return true;
     }

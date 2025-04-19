@@ -136,25 +136,25 @@
 	</packet>
 <!--===============-->>
 <!-- Attack -->
-	<packet name="C_AttackRequest">
+	<packet name="C_AttackedRequest">
 		<int name="attackerOid"/>
 		<int name="targetOid"/>
 		<float name="attackerX"/>
 		<float name="attackerY"/>
 		<float name="targetX"/>
 		<float name="targetY"/>
-		<int name ="animationDelayTick"/>
-		<int name="clientAttackTick"/>
+		<int name ="hpDecreaseTick"/>
+		<int name="clientAttackedTick"/>
 	</packet>
 
 	<packet name="S_AttackConfirm">
 		<int name="attackerOid"/>
 		<int name="targetOid"/>
-		<float name="damage"/>
 		<float name="dir"/>
 		<float name="correctedX"/>
 		<float name="correctedY"/>
-		<int name="attackTick"/>
+		<float name="targetVerifyHp"/>
+		<int name="attackVerifyTick"/>
 	</packet>
 
 	<packet name="S_ShootConfirm">

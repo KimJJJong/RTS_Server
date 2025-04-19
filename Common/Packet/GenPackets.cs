@@ -30,7 +30,7 @@ public enum PacketID
 	S_AnsSummon = 22,
 	C_TargetCapture = 23,
 	S_VerifyCapture = 24,
-	C_AttackRequest = 25,
+	C_AttackedRequest = 25,
 	S_AttackConfirm = 26,
 	S_ShootConfirm = 27,
 	C_RequestManaStatus = 28,
@@ -1267,7 +1267,7 @@ public class S_VerifyCapture : IPacket
 	}
 }
 
-public class C_AttackRequest : IPacket
+public class C_AttackedRequest : IPacket
 {
 	public int attackerOid;
 	public int targetOid;
@@ -1275,10 +1275,10 @@ public class C_AttackRequest : IPacket
 	public float attackerY;
 	public float targetX;
 	public float targetY;
-	public int animationDelayTick;
-	public int clientAttackTick;
+	public int hpDecreaseTick;
+	public int clientAttackedTick;
 
-	public ushort Protocol { get { return (ushort)PacketID.C_AttackRequest; } }
+	public ushort Protocol { get { return (ushort)PacketID.C_AttackedRequest; } }
 
 	public void Read(ArraySegment<byte> segment)
 	{
@@ -1299,9 +1299,9 @@ public class C_AttackRequest : IPacket
 		count += sizeof(float);
 		this.targetY = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
-		this.animationDelayTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		this.hpDecreaseTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
-		this.clientAttackTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		this.clientAttackedTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
 	}
 
@@ -1314,7 +1314,7 @@ public class C_AttackRequest : IPacket
 		Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
 
 		count += sizeof(ushort);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.C_AttackRequest);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.C_AttackedRequest);
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.attackerOid);
 		count += sizeof(int);
@@ -1328,9 +1328,9 @@ public class C_AttackRequest : IPacket
 		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.targetY);
 		count += sizeof(float);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.animationDelayTick);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.hpDecreaseTick);
 		count += sizeof(int);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.clientAttackTick);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.clientAttackedTick);
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
@@ -1343,11 +1343,11 @@ public class S_AttackConfirm : IPacket
 {
 	public int attackerOid;
 	public int targetOid;
-	public float damage;
 	public float dir;
 	public float correctedX;
 	public float correctedY;
-	public int attackTick;
+	public float targetVerifyHp;
+	public int attackVerifyTick;
 
 	public ushort Protocol { get { return (ushort)PacketID.S_AttackConfirm; } }
 
@@ -1362,15 +1362,15 @@ public class S_AttackConfirm : IPacket
 		count += sizeof(int);
 		this.targetOid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
-		this.damage = BitConverter.ToSingle(s.Slice(count, s.Length - count));
-		count += sizeof(float);
 		this.dir = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
 		this.correctedX = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
 		this.correctedY = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
-		this.attackTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		this.targetVerifyHp = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
+		this.attackVerifyTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
 	}
 
@@ -1389,15 +1389,15 @@ public class S_AttackConfirm : IPacket
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.targetOid);
 		count += sizeof(int);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.damage);
-		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.dir);
 		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.correctedX);
 		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.correctedY);
 		count += sizeof(float);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.attackTick);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.targetVerifyHp);
+		count += sizeof(float);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.attackVerifyTick);
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
