@@ -39,6 +39,8 @@ public class Unit
         PositionX = s_AnsSummon.x;
         PositionY = s_AnsSummon.y;
         CurrentHP = MaxHP;
+
+        Console.WriteLine($"CurrHp : {CurrentHP } || Power : {AttackPower}");
     }
 
     public void SetStats(float maxHp, float speed, float attackPower, float attackRange)

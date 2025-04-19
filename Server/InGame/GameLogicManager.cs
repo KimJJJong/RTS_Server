@@ -55,16 +55,19 @@ class GameLogicManager
     private void SetUnitPool(List<Card> cardList)
     {
         _unitPool.Clear();
+        Console.WriteLine("++++++++++++++++++++++ObjectPool++++++++++++++++++++++");
         foreach (Card card in cardList)
         {
             for (int i = 0; i < unitPoolSize; i++)
             {
-            Unit unit = UnitFactory.CreateUnit(card.ID, card.LV);
+            Console.WriteLine(i);
+                Unit unit = UnitFactory.CreateUnit(card.ID, card.LV);
                 _unitPool.Add(unit);
             }
 
         }
         Console.WriteLine($"SetUnitPool : [ {unitPoolSize} ]");
+        Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
         _damageCalculator = new DamageCalculator(_unitPool);
     }
 
@@ -95,6 +98,7 @@ class GameLogicManager
 
             S_CardPool poolPacket = new S_CardPool();
             poolPacket.size = unitPoolSize;
+            Console.WriteLine("++++++++++++++++++++++서버에서 양쪽 합쳤띙++++++++++++++++++++++");
             foreach (var card in cardPool)
             {
                 poolPacket.cardCombinations.Add(new S_CardPool.CardCombination
@@ -108,6 +112,7 @@ class GameLogicManager
                 Console.WriteLine($"UID : {card.uid} || LV : {card.lv}");
             }
             Console.WriteLine("UnitPoolSize");
+            Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             _room.BroadCast(poolPacket.Write());
 
             SetUnitPool(cardPool);
@@ -152,7 +157,7 @@ class GameLogicManager
 
     public void OnReciveAttack(ClientSession clientSession, C_AttackedRequest packet)
     {
-        int hpDecreaseTick = packet.hpDecreaseTick;
+        int hpDecreaseTick = 10;//packet.hpDecreaseTick;
         int clientAttackedTick = packet.clientAttackedTick;
         int currentTick = _tickManager.GetCurrentTick();
 
@@ -264,13 +269,13 @@ class GameLogicManager
             return false;
         }
 
-        if (!_unitPool[packet.attackerOid].IsActive || !_unitPool[packet.targetOid].IsActive)
+    /*    if (!_unitPool[packet.attackerOid].IsActive || !_unitPool[packet.targetOid].IsActive)
         {
             //reason = "Inactive unit";
             reason = $"Inactive unit || attacket [ {packet.attackerOid} is [ {UnitPool[packet.attackerOid].IsActive} ] || target[ {packet.targetOid} is [ {UnitPool[packet.targetOid].IsActive} ]";
 
             return false;
-        }
+        }*/
 
         // 구종 변경으로 인한 수정
         //if (currentTick - UnitPool[packet.attackerOid].LastAttackExcuteTick < packet.animationDelayTick)

@@ -26,17 +26,21 @@ public class DamageCalculator
 
 
 
-    public bool ApplyDamageAndCheckDeath(int attackerOid, int targetOid, out float damage)
+    public bool ApplyDamageAndCheckDeath(int attackerOid, int targetOid, out float curHp)
     {
-        damage = 0;
 
         Unit attacker = _unitPool[attackerOid];
         Unit target = _unitPool[targetOid];
 
-        damage = attacker.AttackPower;
+        //        curHp = target.CurrentHP;
 
+        float damage = attacker.AttackPower;
+        Console.WriteLine($"damage : [{damage}]");
         target.CurrentHP -= damage;
         target.CurrentHP = Math.Max(0, target.CurrentHP); // 음수 방지
+
+        curHp = target.CurrentHP;
+        Console.WriteLine($"damage : [{curHp}]");
 
         return target.CurrentHP <= 0;
     }
