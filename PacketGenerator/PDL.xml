@@ -160,19 +160,20 @@
 	<packet name ="C_SummonProJectile">
 		<int name="summonerOid"/>
 		<int name="targetOid"/>
-		<int name="oid"/>
-		<float name="attackerX"/>
-		<float name="attackerY"/>
+		<int name="projectileOid"/>
+		<float name="summonerX"/>
+		<float name="summonerY"/>
 		<float name="targetX"/>
 		<float name="targetY"/>
 		<int name="clientRequestTick"/>
 	</packet>
 	
 	<packet name="S_ShootConfirm">
-		<int name="attackerOid"/>
+		<int name ="summonerOid"/>
+		<int name="projcetileOid"/>
 		<int name="targetOid"/>
 		<float name="projectileDir"/>
-		<float name="distance"/>
+		<float name="projcetilDistance"/>
 		<float name="startX"/>
 		<float name="startY"/>
 		<int name="shootTick"/>

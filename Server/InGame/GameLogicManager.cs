@@ -48,7 +48,7 @@ class GameLogicManager
         _timer = new Timer();
         _tickManager = new TickManager();
 
-        unitPoolSize = 20;
+        unitPoolSize = 10;
 
         S_InitGame initPackt = new S_InitGame();
         initPackt.gameStartTime = _timer.GameStartTime;
@@ -65,7 +65,6 @@ class GameLogicManager
         {
             for (int i = 0; i < unitPoolSize; i++)
             {
-            Console.WriteLine(i);
                 Unit unit = UnitFactory.CreateUnit(card.ID, card.LV);
                 _unitPool.Add(unit);
             }
@@ -177,11 +176,7 @@ class GameLogicManager
         _room.BroadCast(response.Write());
 
         UnitPool[response.oid].Summon(response);
-        //UnitPool[packet.oid].SetActive(true);
-        //for (int i = 0; i < UnitPool.Count; i++)
-        //{
-        //    Console.WriteLine($" oid [{i}] : {UnitPool[i].IsActive}");
-        //}
+
     }
 
     public void OnReciveAttack(ClientSession clientSession, C_AttackedRequest packet)
@@ -232,6 +227,14 @@ class GameLogicManager
         //  응답 전송
         _room.BroadCast(response.Write());
 
+        // tmp 투사체 처리
+        if (_unitPool[packet.attackerOid].IsProjectile)
+        {
+            _unitPool[packet.attackerOid].Dead();
+            Console.WriteLine($"Projectile : {_unitPool[packet.attackerOid]} isIsProjectile? :  {_unitPool[packet.attackerOid].IsProjectile} is Active? : {_unitPool[packet.attackerOid].IsActive} ");
+
+        }
+
         Console.WriteLine($"Player [ {clientSession.SessionID} ] || [Attack] {packet.attackerOid} → {packet.targetOid} :  HP[{_unitPool[packet.targetOid].CurrentHP}] IsDead? {isDead} | Damage: {UnitPool[packet.attackerOid].AttackPower}, || VerifyTick: {excuteAttackVerifyTick} CurrentTick[ {currentTick}");
     }
 
@@ -240,6 +243,7 @@ class GameLogicManager
         int clientRequestTick = packet.clientRequestTick;
         int currentTick = _tickManager.GetCurrentTick();
 
+        Console.WriteLine("sumProjectile");
         int excuteSummonProjectileTick = clientRequestTick + SummonProjectileDelayTick;
 
 
@@ -270,6 +274,8 @@ class GameLogicManager
                         
         };
 
+        _unitPool[packet.oid].Summon(response);
+        Console.WriteLine($"Projectile : {_unitPool[packet.oid]} isIsProjectile? :  {_unitPool[packet.oid].IsProjectile} is Active? : {_unitPool[packet.oid].IsActive} ");
         //  응답 전송
         _room.BroadCast(response.Write());
 

@@ -39,6 +39,7 @@ namespace Server
             // DNS (Domain Name System)
             
             UnitStatDatabase.Load();
+            CardMetaDatabase.Load();
 
 
             Lobby.CreateRoom();         // TODO : Del this code when Test Over

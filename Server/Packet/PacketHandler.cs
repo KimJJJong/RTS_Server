@@ -181,7 +181,7 @@ class PacketHandler
         ClientSession clientSession = session as ClientSession ;
         GameRoom room = clientSession.Room;  // ToDo : 
 
-        Console.WriteLine($"씨발 {room.GameLogic.UnitPool[c_ReqSummon.oid].IsActive}");
+        //Console.WriteLine($"씨발 {room.GameLogic.UnitPool[c_ReqSummon.oid].IsActive}");
 
         // 유효성 검사
         if (c_ReqSummon.oid < 0 || c_ReqSummon.oid >= room.GameLogic.UnitPool.Count)
@@ -230,6 +230,8 @@ class PacketHandler
             return;
         }
 
+
+
         Console.WriteLine($"[C_AttackRequestHandler]  요청 도착  " +
                           $"SessionID: {client.SessionID}, " +
                           $"AttackerOid: {req.attackerOid}, " +
@@ -251,12 +253,26 @@ class PacketHandler
             return;
         }
 
-        Console.WriteLine($"[C_SummonProjectile]  요청 도착  " +
+        // 사용 중이면 같은 카드 그룹 내 빈 OID 탐색
+        if (room.GameLogic.UnitPool[req.oid].IsActive)
+        {
+            int? available = room.GameLogic.GetAvailableOid(req.oid);
+            if (available == null)
+            {
+                Console.WriteLine($"[Projectile] 사용 가능한 유닛 없음 - 카드 OID 기준 {req.oid}");
+                return;
+            }
+
+            req.oid = available.Value;
+        }
+
+
+/*        Console.WriteLine($"[C_SummonProjectile]  요청 도착  " +
                           $"Pos:  [ {req.attackerX}, {req.attackerY} ]" +
                           $"DestinationPos: [ {req.targetX}, {req.targetY} ] " +
                           $"SummonnerOid: {req.summonerOid}, " +
                           $"ProjectileOid: {req.oid}, " +
-                          $"SummonRequsetTime: {req.clientRequestTick}  ");
+                          $"SummonRequsetTime: {req.clientRequestTick}  ");*/
         room.GameLogic.OnReciveSummonProject(client, req);
     }
     public static void C_RequestManaStatusHandler(PacketSession session, IPacket packet)

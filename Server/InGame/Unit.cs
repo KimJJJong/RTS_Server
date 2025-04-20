@@ -12,6 +12,7 @@ public class Unit
     public float Speed { get; private set; }
     public float AttackPower { get; private set; }
     public float AttackRange { get; private set; }
+    public bool IsProjectile { get; private set; }
 
     // InGame Modifi Value
     public float PositionX { get; set; }
@@ -42,14 +43,25 @@ public class Unit
 
         Console.WriteLine($"CurrHp : {CurrentHP } || Power : {AttackPower}");
     }
+    public void Summon(S_ShootConfirm s_ShootConfirm)
+    {
+        IsActive = true;
+        //PlayerID = s_ShootConfirm.reqSessionID;
+        PositionX = s_ShootConfirm.startX;
+        PositionY = s_ShootConfirm.startY;
+        //CurrentHP = MaxHP;
 
-    public void SetStats(float maxHp, float speed, float attackPower, float attackRange)
+        Console.WriteLine($"CurrHp : {CurrentHP} || Power : {AttackPower}");
+    }
+
+    public void SetStats(float maxHp, float speed, float attackPower, float attackRange, bool isProjectile)
     {
         IsActive = false;
         MaxHP = maxHp;
         Speed = speed;
         AttackPower = attackPower;
         AttackRange = attackRange;
+        IsProjectile = isProjectile;
     }
 
 
