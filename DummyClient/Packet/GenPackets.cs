@@ -32,13 +32,14 @@ public enum PacketID
 	S_VerifyCapture = 24,
 	C_AttackedRequest = 25,
 	S_AttackConfirm = 26,
-	S_ShootConfirm = 27,
-	C_RequestManaStatus = 28,
-	S_SyncTime = 29,
-	S_GameStateUpdate = 30,
-	S_ManaUpdate = 31,
-	S_UnitAction = 32,
-	S_GameOver = 33,
+	C_SummonProJectile = 27,
+	S_ShootConfirm = 28,
+	C_RequestManaStatus = 29,
+	S_SyncTime = 30,
+	S_GameStateUpdate = 31,
+	S_ManaUpdate = 32,
+	S_UnitAction = 33,
+	S_GameOver = 34,
 	
 }
 
@@ -1406,11 +1407,84 @@ public class S_AttackConfirm : IPacket
 	}
 }
 
+public class C_SummonProJectile : IPacket
+{
+	public int summonerOid;
+	public int targetOid;
+	public int oid;
+	public float attackerX;
+	public float attackerY;
+	public float targetX;
+	public float targetY;
+	public int clientRequestTick;
+
+	public ushort Protocol { get { return (ushort)PacketID.C_SummonProJectile; } }
+
+	public void Read(ArraySegment<byte> segment)
+	{
+		ushort count = 0;
+
+		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
+		count += sizeof(ushort);
+		count += sizeof(ushort);
+		this.summonerOid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+		this.targetOid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+		this.oid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+		this.attackerX = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
+		this.attackerY = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
+		this.targetX = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
+		this.targetY = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
+		this.clientRequestTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+	}
+
+	public ArraySegment<byte> Write()
+	{
+		ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+		ushort count = 0;
+		bool success = true;
+
+		Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
+
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.C_SummonProJectile);
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.summonerOid);
+		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.targetOid);
+		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.oid);
+		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.attackerX);
+		count += sizeof(float);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.attackerY);
+		count += sizeof(float);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.targetX);
+		count += sizeof(float);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.targetY);
+		count += sizeof(float);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.clientRequestTick);
+		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s, count);
+		if (success == false)
+			return null;
+		return SendBufferHelper.Close(count);
+	}
+}
+
 public class S_ShootConfirm : IPacket
 {
 	public int attackerOid;
 	public int targetOid;
 	public float projectileDir;
+	public float distance;
 	public float startX;
 	public float startY;
 	public int shootTick;
@@ -1429,6 +1503,8 @@ public class S_ShootConfirm : IPacket
 		this.targetOid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
 		this.projectileDir = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
+		this.distance = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
 		this.startX = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
@@ -1454,6 +1530,8 @@ public class S_ShootConfirm : IPacket
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.targetOid);
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.projectileDir);
+		count += sizeof(float);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.distance);
 		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.startX);
 		count += sizeof(float);

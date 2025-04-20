@@ -238,6 +238,27 @@ class PacketHandler
                           $"HPDecreaseTick: {req.hpDecreaseTick}  ");
         room.GameLogic.OnReciveAttack(client, req);
     }
+
+    public static void C_SummonProJectileHandler(PacketSession session, IPacket packet)
+    {
+        C_SummonProJectile req = packet as C_SummonProJectile;
+        ClientSession client = session as ClientSession;
+        GameRoom room = client.Room;
+
+        if (room == null || room.GameLogic == null)
+        {
+            Console.WriteLine("[AttackHandler] ❌ GameRoom or GameLogic is null.");
+            return;
+        }
+
+        Console.WriteLine($"[C_SummonProjectile]  요청 도착  " +
+                          $"Pos:  [ {req.attackerX}, {req.attackerY} ]" +
+                          $"DestinationPos: [ {req.targetX}, {req.targetY} ] " +
+                          $"SummonnerOid: {req.summonerOid}, " +
+                          $"ProjectileOid: {req.oid}, " +
+                          $"SummonRequsetTime: {req.clientRequestTick}  ");
+        room.GameLogic.OnReciveAttack(client, req);
+    }
     public static void C_RequestManaStatusHandler(PacketSession session, IPacket packet)
     {
 

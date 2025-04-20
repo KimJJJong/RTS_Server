@@ -6,6 +6,8 @@ using System.Net.Sockets;
 using Shared;
 using System.Diagnostics;
 using System.Net.Mail;
+using System.Xml.Linq;
+using System.Numerics;
 
 class GameLogicManager
 {
@@ -35,6 +37,10 @@ class GameLogicManager
     {
         _room = room;
     }
+
+    //DefineData
+    const int HpDecreaseTick = 10;
+    const int SummonProjectileDelayTick = 5;
 
 
     public void Init()
@@ -157,7 +163,7 @@ class GameLogicManager
 
     public void OnReciveAttack(ClientSession clientSession, C_AttackedRequest packet)
     {
-        int hpDecreaseTick = 10;//packet.hpDecreaseTick;
+        int hpDecreaseTick = HpDecreaseTick;//packet.hpDecreaseTick;
         int clientAttackedTick = packet.clientAttackedTick;
         int currentTick = _tickManager.GetCurrentTick();
 
@@ -204,6 +210,46 @@ class GameLogicManager
         _room.BroadCast(response.Write());
 
         Console.WriteLine($"Player [ {clientSession.SessionID} ] || [Attack] {packet.attackerOid} → {packet.targetOid} :  HP[{_unitPool[packet.targetOid].CurrentHP}] IsDead? {isDead} | Damage: {UnitPool[packet.attackerOid].AttackPower}, || VerifyTick: {excuteAttackVerifyTick} CurrentTick[ {currentTick}");
+    }
+
+    public void OnReciveSummonProject(ClientSession clientSession, C_SummonProJectile packet)
+    {
+        int clientRequestTick = packet.clientRequestTick;
+        int currentTick = _tickManager.GetCurrentTick();
+
+        int excuteSummonProjectileTick = clientRequestTick + SummonProjectileDelayTick;
+
+
+        // dir Calcul
+        Vector2 attckerPos = new Vector2(packet.attackerX, packet.attackerY);
+        Vector2 targetPos = new Vector2(packet.targetX, packet.targetY);
+
+        Vector2 dir = targetPos - attckerPos;
+
+        if(dir.LengthSquared() > 0.0001f)
+            dir = Vector2.Normalize(dir);
+        
+        float angle = MathF.Atan2(dir.X, dir.Y); //Radian 변환
+        float degress = angle * (180f / MathF.PI); //degress 변환
+
+        float distance = Vector2.Distance(attckerPos, targetPos);
+
+        // if(석궁 10새끼면 distance 통일 해 줘야함)
+
+        S_ShootConfirm response = new S_ShootConfirm
+        {
+            attackerOid = packet.oid, // ProjectileOid
+            startX = packet.attackerX,
+            startY = packet.attackerY,
+            distance = distance,
+            projectileDir = degress,
+            shootTick = excuteSummonProjectileTick,
+                        
+        };
+
+        //  응답 전송
+        _room.BroadCast(response.Write());
+
     }
 
     public int? GetAvailableOid(int oid)

@@ -45,6 +45,8 @@ public class PacketManager
 		_handler.Add((ushort)PacketID.C_TargetCapture, PacketHandler.C_TargetCaptureHandler);
 		_makeFunc.Add((ushort)PacketID.C_AttackedRequest, MakePacket<C_AttackedRequest>);
 		_handler.Add((ushort)PacketID.C_AttackedRequest, PacketHandler.C_AttackedRequestHandler);
+		_makeFunc.Add((ushort)PacketID.C_SummonProJectile, MakePacket<C_SummonProJectile>);
+		_handler.Add((ushort)PacketID.C_SummonProJectile, PacketHandler.C_SummonProJectileHandler);
 		_makeFunc.Add((ushort)PacketID.C_RequestManaStatus, MakePacket<C_RequestManaStatus>);
 		_handler.Add((ushort)PacketID.C_RequestManaStatus, PacketHandler.C_RequestManaStatusHandler);
 
