@@ -248,7 +248,7 @@ class GameLogicManager
 
 
         // dir Calcul
-        Vector2 attckerPos = new Vector2(packet.attackerX, packet.attackerY);
+        Vector2 attckerPos = new Vector2(packet.summonerX, packet.summonerY);
         Vector2 targetPos = new Vector2(packet.targetX, packet.targetY);
 
         Vector2 dir = targetPos - attckerPos;
@@ -265,17 +265,18 @@ class GameLogicManager
 
         S_ShootConfirm response = new S_ShootConfirm
         {
-            attackerOid = packet.oid, // ProjectileOid
-            startX = packet.attackerX,
-            startY = packet.attackerY,
-            distance = distance,
+            projcetileOid = packet.projectileOid,
+            summonerOid = packet.summonerOid,
+            startX = packet.summonerX,
+            startY = packet.summonerY,
+            projcetilDistance = distance,
             projectileDir = degress,
             shootTick = excuteSummonProjectileTick,
                         
         };
 
-        _unitPool[packet.oid].Summon(response);
-        Console.WriteLine($"Projectile : {_unitPool[packet.oid]} isIsProjectile? :  {_unitPool[packet.oid].IsProjectile} is Active? : {_unitPool[packet.oid].IsActive} ");
+        _unitPool[packet.projectileOid].Summon(response);
+        Console.WriteLine($"Summoner is {_unitPool[packet.summonerOid]}  Projectile : {_unitPool[packet.projectileOid]} isIsProjectile? :  {_unitPool[packet.projectileOid].IsProjectile} is Active? : {_unitPool[packet.projectileOid].IsActive} ");
         //  응답 전송
         _room.BroadCast(response.Write());
 

@@ -254,16 +254,16 @@ class PacketHandler
         }
 
         // 사용 중이면 같은 카드 그룹 내 빈 OID 탐색
-        if (room.GameLogic.UnitPool[req.oid].IsActive)
+        if (room.GameLogic.UnitPool[req.projectileOid].IsActive)
         {
-            int? available = room.GameLogic.GetAvailableOid(req.oid);
+            int? available = room.GameLogic.GetAvailableOid(req.projectileOid);
             if (available == null)
             {
-                Console.WriteLine($"[Projectile] 사용 가능한 유닛 없음 - 카드 OID 기준 {req.oid}");
+                Console.WriteLine($"[Projectile] 사용 가능한 유닛 없음 - 카드 OID 기준 {req.projectileOid}");
                 return;
             }
 
-            req.oid = available.Value;
+            req.projectileOid = available.Value;
         }
 
 
