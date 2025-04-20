@@ -1411,9 +1411,9 @@ public class C_SummonProJectile : IPacket
 {
 	public int summonerOid;
 	public int targetOid;
-	public int oid;
-	public float attackerX;
-	public float attackerY;
+	public int projectileOid;
+	public float summonerX;
+	public float summonerY;
 	public float targetX;
 	public float targetY;
 	public int clientRequestTick;
@@ -1431,11 +1431,11 @@ public class C_SummonProJectile : IPacket
 		count += sizeof(int);
 		this.targetOid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
-		this.oid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		this.projectileOid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
-		this.attackerX = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		this.summonerX = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
-		this.attackerY = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		this.summonerY = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
 		this.targetX = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
@@ -1460,11 +1460,11 @@ public class C_SummonProJectile : IPacket
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.targetOid);
 		count += sizeof(int);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.oid);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.projectileOid);
 		count += sizeof(int);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.attackerX);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.summonerX);
 		count += sizeof(float);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.attackerY);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.summonerY);
 		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.targetX);
 		count += sizeof(float);
@@ -1481,10 +1481,11 @@ public class C_SummonProJectile : IPacket
 
 public class S_ShootConfirm : IPacket
 {
-	public int attackerOid;
+	public int summonerOid;
+	public int projcetileOid;
 	public int targetOid;
 	public float projectileDir;
-	public float distance;
+	public float projcetilDistance;
 	public float startX;
 	public float startY;
 	public int shootTick;
@@ -1498,13 +1499,15 @@ public class S_ShootConfirm : IPacket
 		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 		count += sizeof(ushort);
 		count += sizeof(ushort);
-		this.attackerOid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		this.summonerOid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+		this.projcetileOid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
 		this.targetOid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
 		this.projectileDir = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
-		this.distance = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		this.projcetilDistance = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
 		this.startX = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
@@ -1525,13 +1528,15 @@ public class S_ShootConfirm : IPacket
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_ShootConfirm);
 		count += sizeof(ushort);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.attackerOid);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.summonerOid);
+		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.projcetileOid);
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.targetOid);
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.projectileDir);
 		count += sizeof(float);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.distance);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.projcetilDistance);
 		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.startX);
 		count += sizeof(float);
