@@ -61,7 +61,6 @@ class GameLogicManager
     private void SetUnitPool(List<Card> cardList)
     {
         _unitPool.Clear();
-        Console.WriteLine("++++++++++++++++++++++ObjectPool++++++++++++++++++++++");
         foreach (Card card in cardList)
         {
             for (int i = 0; i < unitPoolSize; i++)
@@ -73,7 +72,6 @@ class GameLogicManager
 
         }
         Console.WriteLine($"SetUnitPool : [ {unitPoolSize} ]");
-        Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
         _damageCalculator = new DamageCalculator(_unitPool);
     }
 
@@ -84,27 +82,57 @@ class GameLogicManager
 
         playerDecks[session.SessionID].Clear();
 
-        // CardData -> Card 변환 후 저장
+        // Card Collector
         foreach (var cardData in packet.cardCombinations)
         {
             Card newCard = new Card(cardData.uid, cardData.lv);
             playerDecks[session.SessionID].Add(newCard);
         }
 
-        Console.WriteLine($"Player {session.SessionID} sent their deck.");
+        Console.WriteLine($"Player {session.SessionID} sent their deck to Server.");
 
-        if (playerDecks.Count == 2) // 두 플레이어의 덱을 모두 받았으면 카드 풀 생성
+
+
+        // CardPool Maker
+        if (playerDecks.Count == 2) 
         {
-            LogManager.Instance.LogInfo("GameLogic", $"CardPool sent to players");
+            LogManager.Instance.LogInfo("GameLogic", $"CardPool sent each players");
             cardPool.Clear();
+
+            // Castle ID Adition
+            List<Card> cards = new List<Card>()
+            {
+                new Card("CASTLE-U-01", 1),
+                new Card("CASTLE-U-02", 1)
+            };
+            cardPool.AddRange(cards);
+
+            // Player CardPool Reference
             foreach (var deck in playerDecks.Values)
                 cardPool.AddRange(deck);
 
-            //Console.WriteLine("Card pool is ready, sending to players.");
+            // Reference each Cards, Add reqire Information
+            List<Card> tmpCardPool = new List<Card>(cardPool);
 
+            foreach (Card card in tmpCardPool)
+            {
+                CardMeta meta = CardMetaDatabase.GetMeta(card.ID, card.LV);
+                if (meta != null && meta.IsRanged && !string.IsNullOrEmpty(meta.ProjectileCardID))
+                {
+                    cardPool.Add(new Card(meta.ProjectileCardID, card.LV));
+                    LogManager.Instance.LogInfo("GameLogic", $"[Projectile Add] {meta.ProjectileCardID} for {card.ID}");
+                }
+            }
+            Console.WriteLine("===============CardPool==============");
+            foreach(Card card in cardPool)
+            {
+                Console.WriteLine($"ID :{ card.ID } || LV :{ card.LV }");
+            }
+            Console.WriteLine("=======================================");
+
+            // Make Packet to Send each client
             S_CardPool poolPacket = new S_CardPool();
             poolPacket.size = unitPoolSize;
-            Console.WriteLine("++++++++++++++++++++++서버에서 양쪽 합쳤띙++++++++++++++++++++++");
             foreach (var card in cardPool)
             {
                 poolPacket.cardCombinations.Add(new S_CardPool.CardCombination
@@ -113,12 +141,7 @@ class GameLogicManager
                     lv = card.LV
                 });
             }
-            foreach (var card in poolPacket.cardCombinations)
-            {
-                Console.WriteLine($"UID : {card.uid} || LV : {card.lv}");
-            }
-            Console.WriteLine("UnitPoolSize");
-            Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
             _room.BroadCast(poolPacket.Write());
 
             SetUnitPool(cardPool);

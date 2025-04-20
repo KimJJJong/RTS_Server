@@ -257,7 +257,7 @@ class PacketHandler
                           $"SummonnerOid: {req.summonerOid}, " +
                           $"ProjectileOid: {req.oid}, " +
                           $"SummonRequsetTime: {req.clientRequestTick}  ");
-        room.GameLogic.OnReciveAttack(client, req);
+        room.GameLogic.OnReciveSummonProject(client, req);
     }
     public static void C_RequestManaStatusHandler(PacketSession session, IPacket packet)
     {
