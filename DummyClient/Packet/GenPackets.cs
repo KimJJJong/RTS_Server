@@ -1482,8 +1482,9 @@ public class C_SummonProJectile : IPacket
 public class S_ShootConfirm : IPacket
 {
 	public int summonerOid;
-	public int projcetileOid;
 	public int targetOid;
+	public int projcetileOid;
+	public float projectileSpeed;
 	public float projectileDir;
 	public float projcetilDistance;
 	public float startX;
@@ -1501,10 +1502,12 @@ public class S_ShootConfirm : IPacket
 		count += sizeof(ushort);
 		this.summonerOid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
-		this.projcetileOid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
-		count += sizeof(int);
 		this.targetOid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
+		this.projcetileOid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+		this.projectileSpeed = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
 		this.projectileDir = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
 		this.projcetilDistance = BitConverter.ToSingle(s.Slice(count, s.Length - count));
@@ -1530,10 +1533,12 @@ public class S_ShootConfirm : IPacket
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.summonerOid);
 		count += sizeof(int);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.projcetileOid);
-		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.targetOid);
 		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.projcetileOid);
+		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.projectileSpeed);
+		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.projectileDir);
 		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.projcetilDistance);

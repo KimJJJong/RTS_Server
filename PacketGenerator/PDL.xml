@@ -170,8 +170,9 @@
 	
 	<packet name="S_ShootConfirm">
 		<int name ="summonerOid"/>
-		<int name="projcetileOid"/>
 		<int name="targetOid"/>
+		<int name="projcetileOid"/>
+		<float name="projectileSpeed"/>
 		<float name="projectileDir"/>
 		<float name="projcetilDistance"/>
 		<float name="startX"/>
