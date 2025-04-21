@@ -39,7 +39,8 @@ public enum PacketID
 	S_GameStateUpdate = 31,
 	S_ManaUpdate = 32,
 	S_UnitAction = 33,
-	S_GameOver = 34,
+	C_GoToLobby = 34,
+	S_GameOver = 35,
 	
 }
 
@@ -1485,8 +1486,8 @@ public class S_ShootConfirm : IPacket
 	public int targetOid;
 	public int projcetileOid;
 	public float projectileSpeed;
-	public float projectileDir;
-	public float projcetilDistance;
+	public float targetX;
+	public float targetY;
 	public float startX;
 	public float startY;
 	public int shootTick;
@@ -1508,9 +1509,9 @@ public class S_ShootConfirm : IPacket
 		count += sizeof(int);
 		this.projectileSpeed = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
-		this.projectileDir = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		this.targetX = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
-		this.projcetilDistance = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		this.targetY = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
 		this.startX = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
@@ -1539,9 +1540,9 @@ public class S_ShootConfirm : IPacket
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.projectileSpeed);
 		count += sizeof(float);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.projectileDir);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.targetX);
 		count += sizeof(float);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.projcetilDistance);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.targetY);
 		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.startX);
 		count += sizeof(float);
@@ -1851,6 +1852,41 @@ public class S_UnitAction : IPacket
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), actionTypeLen);
 		count += sizeof(ushort);
 		count += actionTypeLen;
+		success &= BitConverter.TryWriteBytes(s, count);
+		if (success == false)
+			return null;
+		return SendBufferHelper.Close(count);
+	}
+}
+
+public class C_GoToLobby : IPacket
+{
+	
+
+	public ushort Protocol { get { return (ushort)PacketID.C_GoToLobby; } }
+
+	public void Read(ArraySegment<byte> segment)
+	{
+		ushort count = 0;
+
+		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
+		count += sizeof(ushort);
+		count += sizeof(ushort);
+		
+	}
+
+	public ArraySegment<byte> Write()
+	{
+		ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+		ushort count = 0;
+		bool success = true;
+
+		Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
+
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.C_GoToLobby);
+		count += sizeof(ushort);
+		
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;

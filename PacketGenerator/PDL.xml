@@ -173,8 +173,10 @@
 		<int name="targetOid"/>
 		<int name="projcetileOid"/>
 		<float name="projectileSpeed"/>
-		<float name="projectileDir"/>
-		<float name="projcetilDistance"/>
+		<float name="targetX"/>
+		<float name="targetY"/>
+		<!--<float name="projectileDir"/>
+		<float name="projcetilDistance"/>-->
 		<float name="startX"/>
 		<float name="startY"/>
 		<int name="shootTick"/>
@@ -214,6 +216,9 @@
 		<string name="actionType"/>
 	</packet>
 
+	<packet name ="C_GoToLobby">
+	</packet>
+	
 	<packet name="S_GameOver">
 		<int name="winnerId"/>
 		<string name="resultMessage"/>

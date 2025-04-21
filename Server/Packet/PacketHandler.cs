@@ -276,5 +276,15 @@ class PacketHandler
     {
 
     }
+
+
+    public static void C_GoToLobbyHandler(PacketSession session, IPacket packet)
+    {
+        C_SummonProJectile req = packet as C_SummonProJectile;
+        ClientSession client = session as ClientSession;
+        GameRoom room = client.Room;
+
+        room.Leave(client);
+    }
     #endregion
 }

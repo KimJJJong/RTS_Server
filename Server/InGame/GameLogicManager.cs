@@ -272,8 +272,8 @@ class GameLogicManager
             projectileSpeed = speed,
             startX = packet.summonerX,
             startY = packet.summonerY,
-            projcetilDistance = targetPos.X,        //TODO : ㅆ~~~발 이거 안고치면 ㅈㄱ됨 
-            projectileDir = targetPos.Y,            //TODO : ㅆ~~~발 이거 안고치면 ㅈㄱ됨 
+            targetX = targetPos.X,        //TODO : ㅆ~~~발 이거 안고치면 ㅈㄱ됨 
+            targetY = targetPos.Y,            //TODO : ㅆ~~~발 이거 안고치면 ㅈㄱ됨 
             shootTick = excuteSummonProjectileTick,
                         
         };
@@ -340,7 +340,34 @@ class GameLogicManager
     public void EndGame()
     {
         _gameOver = true;
+
+        // 유닛 풀 정리
+        foreach (var unit in _unitPool)
+            unit.Reset(); // IsActive, HP 등 초기화 (만약 재사용할 경우)
+        _unitPool.Clear();
+
+        // 플레이어 마나 정리
+        _playerMana.Clear();
+
+        // 세션 정보 정리
+        _sessions.Clear();
+
+        // 카드 정보 정리
+        playerDecks.Clear();
+        cardPool.Clear();
+
+        // 데미지 계산기 초기화
+        _damageCalculator = null;
+
+        // 타이머 및 틱 매니저 (필요하면 null)
+        _timer = null;
+        _tickManager = null;
+
+        // 로그
+        LogManager.Instance.LogInfo("GameLogic", "게임 종료 및 리소스 정리 완료");
+        Console.WriteLine("✅ Game Ended - All dynamic resources cleared.");
     }
+
 
 
     public bool ValidateAttackRequest(C_AttackedRequest packet, int executeTick, int currentTick, out string reason)

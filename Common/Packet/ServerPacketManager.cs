@@ -49,6 +49,8 @@ public class PacketManager
 		_handler.Add((ushort)PacketID.C_SummonProJectile, PacketHandler.C_SummonProJectileHandler);
 		_makeFunc.Add((ushort)PacketID.C_RequestManaStatus, MakePacket<C_RequestManaStatus>);
 		_handler.Add((ushort)PacketID.C_RequestManaStatus, PacketHandler.C_RequestManaStatusHandler);
+		_makeFunc.Add((ushort)PacketID.C_GoToLobby, MakePacket<C_GoToLobby>);
+		_handler.Add((ushort)PacketID.C_GoToLobby, PacketHandler.C_GoToLobbyHandler);
 
 	}
 
