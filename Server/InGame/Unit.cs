@@ -20,7 +20,7 @@ public class Unit
     public float CurrentHP { get; set; }
     public bool IsActive { get; private set; }
     public int DeadTick { get; private set; }
-    public int LastAttackExcuteTick { get; private set; }
+    public int LastSummonExcuteTick { get; private set; }
     public Unit(string unitID, int cardLV)
     {
         IsActive = false;
@@ -40,17 +40,16 @@ public class Unit
         PositionX = s_AnsSummon.x;
         PositionY = s_AnsSummon.y;
         CurrentHP = MaxHP;
-
         Console.WriteLine($"CurrHp : {CurrentHP } || Power : {AttackPower}");
     }
-    public void Summon(S_ShootConfirm s_ShootConfirm)
+    public void Summon(S_ShootConfirm s_ShootConfirm,int excutionSummonTick)
     {
         IsActive = true;
         //PlayerID = s_ShootConfirm.reqSessionID;
         PositionX = s_ShootConfirm.startX;
         PositionY = s_ShootConfirm.startY;
         //CurrentHP = MaxHP;
-
+        LastSummonExcuteTick = excutionSummonTick;
         Console.WriteLine($"CurrHp : {CurrentHP} || Power : {AttackPower}");
     }
 
@@ -86,16 +85,12 @@ public class Unit
         CurrentHP = -1;
         DeadTick = 9999999;
         PlayerID = -1;
-        LastAttackExcuteTick = -1;
     }
 
     public void SetDeadTick(int deadTick)
     {
         DeadTick = deadTick;
     }
-    public void SetLastAttackExcuteTick(int lastAttackTick)
-    {
-        LastAttackExcuteTick = lastAttackTick;
-    }
+
 
 }

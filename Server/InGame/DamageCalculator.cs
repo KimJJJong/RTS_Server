@@ -40,7 +40,7 @@ public class DamageCalculator
         target.CurrentHP = Math.Max(0, target.CurrentHP); // 음수 방지
 
         curHp = target.CurrentHP;
-        Console.WriteLine($"damage : [{curHp}]");
+        Console.WriteLine($"curHp : [{curHp}]");
 
         return target.CurrentHP <= 0;
     }

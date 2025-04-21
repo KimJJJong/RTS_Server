@@ -232,13 +232,10 @@ class PacketHandler
 
 
 
-        Console.WriteLine($"[C_AttackRequestHandler]  요청 도착  " +
-                          $"SessionID: {client.SessionID}, " +
+/*        Console.WriteLine($"[C_AttackRequestHandler]  요청 도착  " +
                           $"AttackerOid: {req.attackerOid}, " +
-                          $"TargetOid: {req.targetOid}, " +
-                          $"ClientAttackTick: {req.clientAttackedTick}, " +
-                          $"HPDecreaseTick: {req.hpDecreaseTick}  ");
-        room.GameLogic.OnReciveAttack(client, req);
+                          $"TargetOid: {req.targetOid}");
+*/        room.GameLogic.OnReciveAttack(client, req);
     }
 
     public static void C_SummonProJectileHandler(PacketSession session, IPacket packet)

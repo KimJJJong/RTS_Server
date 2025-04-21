@@ -167,12 +167,11 @@ class GameLogicManager
             ServerStartTimeMs = _tickManager.GetStartTimeMs(),
             ClientSendTimeMs = packet.ClientSendTimeMs // 클라이언트가 보낸 시각 그대로 회신
         };
-        Console.WriteLine($"Player [ {response.reqSessionID} ]" +
+        Console.WriteLine($"[Summon]  Player [ {response.reqSessionID} ]" +
                           $" || Oid[ {response.oid} ]" +
                           $" || Position [ {response.x}, {response.y} ]" +
                           $" || Excute Tick [ {executeTick} ]" +
-                          $" || CurrentTick [ {currentTick} ]" +
-                          $" || CurrentTimeMs [ {response.ServerReceiveTimeMs} ]");
+                          $" || CurrentTick [ {currentTick} ]");
         _room.BroadCast(response.Write());
 
         UnitPool[response.oid].Summon(response);
@@ -187,6 +186,8 @@ class GameLogicManager
 
         int excuteAttackVerifyTick = clientAttackedTick + hpDecreaseTick;
 
+        Console.WriteLine($"[Attack] || 실행 :{excuteAttackVerifyTick} || 클라 보낸 시간 : {clientAttackedTick}");
+
         ///////Check//////////Check//////////Check//////////Check//////////Check//////////Check//////////Check/////
         if (!ValidateAttackRequest(packet, excuteAttackVerifyTick, currentTick, out var reason))
         {
@@ -200,13 +201,12 @@ class GameLogicManager
         float curHp;
         bool isDead = _damageCalculator.ApplyDamageAndCheckDeath(packet.attackerOid, packet.targetOid, out curHp);
 
-        // Set LastAttackExcuteTick wich UnitPool[oid]
-        UnitPool[packet.attackerOid].SetLastAttackExcuteTick(clientAttackedTick);
+
 
         if (isDead)
         {
             UnitPool[packet.targetOid].SetDeadTick(clientAttackedTick); // 피격자의 사망 Tick 저장
-            Console.WriteLine($"Player [ {clientSession.SessionID} ] || CurrentTick [ {currentTick} ] || Target [ {packet.targetOid} died by {packet.attackerOid} in {clientAttackedTick} ]");
+            Console.WriteLine($"[ Dead ] || CurrentTick [ {currentTick} ] ||  Kill [ {packet.attackerOid} -> {packet.targetOid}  At {clientAttackedTick} Tick ]");
             UnitPool[packet.targetOid].Dead();
         }
 
@@ -223,19 +223,18 @@ class GameLogicManager
             //correctedY =
             attackVerifyTick = excuteAttackVerifyTick,
         };
-
-        //  응답 전송
-        _room.BroadCast(response.Write());
-
         // tmp 투사체 처리
         if (_unitPool[packet.attackerOid].IsProjectile)
         {
             _unitPool[packet.attackerOid].Dead();
-            Console.WriteLine($"Projectile : {_unitPool[packet.attackerOid]} isIsProjectile? :  {_unitPool[packet.attackerOid].IsProjectile} is Active? : {_unitPool[packet.attackerOid].IsActive} ");
-
+            Console.WriteLine($"[ ProjectileActive ] ProjectileOid : {packet.attackerOid} || is Active? : {_unitPool[packet.attackerOid].IsActive} "); 
         }
 
-        Console.WriteLine($"Player [ {clientSession.SessionID} ] || [Attack] {packet.attackerOid} → {packet.targetOid} :  HP[{_unitPool[packet.targetOid].CurrentHP}] IsDead? {isDead} | Damage: {UnitPool[packet.attackerOid].AttackPower}, || VerifyTick: {excuteAttackVerifyTick} CurrentTick[ {currentTick}");
+        //  응답 전송
+        _room.BroadCast(response.Write());
+
+
+        Console.WriteLine($"[ Attck ] ||  {packet.attackerOid} → {packet.targetOid} :  HP[{_unitPool[packet.targetOid].CurrentHP}] IsDead? || {isDead} || Damage: {UnitPool[packet.attackerOid].AttackPower} ]");
     }
 
     public void OnReciveSummonProject(ClientSession clientSession, C_SummonProJectile packet)
@@ -243,7 +242,7 @@ class GameLogicManager
         int clientRequestTick = packet.clientRequestTick;
         int currentTick = _tickManager.GetCurrentTick();
 
-        Console.WriteLine("sumProjectile");
+        //Console.WriteLine("sumProjectile");
         int excuteSummonProjectileTick = clientRequestTick + SummonProjectileDelayTick;
 
 
@@ -261,22 +260,26 @@ class GameLogicManager
 
         float distance = Vector2.Distance(attckerPos, targetPos);
 
+        float speed = _unitPool[packet.projectileOid].Speed;
+
+        
         // if(석궁 10새끼면 distance 통일 해 줘야함)
 
         S_ShootConfirm response = new S_ShootConfirm
         {
             projcetileOid = packet.projectileOid,
             summonerOid = packet.summonerOid,
+            projectileSpeed = speed,
             startX = packet.summonerX,
             startY = packet.summonerY,
-            projcetilDistance = distance,
-            projectileDir = degress,
+            projcetilDistance = targetPos.X,        //TODO : ㅆ~~~발 이거 안고치면 ㅈㄱ됨 
+            projectileDir = targetPos.Y,            //TODO : ㅆ~~~발 이거 안고치면 ㅈㄱ됨 
             shootTick = excuteSummonProjectileTick,
                         
         };
 
-        _unitPool[packet.projectileOid].Summon(response);
-        Console.WriteLine($"Summoner is {_unitPool[packet.summonerOid]}  Projectile : {_unitPool[packet.projectileOid]} isIsProjectile? :  {_unitPool[packet.projectileOid].IsProjectile} is Active? : {_unitPool[packet.projectileOid].IsActive} ");
+        _unitPool[packet.projectileOid].Summon(response, excuteSummonProjectileTick);
+        Console.WriteLine($"Summoner is {packet.summonerOid}  Projectile : {packet.projectileOid} isIsProjectile? :  {_unitPool[packet.projectileOid].IsProjectile} is Active? : {_unitPool[packet.projectileOid].IsActive} ");
         //  응답 전송
         _room.BroadCast(response.Write());
 
@@ -284,12 +287,17 @@ class GameLogicManager
 
     public int? GetAvailableOid(int oid)
     {
+
+
         int definitionIndex = oid % unitPoolSize;
         int objectStartIndex = oid - definitionIndex;
         int endIndex = objectStartIndex + unitPoolSize;
 
         for (int i = objectStartIndex; i < endIndex; i++)
         {
+  
+
+
             Console.WriteLine($"ReQOID : {oid} / i : {i} is {_unitPool[i].IsActive} ");
             if (_unitPool[i].IsActive == false)
                 return i;
