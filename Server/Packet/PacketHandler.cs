@@ -88,7 +88,7 @@ class PacketHandler
         C_Ready c_Ready = packet as C_Ready;
         ClientSession clientSession =session as ClientSession;
         GameRoom gameRoom = clientSession.Room;
-        clientSession.isReady = true;
+        clientSession.isReady = c_Ready.isReady;
         Console.WriteLine($"Client[{clientSession.SessionID}] Ready[{clientSession.isReady}]");
 
         if (gameRoom.Sessions.Count == 2)
@@ -149,7 +149,7 @@ class PacketHandler
         ClientSession clientSession = session as ClientSession;
         GameRoom gameRoom = clientSession.Room;
 
-        clientSession.isLoad = loadpacket.isLoad;
+        clientSession.isLoad = true;//loadpacket.isLoad;
 
         if (gameRoom.Sessions.Count == 2)
         {
@@ -160,6 +160,9 @@ class PacketHandler
             S_SceneLoad sPakcet = new S_SceneLoad();
             sPakcet.ServerSendTime = DateTime.UtcNow.Ticks * 1e-7;
             sPakcet.StartTime = gameRoom.GameLogic.Timer.GetServerTime() + 2d; /*after Load Delay*/
+
+            Console.WriteLine($"[Session] : {clientSession.SessionID} || ISLoad :[ {clientSession.isLoad}] || ISReady :[ {clientSession.isReady}] || {gameRoom.RoomId}");
+
 
             gameRoom.BroadCast(sPakcet.Write());
         }
@@ -283,6 +286,12 @@ class PacketHandler
         C_SummonProJectile req = packet as C_SummonProJectile;
         ClientSession client = session as ClientSession;
         GameRoom room = client.Room;
+
+        if (room == null)
+        {
+            Console.WriteLine($"[Error] Client {client.SessionID} is not in a room.");
+            return;
+        }
 
         room.Leave(client);
     }

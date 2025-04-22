@@ -45,6 +45,30 @@ public class DamageCalculator
         return target.CurrentHP <= 0;
     }
 
+    public bool ApplyDirectDamage(int targetOid, float damage, out float newHp)
+    {
+        if (targetOid < 0 || targetOid >= _unitPool.Count)
+        {
+            newHp = 0;
+            return true;
+        }
+
+        Unit target = _unitPool[targetOid];
+        if (!target.IsActive)
+        {
+            newHp = target.CurrentHP;
+            return false;
+        }
+
+        target.CurrentHP -= damage;
+        target.CurrentHP = Math.Max(0, target.CurrentHP);
+
+        newHp = target.CurrentHP;
+        return newHp <= 0;
+    }
+
+
+
     public bool IsDead(int targetOid)
     {
         if (targetOid < 0 || targetOid >= _unitPool.Count)

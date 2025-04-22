@@ -18,7 +18,13 @@ public class CardMeta
     public int Level;
 
     public bool IsRanged;
-    public string ProjectileCardID; // 없으면 null
+    public string ProjectileCardID;
+
+    public bool IsSpell;
+    public List<string> SpellTimerIDs = new List<string>();      // ✅ 여러 타이머 참조
+    public List<string> SpellPositionIDs = new List<string>();   // ✅ 여러 소환 범위 참조
+    public string SpellType;                        // "PNT", "SUP" 등
+    public float SpawnMana;
 }
 
 
@@ -28,6 +34,7 @@ public static class CardMetaDatabase
 
     public static void Load()
     {
+        //////////////////////////////////////////Projectile//////////////////////////////////////////
         // Scholar - U-JOS-003 → PRJ-U-JOS-003
         _metas[("U-JOS-003", 1)] = new CardMeta
         {
@@ -64,15 +71,45 @@ public static class CardMetaDatabase
             ProjectileCardID = "PRJ-TWR-ATK-001"
         };
 
-        // ❗️기타 유닛은 추가적으로 여기에 계속 넣으면 됨
-    }
+        //////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static CardMeta GetMeta(string cardID, int level)
-    {
-        if (_metas.TryGetValue((cardID, level), out var meta))
-            return meta;
 
-        return null;
+        //////////////////////////////////////////Spell//////////////////////////////////////////
+        {
+            _metas[("SP-PNT-001", 1)] = new CardMeta
+            {
+                CardID = "SP-PNT-001",
+                Level = 1,
+                IsSpell = true,
+                SpellType = "PNT",
+                SpawnMana = 3,
+                SpellTimerIDs = new List<string> { "TMR-SP-001" },
+                SpellPositionIDs = new List<string> { "POS-SP-PNT-001" }
+            };
+
+            _metas[("SP-SUP-001", 1)] = new CardMeta
+            {
+                CardID = "SP-SUP-001",
+                Level = 1,
+                IsSpell = true,
+                SpellType = "SUP",
+                SpawnMana = 4,
+                SpellTimerIDs = new List<string>(), // 비어있을 수도 있음
+                SpellPositionIDs = new List<string> { "POS-SP-SUP-001" }
+            };
+
+
+            /////////////////////////////////////////////////////////////////////////////////////////
+
+        }
+
     }
+        public static CardMeta GetMeta(string cardID, int level)
+        {
+            if (_metas.TryGetValue((cardID, level), out var meta))
+                return meta;
+
+            return null;
+        }
 }
 

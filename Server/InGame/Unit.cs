@@ -13,6 +13,8 @@ public class Unit
     public float AttackPower { get; private set; }
     public float AttackRange { get; private set; }
     public bool IsProjectile { get; private set; }
+    public bool IsTower { get; private set; }
+    public int Oid {  get; private set; }
 
     // InGame Modifi Value
     public float PositionX { get; set; }
@@ -53,14 +55,16 @@ public class Unit
         Console.WriteLine($"CurrHp : {CurrentHP} || Power : {AttackPower}");
     }
 
-    public void SetStats(float maxHp, float speed, float attackPower, float attackRange, bool isProjectile)
+    public void SetStats(int oid, float maxHp, float speed, float attackPower, float attackRange, bool isProjectile, bool isTower)
     {
+        Oid =  oid;
         IsActive = false;
         MaxHP = maxHp;
         Speed = speed;
         AttackPower = attackPower;
         AttackRange = attackRange;
         IsProjectile = isProjectile;
+        IsTower = isTower;
     }
 
 
@@ -75,6 +79,7 @@ public class Unit
     public void Dead()
     {
         IsActive = false;
+        CurrentHP = 0;
         Reset();
     }
 

@@ -45,7 +45,7 @@ namespace Server
             if (Room != null)
             {
                 GameRoom room = Room;
-                room.Leave(this);
+                room?.Leave(this);
                 Room = null;
             }
 

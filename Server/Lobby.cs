@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ServerCore;
 using Shared;
 
 namespace Server
@@ -95,6 +96,8 @@ namespace Server
             {
                 ClientSession player1 = _waitingQueue.Dequeue();
                 ClientSession player2 = _waitingQueue.Dequeue();
+                player1.isMatching = false;
+                player2.isMatching = false;
 
                 string roomId = Guid.NewGuid().ToString().Substring(0, 6); ; // 랜덤 ID 생성
                 GameRoom room = new GameRoom(roomId);

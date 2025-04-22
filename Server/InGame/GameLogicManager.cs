@@ -26,8 +26,11 @@ class GameLogicManager
     private Timer _timer;
     private TickManager _tickManager;
     private DamageCalculator _damageCalculator;
+    private List<Unit> _selfDecreasingTowers = new List<Unit>(); // 1초마다 체력 줄어드는 포탑 리스트
+
 
     //state
+    private const float TowerDecayPerSecond = 25f;
     private bool _gameOver = false;
     public List<Unit> UnitPool => _unitPool;
     public IReadOnlyDictionary<int, Mana> Manas => _playerMana;
@@ -39,7 +42,7 @@ class GameLogicManager
     }
 
     //DefineData
-    const int HpDecreaseTick = 10;
+    const int HpDecreaseTick = 5;
     const int SummonProjectileDelayTick = 5;
 
 
@@ -61,18 +64,23 @@ class GameLogicManager
     private void SetUnitPool(List<Card> cardList)
     {
         _unitPool.Clear();
+        _selfDecreasingTowers.Clear(); // ❌ 등록은 소환 시점에
+        int num = 0;
+
         foreach (Card card in cardList)
         {
             for (int i = 0; i < unitPoolSize; i++)
             {
-                Unit unit = UnitFactory.CreateUnit(card.ID, card.LV);
+                Unit unit = UnitFactory.CreateUnit(card.ID, card.LV, num);
                 _unitPool.Add(unit);
+                num++;
             }
-
         }
-        Console.WriteLine($"SetUnitPool : [ {unitPoolSize} ]");
+
+        Console.WriteLine($"SetUnitPool : [ {unitPoolSize} * {cardList.Count} = {_unitPool.Count} ]");
         _damageCalculator = new DamageCalculator(_unitPool);
     }
+
 
     public void OnReceiveDeck(ClientSession session, C_SetCardPool packet)
     {
@@ -110,18 +118,42 @@ class GameLogicManager
             foreach (var deck in playerDecks.Values)
                 cardPool.AddRange(deck);
 
-            // Reference each Cards, Add reqire Information
+            // Reference each Cards, Add required Information
             List<Card> tmpCardPool = new List<Card>(cardPool);
 
             foreach (Card card in tmpCardPool)
             {
                 CardMeta meta = CardMetaDatabase.GetMeta(card.ID, card.LV);
-                if (meta != null && meta.IsRanged && !string.IsNullOrEmpty(meta.ProjectileCardID))
+                if (meta == null) continue;
+
+                // 1. Projectile 추가
+                if (meta.IsRanged && !string.IsNullOrEmpty(meta.ProjectileCardID))
                 {
                     cardPool.Add(new Card(meta.ProjectileCardID, card.LV));
                     LogManager.Instance.LogInfo("GameLogic", $"[Projectile Add] {meta.ProjectileCardID} for {card.ID}");
                 }
             }
+            foreach (Card card in tmpCardPool)
+            {
+                CardMeta meta = CardMetaDatabase.GetMeta(card.ID, card.LV);
+                if (meta == null) continue;
+                // 2. Spell 관련 카드 추가
+                if (meta.IsSpell)
+                {
+                    foreach (var timerID in meta.SpellTimerIDs)
+                    {
+                        cardPool.Add(new Card(timerID, card.LV));
+                        LogManager.Instance.LogInfo("GameLogic", $"[SpellTimer Add] {timerID} for {card.ID}");
+                    }
+
+                    foreach (var posID in meta.SpellPositionIDs)
+                    {
+                        cardPool.Add(new Card(posID, card.LV));
+                        LogManager.Instance.LogInfo("GameLogic", $"[SpellPosition Add] {posID} for {card.ID}");
+                    }
+                }
+            }
+
             Console.WriteLine("===============CardPool==============");
             foreach(Card card in cardPool)
             {
@@ -174,7 +206,15 @@ class GameLogicManager
                           $" || CurrentTick [ {currentTick} ]");
         _room.BroadCast(response.Write());
 
-        UnitPool[response.oid].Summon(response);
+        Unit unit = UnitPool[response.oid];
+        unit.Summon(response);
+
+        // 타워라면 체력감소 리스트에 등록
+        if (unit.IsTower)
+        {
+            _selfDecreasingTowers.Add(unit);
+            Console.WriteLine($"[TowerSummon] Tower OID {response.oid} 체력 감소 시작.");
+        }
 
     }
 
@@ -206,8 +246,14 @@ class GameLogicManager
         if (isDead)
         {
             UnitPool[packet.targetOid].SetDeadTick(clientAttackedTick); // 피격자의 사망 Tick 저장
-            Console.WriteLine($"[ Dead ] || CurrentTick [ {currentTick} ] ||  Kill [ {packet.attackerOid} -> {packet.targetOid}  At {clientAttackedTick} Tick ]");
             UnitPool[packet.targetOid].Dead();
+
+            // 체력 감소 대상 리스트에서 제거
+            if (_selfDecreasingTowers.Contains(UnitPool[packet.targetOid]))
+                _selfDecreasingTowers.Remove(UnitPool[packet.targetOid]);
+
+
+            Console.WriteLine($"[ Dead ] || CurrentTick [ {currentTick} ] ||  Kill [ {packet.attackerOid} -> {packet.targetOid}  At {clientAttackedTick} Tick ]");
         }
 
         //Calcul Hit Position
@@ -331,10 +377,43 @@ class GameLogicManager
             S_ManaUpdate packet = new S_ManaUpdate { currentMana = mana.Value.GetMana() };
             _sessions[mana.Key].Send(packet.Write());
         }
+        //////////////////////////////////////////////
+        int currentTick = _tickManager.GetCurrentTick();
+
+        foreach (var tower in _selfDecreasingTowers.ToArray()) // 복사본 사용해 안전한 삭제 보장
+        {
+            if (!tower.IsActive)
+                continue;
+
+            float beforeHp = tower.CurrentHP;
+            bool isDead = _damageCalculator.ApplyDirectDamage(tower.Oid, TowerDecayPerSecond, out float newHp);
+
+            S_AttackConfirm decayPacket = new S_AttackConfirm
+            {
+                attackerOid = -1, // 시스템 데미지
+                targetOid = tower.Oid,
+                targetVerifyHp = newHp,
+                attackVerifyTick = currentTick,
+            };
+
+            _room.BroadCast(decayPacket.Write());
+            Console.WriteLine($"[TowerDecay] Tower {tower.Oid} : {beforeHp} → {newHp}");
+
+            if (isDead)
+            {
+                tower.SetDeadTick(currentTick);
+                tower.Dead();
+                _selfDecreasingTowers.Remove(tower); // 죽으면 리스트에서 제거
+                Console.WriteLine($"[TowerDeath] Tower {tower.Oid} 사망 및 제거됨");
+            }
+        }
+        /////////////////////////////////////////////////////////
 
 
 
-        JobTimer.Instance.Push(Update, 1000);
+
+        // Console.WriteLine($"CurrentTick : {_tickManager.GetCurrentTick()}");
+        JobTimer.Instance.Push(Update, 900);
     }
 
     public void EndGame()
@@ -373,6 +452,13 @@ class GameLogicManager
     public bool ValidateAttackRequest(C_AttackedRequest packet, int executeTick, int currentTick, out string reason)
     {
         reason = "";
+
+        if (_unitPool[packet.attackerOid].IsProjectile && packet.targetOid < 0)
+        {
+            _unitPool[packet.attackerOid].Dead();
+            Console.WriteLine("Projectile is out of bounary");
+            return false;
+        }
 
         if (packet.attackerOid < 0 || packet.targetOid < 0)
         {
