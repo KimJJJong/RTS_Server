@@ -1,28 +1,27 @@
-﻿using System;
+﻿// GameLogicManager.cs
+using System;
 using System.Collections.Generic;
 using Server;
 
-class GameLogicManager
+ class GameLogicManager
 {
     private TickManager _tickManager;
-
     private PlayerManager _playerManager;
     private DeckManager _deckManager;
     private BattleManager _battleManager;
     private UnitPoolManager _unitPoolManager;
     private GameTimerManager _gameTimerManager;
-
+    private TickDrivenUnitManager _tickDrivenUnitManager;
     private GameRoom _room;
 
     public GameLogicManager(GameRoom room)
     {
         _room = room;
-
         _tickManager = new TickManager();
-
         _playerManager = new PlayerManager();
         _deckManager = new DeckManager();
         _unitPoolManager = new UnitPoolManager();
+        _tickDrivenUnitManager = new TickDrivenUnitManager();
         _battleManager = new BattleManager(_unitPoolManager, _room, _tickManager);
         _gameTimerManager = new GameTimerManager(_tickManager);
     }
@@ -37,10 +36,12 @@ class GameLogicManager
     public void AddPlayer(ClientSession session)
     {
         _playerManager.AddPlayer(session);
+        Console.WriteLine($"[GameLogicManager] Player {session.SessionID} added.");
     }
 
     public void OnReceiveDeck(ClientSession session, C_SetCardPool packet)
     {
+        Console.WriteLine($"[GameLogicManager] Receive deck from session {session.SessionID}");
         bool ready = _deckManager.ReceiveDeck(session, packet);
 
         if (ready)
@@ -48,39 +49,68 @@ class GameLogicManager
             List<Card> allCards = _deckManager.GetAllCards();
             _unitPoolManager.Initialize(allCards);
             _room.BroadCast(_deckManager.MakeCardPoolPacket().Write());
+            Console.WriteLine("[GameLogicManager] Decks ready and unit pool initialized.");
         }
     }
 
     public void OnReceiveSummon(ClientSession session, C_ReqSummon packet)
     {
-        int sessionId = session.SessionID;
-        Mana mana = _playerManager.GetMana(sessionId);
-
-        if (mana == null || !mana.UseMana(packet.needMana))
+        try
         {
-            Console.WriteLine($"[Reject] Summon blocked: Not enough mana for Player {sessionId}");
-            return;
+            Console.WriteLine($"[GameLogicManager] Summon requested: OID={packet.oid}, Session={session.SessionID}");
+            Unit unit = _unitPoolManager.GetUnit(packet.oid);
+            unit?.Summon(packet.x, packet.y, session.SessionID);
+
+            if (unit is ITickable)
+            {
+                RegisterTickUnit(unit);
+                unit.OnDead += UnregisterTickUnit;
+            }
+
+            _battleManager.ProcessSummon(session, packet);
         }
-
-        _battleManager.ProcessSummon(session, packet);
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[GameLogicManager] ❌ Error in OnReceiveSummon: {ex.Message}");
+        }
     }
 
-
-    public void OnReceiveAttack(ClientSession session, C_AttackedRequest packet)
+    public void OnReciveAttack(ClientSession session, C_AttackedRequest packet)
     {
-        _battleManager.ProcessAttack(session, packet);
+        try
+        {
+            Console.WriteLine($"[GameLogicManager] Attack: {packet.attackerOid} -> {packet.targetOid}, Tick={packet.clientAttackedTick}");
+            _battleManager.ProcessAttack(session, packet);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[GameLogicManager] ❌ Error in OnReceiveAttack: {ex.Message}");
+        }
     }
-    public void OnReceiveSummonProjectile(ClientSession session, C_SummonProJectile packet)
+
+    public void OnReciveSummonProject(ClientSession session, C_SummonProJectile packet)
     {
-        _battleManager.ProcessSummonProjectile(session, packet);
+        try
+        {
+            Console.WriteLine($"[GameLogicManager] Projectile summon: OID={packet.projectileOid}, Tick={packet.clientRequestTick}");
+            _battleManager.ProcessSummonProjectile(session, packet);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[GameLogicManager] ❌ Error in OnReciveSummonProject: {ex.Message}");
+        }
     }
+
     public void Update()
     {
         _playerManager.RegenManaAll();
         _gameTimerManager.Update();
-
+        _tickDrivenUnitManager.Update(_tickManager.GetCurrentTick());
         JobTimer.Instance.Push(Update, 1000);
     }
+
+    public void RegisterTickUnit(Unit unit) => _tickDrivenUnitManager.Register(unit);
+    public void UnregisterTickUnit(Unit unit) => _tickDrivenUnitManager.Unregister(unit);
 
     public void EndGame()
     {
@@ -88,9 +118,11 @@ class GameLogicManager
         _deckManager.Clear();
         _unitPoolManager.Clear();
         _gameTimerManager.Clear();
+        Console.WriteLine("[GameLogicManager] Game ended and resources cleared.");
     }
-}
 
+    public BattleManager Battle => _battleManager;
+}
 
 /*using Server;
 using System.Collections.Generic;

@@ -144,147 +144,113 @@ class PacketHandler
     }
     public static void C_SceneLoadedHandler(PacketSession session, IPacket packet)
     {
+        var loadPacket = packet as C_SceneLoaded;
+        var client = session as ClientSession;
+        var room = client.Room;
 
-        C_SceneLoaded loadpacket = packet as C_SceneLoaded;
-        ClientSession clientSession = session as ClientSession;
-        GameRoom gameRoom = clientSession.Room;
+        client.isLoad = loadPacket.isLoad;
 
-        clientSession.isLoad = loadpacket.isLoad;
-
-        if (gameRoom.Sessions.Count == 2)
+        if (room.Sessions.Count == 2)
         {
-            foreach (ClientSession _session in gameRoom.Sessions.Values)
+            foreach (ClientSession s in room.Sessions.Values)
             {
-                if (_session.isLoad == false) return;
+                if (!s.isLoad)
+                    return;
             }
-            S_SceneLoad sPakcet = new S_SceneLoad();
-            sPakcet.ServerSendTime = DateTime.UtcNow.Ticks * 1e-7;
-            sPakcet.StartTime = gameRoom.GameLogic.Timer.GetServerTime() + 2d; /*after Load Delay*/
 
-            gameRoom.BroadCast(sPakcet.Write());
+            var response = new S_SceneLoad
+            {
+                ServerSendTime = DateTime.UtcNow.Ticks * 1e-7,
+                StartTime = 180 + 2d
+            };
+
+            room.BroadCast(response.Write());
         }
         else
         {
-            Console.WriteLine($"err : RoomCound[{gameRoom.Sessions.Count}]");
-            return;
+            Console.WriteLine($"[SceneLoad] Invalid player count: {room.Sessions.Count}");
         }
-
     }
-    public static void C_GameActionHandler(PacketSession session, IPacket packet)
-    {
 
-    }
+    public static void C_GameActionHandler(PacketSession session, IPacket packet) { }
+
     public static void C_ReqSummonHandler(PacketSession session, IPacket packet)
     {
-      
-        C_ReqSummon c_ReqSummon = packet as C_ReqSummon;
-        ClientSession clientSession = session as ClientSession ;
-        GameRoom room = clientSession.Room;  // ToDo : 
+        var req = packet as C_ReqSummon;
+        var client = session as ClientSession;
+        var logic = client.Room?.GameLogic;
 
-        //Console.WriteLine($"씨발 {room.GameLogic.UnitPool[c_ReqSummon.oid].IsActive}");
-
-        // 유효성 검사
-        if (c_ReqSummon.oid < 0 || c_ReqSummon.oid >= room.GameLogic.UnitPool.Count)
+        if (logic == null)
         {
-            Console.WriteLine($"[Summon] 잘못된 oid 요청: {c_ReqSummon.oid}");
-            return;
-        }
-        // 사용 중이면 같은 카드 그룹 내 빈 OID 탐색
-        if (room.GameLogic.UnitPool[c_ReqSummon.oid].IsActive)
-        {
-            int? available = room.GameLogic.GetAvailableOid(c_ReqSummon.oid);
-            if (available == null)
-            {
-                Console.WriteLine($"[Summon] 사용 가능한 유닛 없음 - 카드 OID 기준 {c_ReqSummon.oid}");
-                return;
-            }
-
-            c_ReqSummon.oid = available.Value;
-        }
-
-
-        if (!room.GameLogic.Manas[c_ReqSummon.reqSessionID].UseMana(c_ReqSummon.needMana))
-        {
-            Console.WriteLine($"[Summon] 실패: 마나 부족");
+            Console.WriteLine("[SummonHandler] ❌ GameLogic is null");
             return;
         }
 
-        //room.GameLogic.UnitPool[c_ReqSummon.oid].SetActive( true );
-        room.GameLogic.OnReceiveSummon(clientSession, c_ReqSummon);
-
-
+        try
+        {
+           // Console.WriteLine($"[SummonHandler] Session:{client.SessionID}, OID:{req.oid}, Mana:{req.needMana}");
+            logic.OnReceiveSummon(client, req);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[SummonHandler] ❌ 예외 발생: {ex.Message}");
+        }
     }
-    public static void C_TargetCaptureHandler(PacketSession session, IPacket packet)
-    {
 
-    }
+    public static void C_TargetCaptureHandler(PacketSession session, IPacket packet) { }
+
     public static void C_AttackedRequestHandler(PacketSession session, IPacket packet)
     {
-        C_AttackedRequest req = packet as C_AttackedRequest;
-        ClientSession client = session as ClientSession;
-        GameRoom room = client.Room;
+        var req = packet as C_AttackedRequest;
+        var client = session as ClientSession;
+        var logic = client.Room?.GameLogic;
 
-        if (room == null || room.GameLogic == null)
+        if (logic == null)
         {
-            Console.WriteLine("[AttackHandler] ❌ GameRoom or GameLogic is null.");
+            Console.WriteLine("[AttackHandler] ❌ GameLogic is null");
             return;
         }
 
-
-
-/*        Console.WriteLine($"[C_AttackRequestHandler]  요청 도착  " +
-                          $"AttackerOid: {req.attackerOid}, " +
-                          $"TargetOid: {req.targetOid}");
-*/        room.GameLogic.OnReciveAttack(client, req);
+        try
+        {
+            //Console.WriteLine($"[AttackHandler] 요청: {req.attackerOid} -> {req.targetOid}, Tick: {req.clientAttackedTick}");
+            logic.OnReciveAttack(client, req);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[AttackHandler] ❌ 예외 발생: {ex.Message}");
+        }
     }
 
     public static void C_SummonProJectileHandler(PacketSession session, IPacket packet)
     {
-        C_SummonProJectile req = packet as C_SummonProJectile;
-        ClientSession client = session as ClientSession;
-        GameRoom room = client.Room;
+        var req = packet as C_SummonProJectile;
+        var client = session as ClientSession;
+        var logic = client.Room?.GameLogic;
 
-        if (room == null || room.GameLogic == null)
+        if (logic == null)
         {
-            Console.WriteLine("[AttackHandler] ❌ GameRoom or GameLogic is null.");
+            Console.WriteLine("[ProjectileHandler] ❌ GameLogic is null");
             return;
         }
 
-        // 사용 중이면 같은 카드 그룹 내 빈 OID 탐색
-        if (room.GameLogic.UnitPool[req.projectileOid].IsActive)
+        try
         {
-            int? available = room.GameLogic.GetAvailableOid(req.projectileOid);
-            if (available == null)
-            {
-                Console.WriteLine($"[Projectile] 사용 가능한 유닛 없음 - 카드 OID 기준 {req.projectileOid}");
-                return;
-            }
-
-            req.projectileOid = available.Value;
+           // Console.WriteLine($"[ProjectileHandler] ProjectileOid:{req.projectileOid}, Tick:{req.clientRequestTick}");
+            logic.OnReciveSummonProject(client, req);
         }
-
-
-/*        Console.WriteLine($"[C_SummonProjectile]  요청 도착  " +
-                          $"Pos:  [ {req.attackerX}, {req.attackerY} ]" +
-                          $"DestinationPos: [ {req.targetX}, {req.targetY} ] " +
-                          $"SummonnerOid: {req.summonerOid}, " +
-                          $"ProjectileOid: {req.oid}, " +
-                          $"SummonRequsetTime: {req.clientRequestTick}  ");*/
-        room.GameLogic.OnReciveSummonProject(client, req);
-    }
-    public static void C_RequestManaStatusHandler(PacketSession session, IPacket packet)
-    {
-
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[ProjectileHandler] ❌ 예외 발생: {ex.Message}");
+        }
     }
 
+    public static void C_RequestManaStatusHandler(PacketSession session, IPacket packet) { }
 
     public static void C_GoToLobbyHandler(PacketSession session, IPacket packet)
     {
-        C_SummonProJectile req = packet as C_SummonProJectile;
-        ClientSession client = session as ClientSession;
-        GameRoom room = client.Room;
-
-        room.Leave(client);
+        var client = session as ClientSession;
+        client.Room?.Leave(client);
     }
     #endregion
 }

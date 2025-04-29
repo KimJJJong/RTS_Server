@@ -69,19 +69,4 @@ public static class UnitStatDatabase
 
 
 
-public static class UnitFactory
-{
-    public static Unit CreateUnit(string unitID, int level)
-    {
-        UnitStat stat = UnitStatDatabase.GetStat(unitID, level);
 
-        Unit unit;
-        if (CardMetaDatabase.GetMeta(unitID, level)?.IsRanged == true && unitID.StartsWith("TWR"))
-            unit = new TowerUnit(unitID, level); // 예: 타워 유닛일 경우
-        else
-            unit = new Unit(unitID, level);
-
-        unit.SetStats(stat.MaxHP, stat.Speed, stat.AttackPower, stat.AttackRange, stat.IsProjectile);
-        return unit;
-    }
-}
