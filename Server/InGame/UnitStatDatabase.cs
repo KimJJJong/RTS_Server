@@ -74,8 +74,13 @@ public static class UnitFactory
     public static Unit CreateUnit(string unitID, int level)
     {
         UnitStat stat = UnitStatDatabase.GetStat(unitID, level);
-        Unit unit = new Unit(unitID, level);
-        // Console.WriteLine($"unitID : {unitID} || MaxHP : {stat.MaxHP} || Power : { stat.AttackPower } || SPeed: { stat.Speed}");
+
+        Unit unit;
+        if (CardMetaDatabase.GetMeta(unitID, level)?.IsRanged == true && unitID.StartsWith("TWR"))
+            unit = new TowerUnit(unitID, level); // 예: 타워 유닛일 경우
+        else
+            unit = new Unit(unitID, level);
+
         unit.SetStats(stat.MaxHP, stat.Speed, stat.AttackPower, stat.AttackRange, stat.IsProjectile);
         return unit;
     }

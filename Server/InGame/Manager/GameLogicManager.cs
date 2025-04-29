@@ -1,4 +1,98 @@
-﻿using Server;
+﻿using System;
+using System.Collections.Generic;
+using Server;
+
+class GameLogicManager
+{
+    private TickManager _tickManager;
+
+    private PlayerManager _playerManager;
+    private DeckManager _deckManager;
+    private BattleManager _battleManager;
+    private UnitPoolManager _unitPoolManager;
+    private GameTimerManager _gameTimerManager;
+
+    private GameRoom _room;
+
+    public GameLogicManager(GameRoom room)
+    {
+        _room = room;
+
+        _tickManager = new TickManager();
+
+        _playerManager = new PlayerManager();
+        _deckManager = new DeckManager();
+        _unitPoolManager = new UnitPoolManager();
+        _battleManager = new BattleManager(_unitPoolManager, _room, _tickManager);
+        _gameTimerManager = new GameTimerManager(_tickManager);
+    }
+
+    public void Init()
+    {
+        _gameTimerManager.Init();
+        _room.BroadCast(_gameTimerManager.MakeInitPacket().Write());
+        JobTimer.Instance.Push(Update);
+    }
+
+    public void AddPlayer(ClientSession session)
+    {
+        _playerManager.AddPlayer(session);
+    }
+
+    public void OnReceiveDeck(ClientSession session, C_SetCardPool packet)
+    {
+        bool ready = _deckManager.ReceiveDeck(session, packet);
+
+        if (ready)
+        {
+            List<Card> allCards = _deckManager.GetAllCards();
+            _unitPoolManager.Initialize(allCards);
+            _room.BroadCast(_deckManager.MakeCardPoolPacket().Write());
+        }
+    }
+
+    public void OnReceiveSummon(ClientSession session, C_ReqSummon packet)
+    {
+        int sessionId = session.SessionID;
+        Mana mana = _playerManager.GetMana(sessionId);
+
+        if (mana == null || !mana.UseMana(packet.needMana))
+        {
+            Console.WriteLine($"[Reject] Summon blocked: Not enough mana for Player {sessionId}");
+            return;
+        }
+
+        _battleManager.ProcessSummon(session, packet);
+    }
+
+
+    public void OnReceiveAttack(ClientSession session, C_AttackedRequest packet)
+    {
+        _battleManager.ProcessAttack(session, packet);
+    }
+    public void OnReceiveSummonProjectile(ClientSession session, C_SummonProJectile packet)
+    {
+        _battleManager.ProcessSummonProjectile(session, packet);
+    }
+    public void Update()
+    {
+        _playerManager.RegenManaAll();
+        _gameTimerManager.Update();
+
+        JobTimer.Instance.Push(Update, 1000);
+    }
+
+    public void EndGame()
+    {
+        _playerManager.Clear();
+        _deckManager.Clear();
+        _unitPoolManager.Clear();
+        _gameTimerManager.Clear();
+    }
+}
+
+
+/*using Server;
 using System.Collections.Generic;
 using System;
 using ServerCore;
@@ -252,13 +346,13 @@ class GameLogicManager
 
         Vector2 dir = targetPos - attckerPos;
 
-        if(dir.LengthSquared() > 0.0001f)
-            dir = Vector2.Normalize(dir);
+        //if(dir.LengthSquared() > 0.0001f)
+        //    dir = Vector2.Normalize(dir);
         
-        float angle = MathF.Atan2(dir.X, dir.Y); //Radian 변환
-        float degress = angle * (180f / MathF.PI); //degress 변환
+        //float angle = MathF.Atan2(dir.X, dir.Y); //Radian 변환
+        //float degress = angle * (180f / MathF.PI); //degress 변환
 
-        float distance = Vector2.Distance(attckerPos, targetPos);
+        //float distance = Vector2.Distance(attckerPos, targetPos);
 
         float speed = _unitPool[packet.projectileOid].Speed;
 
@@ -380,13 +474,13 @@ class GameLogicManager
             return false;
         }
 
-    /*    if (!_unitPool[packet.attackerOid].IsActive || !_unitPool[packet.targetOid].IsActive)
+    *//*    if (!_unitPool[packet.attackerOid].IsActive || !_unitPool[packet.targetOid].IsActive)
         {
             //reason = "Inactive unit";
             reason = $"Inactive unit || attacket [ {packet.attackerOid} is [ {UnitPool[packet.attackerOid].IsActive} ] || target[ {packet.targetOid} is [ {UnitPool[packet.targetOid].IsActive} ]";
 
             return false;
-        }*/
+        }*//*
 
         // 구종 변경으로 인한 수정
         //if (currentTick - UnitPool[packet.attackerOid].LastAttackExcuteTick < packet.animationDelayTick)
@@ -412,3 +506,4 @@ class GameLogicManager
 
 
 }
+*/
