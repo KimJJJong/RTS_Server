@@ -8,6 +8,9 @@ class BattleManager
     private GameRoom _room;
     private TickManager _tickManager;
 
+    private int HpDecreassRateTick = 10;
+    private int SummonProjectileDelayTick = 5;
+
     public BattleManager(UnitPoolManager unitPoolManager, GameRoom room, TickManager tickManager)
     {
         _unitPoolManager = unitPoolManager;
@@ -58,6 +61,20 @@ class BattleManager
         {
             target.SetDeadTick(_tickManager.GetCurrentTick());
             target.Dead();
+            /*           S_AnsObjectDead ans = new S_AnsObjectDead()
+                       {
+                           attackerOid = packet.attackerOid,
+                           targetOid = packet.targetOid,
+                           targetVerifyHp = 0,
+                           attackVerifyTick = _tickManager.GetCurrentTick() + HpDecreassRateTick // hp decreass Rate
+
+                       };
+
+                       _room.BroadCast(ans.Write());
+
+                       return ;
+                       */
+
         }
         else
         {
@@ -69,7 +86,7 @@ class BattleManager
             attackerOid = packet.attackerOid,
             targetOid = packet.targetOid,
             targetVerifyHp = Math.Max(0, curHp),
-            attackVerifyTick = _tickManager.GetCurrentTick() + 10
+            attackVerifyTick = packet.clientAttackedTick + HpDecreassRateTick // hp decreass Rate
         };
 
         _room.BroadCast(response.Write());
@@ -77,12 +94,12 @@ class BattleManager
 
     public void ProcessSummonProjectile(ClientSession session, C_SummonProJectile packet)
     {
-        int shootTick = _tickManager.GetCurrentTick() + 5;
+        int shootTick = packet.clientRequestTick + SummonProjectileDelayTick;
         S_ShootConfirm response = new S_ShootConfirm
         {
             projcetileOid = packet.projectileOid,
             summonerOid = packet.summonerOid,
-            projectileSpeed = 1f, // 예시
+            projectileSpeed = _unitPoolManager.GetUnit(packet.projectileOid).Speed, // 예시
             startX = packet.summonerX,
             startY = packet.summonerY,
             targetX = packet.targetX,

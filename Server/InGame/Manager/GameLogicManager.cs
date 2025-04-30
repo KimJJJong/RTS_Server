@@ -49,6 +49,12 @@ using Server;
             List<Card> allCards = _deckManager.GetAllCards();
             _unitPoolManager.Initialize(allCards);
             _room.BroadCast(_deckManager.MakeCardPoolPacket().Write());
+
+            foreach (Card card in allCards)
+            {
+                Console.WriteLine($"UID : {card.ID} LV : {card.LV}");
+            }
+
             Console.WriteLine("[GameLogicManager] Decks ready and unit pool initialized.");
         }
     }
@@ -58,10 +64,28 @@ using Server;
         try
         {
             Console.WriteLine($"[GameLogicManager] Summon requested: OID={packet.oid}, Session={session.SessionID}");
+
             Unit unit = _unitPoolManager.GetUnit(packet.oid);
+            if (unit?.IsActive == true)
+            {
+                int? available = _unitPoolManager.GetAvailableOid(packet.oid);
+                if (available == null)
+                {
+                    Console.WriteLine($"[GameLogicManager] ❌ No available unit in group for OID={packet.oid}");
+                    return;
+                }
+                packet.oid = available.Value;
+                unit = _unitPoolManager.GetUnit(packet.oid);
+            }
+
             unit?.Summon(packet.x, packet.y, session.SessionID);
 
-            if (unit is ITickable)
+            /*if (unit is ITickable)
+            {
+                RegisterTickUnit(unit);
+                unit.OnDead += UnregisterTickUnit;
+            }*/
+            if( unit.UnitTypeIs() is UnitType.Tower && unit is ITickable )
             {
                 RegisterTickUnit(unit);
                 unit.OnDead += UnregisterTickUnit;
@@ -93,6 +117,19 @@ using Server;
         try
         {
             Console.WriteLine($"[GameLogicManager] Projectile summon: OID={packet.projectileOid}, Tick={packet.clientRequestTick}");
+
+            Unit unit = _unitPoolManager.GetUnit(packet.projectileOid);
+            if (unit?.IsActive == true)
+            {
+                int? available = _unitPoolManager.GetAvailableOid(packet.projectileOid);
+                if (available == null)
+                {
+                    Console.WriteLine($"[GameLogicManager] ❌ No available projectile in group for OID={packet.projectileOid}");
+                    return;
+                }
+                packet.projectileOid = available.Value;
+            }
+
             _battleManager.ProcessSummonProjectile(session, packet);
         }
         catch (Exception ex)

@@ -1,4 +1,6 @@
-﻿public class TowerUnit : Unit, ITickable
+﻿using System;
+
+public class TowerUnit : Unit, ITickable
 {
     private const float TowerDecayPerSecond = 25f;
 
@@ -9,9 +11,14 @@
         CurrentHP -= TowerDecayPerSecond;
         if (CurrentHP <= 0)
         {
+            Console.WriteLine("DEadTickUpdate <= 0");
             CurrentHP = 0;
             SetDeadTick(tick);
             Dead();
         }
+    }
+    public override UnitType UnitTypeIs()
+    {
+        return UnitType.Tower;
     }
 }

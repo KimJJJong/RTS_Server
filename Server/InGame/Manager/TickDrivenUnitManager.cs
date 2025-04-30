@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 class TickDrivenUnitManager
 {
@@ -6,12 +7,14 @@ class TickDrivenUnitManager
 
     public void Register(Unit unit)
     {
+       // Console.WriteLine($"[Unit : {unit.UnitID} is Registing]");
         if (!_tickUnits.Contains(unit))
             _tickUnits.Add(unit);
     }
 
     public void Unregister(Unit unit)
     {
+        //Console.WriteLine($"[Unit : {unit.UnitID} is UnRegisting]");
         _tickUnits.Remove(unit);
     }
 

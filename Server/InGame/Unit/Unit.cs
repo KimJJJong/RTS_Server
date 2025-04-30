@@ -1,5 +1,12 @@
 ﻿using System;
 
+public enum UnitType
+{
+    Deaful = 1,
+    Tower = 2,
+    Projectile = 3,
+}
+
 public abstract class Unit
 {
     public string UnitID { get; protected set; }
@@ -62,4 +69,5 @@ public abstract class Unit
     public void SetDeadTick(int tick) => DeadTick = tick;
 
     public abstract void TickUpdate(int tick);
+    public abstract UnitType UnitTypeIs();
 }

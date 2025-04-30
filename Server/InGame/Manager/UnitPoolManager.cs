@@ -15,6 +15,7 @@ class UnitPoolManager
             {
                 Unit unit = UnitFactory.CreateUnit(card.ID, card.LV);
                 _unitPool.Add(unit);
+                Console.WriteLine($"UID : {card.ID}");
             }
         }
         Console.WriteLine($"[UnitPoolManager] 총 유닛 수: {_unitPool.Count}");
@@ -29,22 +30,23 @@ class UnitPoolManager
 
     public IEnumerable<Unit> GetAllUnits() => _unitPool;
 
-    public int? GetAvailableOid(string cardID, int poolSize)
-    {
-        int definitionIndex = _unitPoolSize;
 
-        for (int i = 0; i < _unitPool.Count; i += definitionIndex)
+
+    public int? GetAvailableOid(int originOid)
+    {
+        int groupSize = _unitPoolSize;
+        int groupStart = originOid - (originOid % groupSize);
+        int groupEnd = groupStart + groupSize;
+
+        for (int i = groupStart; i < groupEnd && i < _unitPool.Count; i++)
         {
-            for (int j = 0; j < definitionIndex; j++)
-            {
-                int index = i + j;
-                if (index < _unitPool.Count && !_unitPool[index].IsActive)
-                    return index;
-            }
+            if (_unitPool[i].IsActive == false)
+                return i;
         }
 
-        return null; // 사용 가능한 유닛 없음
+        return null;
     }
+
 
     public void ResetAll()
     {
