@@ -50,8 +50,10 @@ public abstract class Unit
         IsActive = true;
     }
 
-    public virtual void Dead()
+
+    public virtual void Dead(int tick)
     {
+        SetDeadTick(tick);
         IsActive = false;
         OnDead?.Invoke(this);
         Reset();

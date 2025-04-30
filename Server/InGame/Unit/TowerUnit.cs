@@ -13,8 +13,8 @@ public class TowerUnit : Unit, ITickable
         {
             Console.WriteLine("DEadTickUpdate <= 0");
             CurrentHP = 0;
-            SetDeadTick(tick);
-            Dead();
+            //SetDeadTick(tick);
+            Dead(tick);
         }
     }
     public override UnitType UnitTypeIs()

@@ -104,11 +104,17 @@ using Server;
         try
         {
             Unit unit = _unitPoolManager.GetUnit(packet.attackerOid);
-            if( unit.UnitTypeIs() is UnitType.Projectile )
 
+            if (unit.UnitTypeIs() is UnitType.Projectile)
+            {
+                _battleManager.ProcessProjectileAttack(session, packet);
+            }
+            else
+            {
+                _battleManager.ProcessAttack(session, packet);
+            }
 
             Console.WriteLine($"[GameLogicManager] [ {unit.UnitTypeIs()} ] Attack: {packet.attackerOid} -> {packet.targetOid}, Tick={packet.clientAttackedTick}");
-            _battleManager.ProcessAttack(session, packet);
         }
         catch (Exception ex)
         {

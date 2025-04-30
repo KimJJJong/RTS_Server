@@ -60,8 +60,8 @@ class BattleManager
 
         if (isDead)
         {
-            target.SetDeadTick(_tickManager.GetCurrentTick());
-            target.Dead();
+//            target.SetDeadTick(_tickManager.GetCurrentTick());
+            target.Dead(_tickManager.GetCurrentTick());
             /*           S_AnsObjectDead ans = new S_AnsObjectDead()
                        {
                            attackerOid = packet.attackerOid,
@@ -111,7 +111,7 @@ class BattleManager
             attackVerifyTick = packet.clientAttackedTick + HpDecreassRateTick // hp decreass Rate
         };
 
-        projectile.Dead();
+        projectile.Dead(_tickManager.GetCurrentTick());
 
         _room.BroadCast(response.Write());
     }
