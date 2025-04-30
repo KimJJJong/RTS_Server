@@ -67,6 +67,19 @@ using Server;
         {
             Console.WriteLine($"[GameLogicManager] Summon requested: OID={packet.oid}, Session={session.SessionID}");
 
+            if (!Manas.TryGetValue(packet.reqSessionID, out var mana))
+            {
+                Console.WriteLine("[GameLogicManager] ❌ 마나 정보 없음");
+                return;
+            }
+
+            if (!mana.UseMana(packet.needMana))
+            {
+                Console.WriteLine("[GameLogicManager] ❌ 마나 부족");
+                return;
+            }
+            packet.needMana = mana.GetMana();
+
             Unit unit = _unitPoolManager.GetUnit(packet.oid);
             if (unit?.IsActive == true)     // 이거 그 oid 겹치는거 소환 요청 했을때 처리
             {
@@ -82,10 +95,10 @@ using Server;
 
             unit?.Summon(packet.x, packet.y, session.SessionID);
 
-            if (_playerManager.GetMana(packet.reqSessionID).UseMana(packet.needMana) == false)
+/*            if (_playerManager.GetMana(packet.reqSessionID).UseMana(packet.needMana) == false)
                 return;
 
-            packet.needMana = _playerManager.GetMana(packet.reqSessionID).GetMana();
+            packet.needMana = _playerManager.GetMana(packet.reqSessionID).GetMana();*/
 
             if( unit.UnitTypeIs() is UnitType.Tower && unit is ITickable )
             {
@@ -167,14 +180,21 @@ using Server;
     public void EndGame()
     {
         _gameOver = true;
+       // _tickManager.Clear();
         _playerManager.Clear();
+        _battleManager.Clear();
         _deckManager.Clear();
         _unitPoolManager.Clear();
         _gameTimerManager.Clear();
+        _gameTimerManager.Clear();
+        _tickDrivenUnitManager.Clear();
         Console.WriteLine("[GameLogicManager] Game ended and resources cleared.");
     }
 
     public BattleManager Battle => _battleManager;
+    public IReadOnlyDictionary<int, Mana> Manas => _playerManager.Manas;
+    public List<Unit> UnitPool => _unitPoolManager.GetAllUnits() as List<Unit>;
+    public TickManager TickManager => _tickManager;
 }
 
 /*using Server;

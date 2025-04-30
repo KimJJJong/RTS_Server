@@ -136,4 +136,8 @@ class BattleManager
         proj.Summon(packet.summonerX, packet.summonerY, session.SessionID);
         _room.BroadCast(response.Write());
     }
+    public void Clear()
+    {
+        _unitPoolManager.Clear();
+    }
 }

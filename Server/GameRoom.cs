@@ -99,13 +99,16 @@ namespace Server
 
         public void Leave(ClientSession session)
         {
-            if (_sessions.ContainsKey(session.SessionID))
-            {
-                //Console.WriteLine($"클라이언트 {session.SessionID}가 방 {RoomId}에서 퇴장");
-                LogManager.Instance.LogInfo("GameRoom", $"클라이언트 {session.SessionID}가 방 {RoomId}에서 퇴장");
-                _sessions.Remove(session.SessionID);
-                session.Room = null;
-            }
+            if (!_sessions.ContainsKey(session.SessionID))
+                return;
+
+                     //Console.WriteLine($"클라이언트 {session.SessionID}가 방 {RoomId}에서 퇴장");
+            LogManager.Instance.LogInfo("GameRoom", $"클라이언트 {session.SessionID}가 방 {RoomId}에서 퇴장");
+            _sessions.Remove(session.SessionID);
+            session.isLoad = false;
+            session.isReady = false;
+            session.Room = null;
+
 
             if (_sessions.Count == 0)
             {
