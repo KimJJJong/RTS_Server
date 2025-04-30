@@ -53,8 +53,8 @@ public static class UnitStatDatabase
         _stats[("CASTLE-U-02", 1)] = new UnitStat { UnitID = "CASTLE-U-02", Level = 1, MaxHP = 9999999, Speed = 0, AttackPower = -1, AttackRange = -1, IsProjectile = false };
 
         //etc... : 데미지 관련 X -> 이후 제외 해도 게임 진행에 문제가 없어야 함
-        //_stats[("POS-SP-SUP-001", 1)] = new UnitStat { UnitID = "POS-SP-SUP-001", Level = 1, MaxHP = 750, Speed = 0, AttackPower = -1, AttackRange = -1 };
-        //_stats[("TMR-SP-001", 1)] = new UnitStat { UnitID = "TMR_SP_001", Level = 1, MaxHP = 750, Speed = 0, AttackPower = -1, AttackRange = -1 };
+        _stats[("POS-SP-SUP-001", 1)] = new UnitStat { UnitID = "POS-SP-SUP-001", Level = 1, MaxHP = 750, Speed = 0, AttackPower = -1, AttackRange = -1 };
+        _stats[("TMR-SP-001", 1)] = new UnitStat { UnitID = "TMR_SP_001", Level = 1, MaxHP = 750, Speed = 0, AttackPower = -1, AttackRange = -1 };
 
 
     }

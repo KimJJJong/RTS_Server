@@ -1,6 +1,7 @@
 ﻿// BattleManager.cs
 using Server;
 using System;
+using System.Net.Sockets;
 
 class BattleManager
 {
@@ -91,6 +92,30 @@ class BattleManager
 
         _room.BroadCast(response.Write());
     }
+    public void ProcessProjectileAttack(ClientSession session, C_AttackedRequest packet)
+    {
+        Unit projectile = _unitPoolManager.GetUnit(packet.attackerOid);
+        Unit target = _unitPoolManager.GetUnit(packet.targetOid);
+
+        if (projectile == null || target == null)
+            return;
+
+        float curHp = target.CurrentHP - projectile.AttackPower;
+        bool isDead = curHp <= 0;
+
+        S_AttackConfirm response = new S_AttackConfirm
+        {
+            attackerOid = packet.attackerOid,
+            targetOid = packet.targetOid,
+            targetVerifyHp = Math.Max(0, curHp),
+            attackVerifyTick = packet.clientAttackedTick + HpDecreassRateTick // hp decreass Rate
+        };
+
+        projectile.Dead();
+
+        _room.BroadCast(response.Write());
+    }
+
 
     public void ProcessSummonProjectile(ClientSession session, C_SummonProJectile packet)
     {

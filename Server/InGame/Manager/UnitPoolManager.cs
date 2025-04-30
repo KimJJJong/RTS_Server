@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 class UnitPoolManager
 {
@@ -40,6 +41,7 @@ class UnitPoolManager
 
         for (int i = groupStart; i < groupEnd && i < _unitPool.Count; i++)
         {
+            Console.WriteLine($"ReQOID : {originOid} / i : {i} is {_unitPool[i].IsActive} ");
             if (_unitPool[i].IsActive == false)
                 return i;
         }
