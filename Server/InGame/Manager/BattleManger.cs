@@ -9,7 +9,8 @@ class BattleManager
     private GameRoom _room;
     private TickManager _tickManager;
 
-    private int HpDecreassRateTick = 10;
+    private int HpDecreassTick = 10;
+    private int HpDecreassProjectileTick = 3;
     private int SummonProjectileDelayTick = 5;
 
     public BattleManager(UnitPoolManager unitPoolManager, GameRoom room, TickManager tickManager)
@@ -34,7 +35,7 @@ class BattleManager
             x = packet.x,
             y = packet.y,
             randomValue = rng.Next(0, 10),
-            reducedMana = 0, // TODO: 실제 마나 시스템 연결
+            reducedMana = packet.needMana, // TODO: 실제 마나 시스템 연결
             ExcuteTick = executeTick,
             ServerReceiveTimeMs = _tickManager.GetNowTimeMs(),
             ServerStartTimeMs = _tickManager.GetStartTimeMs(),
@@ -87,7 +88,7 @@ class BattleManager
             attackerOid = packet.attackerOid,
             targetOid = packet.targetOid,
             targetVerifyHp = Math.Max(0, curHp),
-            attackVerifyTick = packet.clientAttackedTick + HpDecreassRateTick // hp decreass Rate
+            attackVerifyTick = packet.clientAttackedTick + HpDecreassTick  // hp decreass Rate
         };
 
         _room.BroadCast(response.Write());
@@ -97,18 +98,18 @@ class BattleManager
         Unit projectile = _unitPoolManager.GetUnit(packet.attackerOid);
         Unit target = _unitPoolManager.GetUnit(packet.targetOid);
 
-        if (projectile == null || target == null)
-            return;
+        if (projectile == null || target == null) return;
+
 
         float curHp = target.CurrentHP - projectile.AttackPower;
-        bool isDead = curHp <= 0;
-
+        target.CurrentHP = curHp;
+        Console.WriteLine($"targetHP : {target.CurrentHP} || Damage : { projectile.AttackPower } || Resaurt : {curHp}");
         S_AttackConfirm response = new S_AttackConfirm
         {
             attackerOid = packet.attackerOid,
             targetOid = packet.targetOid,
             targetVerifyHp = Math.Max(0, curHp),
-            attackVerifyTick = packet.clientAttackedTick + HpDecreassRateTick // hp decreass Rate
+            attackVerifyTick = packet.clientAttackedTick + HpDecreassProjectileTick // hp decreass Rate
         };
 
         projectile.Dead(_tickManager.GetCurrentTick());

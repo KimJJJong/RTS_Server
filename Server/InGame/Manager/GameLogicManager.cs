@@ -13,9 +13,11 @@ using Server;
     private GameTimerManager _gameTimerManager;
     private TickDrivenUnitManager _tickDrivenUnitManager;
     private GameRoom _room;
+    private bool _gameOver;
 
     public GameLogicManager(GameRoom room)
     {
+        _gameOver = false;
         _room = room;
         _tickManager = new TickManager();
         _playerManager = new PlayerManager();
@@ -66,7 +68,7 @@ using Server;
             Console.WriteLine($"[GameLogicManager] Summon requested: OID={packet.oid}, Session={session.SessionID}");
 
             Unit unit = _unitPoolManager.GetUnit(packet.oid);
-            if (unit?.IsActive == true)
+            if (unit?.IsActive == true)     // 이거 그 oid 겹치는거 소환 요청 했을때 처리
             {
                 int? available = _unitPoolManager.GetAvailableOid(packet.oid);
                 if (available == null)
@@ -80,11 +82,11 @@ using Server;
 
             unit?.Summon(packet.x, packet.y, session.SessionID);
 
-            /*if (unit is ITickable)
-            {
-                RegisterTickUnit(unit);
-                unit.OnDead += UnregisterTickUnit;
-            }*/
+            if (_playerManager.GetMana(packet.reqSessionID).UseMana(packet.needMana) == false)
+                return;
+
+            packet.needMana = _playerManager.GetMana(packet.reqSessionID).GetMana();
+
             if( unit.UnitTypeIs() is UnitType.Tower && unit is ITickable )
             {
                 RegisterTickUnit(unit);
@@ -114,7 +116,7 @@ using Server;
                 _battleManager.ProcessAttack(session, packet);
             }
 
-            Console.WriteLine($"[GameLogicManager] [ {unit.UnitTypeIs()} ] Attack: {packet.attackerOid} -> {packet.targetOid}, Tick={packet.clientAttackedTick}");
+            Console.WriteLine($"[GameLogicManager] [ {unit.UnitTypeIs().ToString()} ] Attack: {packet.attackerOid} -> {packet.targetOid}, Tick={packet.clientAttackedTick}");
         }
         catch (Exception ex)
         {
@@ -150,6 +152,9 @@ using Server;
 
     public void Update()
     {
+        if (_gameOver)
+            return;
+
         _playerManager.RegenManaAll();
         _gameTimerManager.Update();
         _tickDrivenUnitManager.Update(_tickManager.GetCurrentTick());
@@ -161,6 +166,7 @@ using Server;
 
     public void EndGame()
     {
+        _gameOver = true;
         _playerManager.Clear();
         _deckManager.Clear();
         _unitPoolManager.Clear();

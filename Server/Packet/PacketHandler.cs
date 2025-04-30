@@ -249,8 +249,22 @@ class PacketHandler
 
     public static void C_GoToLobbyHandler(PacketSession session, IPacket packet)
     {
-        var client = session as ClientSession;
-        client.Room?.Leave(client);
+//        client.Room?.Leave(client);
+
+    
+            ClientSession client = session as ClientSession;
+            GameRoom room = client.Room;
+
+            if (room == null)
+            {
+                Console.WriteLine($"[Error] Client {client.SessionID} is not in a room.");
+                return;
+            }
+
+            room.Leave(client);
+        
+
+
     }
     #endregion
 }

@@ -20,8 +20,10 @@ class TickDrivenUnitManager
 
     public void Update(int currentTick)
     {
-        foreach (var unit in _tickUnits)
+        foreach (var unit in _tickUnits.ToArray())  // 복사본 순회
+        {
             unit?.TickUpdate(currentTick);
+        }
     }
 }
 

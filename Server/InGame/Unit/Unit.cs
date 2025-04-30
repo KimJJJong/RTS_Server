@@ -39,6 +39,8 @@ public abstract class Unit
         Speed = stat.Speed;
         AttackPower = stat.AttackPower;
         AttackRange = stat.AttackRange;
+
+        Console.WriteLine($"UID : {UnitID} || MaxHP: {MaxHP} || AttackPower :{AttackPower}");
     }
 
     public virtual void Summon(float x, float y, float playerId)

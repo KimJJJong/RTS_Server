@@ -27,6 +27,8 @@ class PlayerManager
         return mana;
     }
 
+    
+
     public void Clear()
     {
         _sessions.Clear();

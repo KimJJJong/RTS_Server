@@ -42,7 +42,7 @@ public static class UnitStatDatabase
         _stats[("TWR-DEF-001", 1)] = new UnitStat { UnitID = "SP-PNT-002", Level = 1, MaxHP = 750, Speed = 0, AttackPower = -1, AttackRange = -1, IsProjectile = false };
 
         //Projection
-        _stats[("PRJ-TWR-ATK-001", 1)] = new UnitStat { UnitID = "PRJ-TWR-ATK-001", Level = 1, MaxHP = 750, Speed = 3f, AttackPower = -1, AttackRange = -1, IsProjectile = true };
+        _stats[("PRJ-TWR-ATK-001", 1)] = new UnitStat { UnitID = "PRJ-TWR-ATK-001", Level = 1, MaxHP = 750, Speed = 3f, AttackPower = 50, AttackRange = -1, IsProjectile = true };
         _stats[("PRJ-U-JOS-003", 1)] = new UnitStat { UnitID = "PRJ-U-JOS-003", Level = 1, MaxHP = 750, Speed = 1.8f, AttackPower = 30, AttackRange = -1 ,IsProjectile = true };
         _stats[("PRJ-U-JOS-004", 1)] = new UnitStat { UnitID = "PRJ-U-JOS-004", Level = 1, MaxHP = 750, Speed = 1.5f, AttackPower = 25, AttackRange = -1 , IsProjectile = true };
         _stats[("PRJ-U-ENG-003", 1)] = new UnitStat { UnitID = "PRJ-U-ENG-003", Level = 1, MaxHP = 750, Speed = 0, AttackPower = -1, AttackRange = -1 , IsProjectile = true };
