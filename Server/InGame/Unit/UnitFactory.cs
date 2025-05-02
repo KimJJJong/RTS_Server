@@ -10,6 +10,8 @@
             unit = new ProjectileUnit();
         else if (meta?.IsRanged == true && unitID.StartsWith("TWR"))
             unit = new TowerUnit();
+        else if(unitID.StartsWith("CASTLE"))
+            unit = new WallMariaUnit();
         else
             unit = new DefaultUnit();
 

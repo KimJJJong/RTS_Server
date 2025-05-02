@@ -1,6 +1,7 @@
 ﻿// GameLogicManager.cs
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Server;
 
  class GameLogicManager
@@ -12,6 +13,7 @@ using Server;
     private UnitPoolManager _unitPoolManager;
     private GameTimerManager _gameTimerManager;
     private TickDrivenUnitManager _tickDrivenUnitManager;
+    private OccupationManager _occupationManager;
     private GameRoom _room;
     private bool _gameOver;
 
@@ -24,13 +26,15 @@ using Server;
         _deckManager = new DeckManager();
         _unitPoolManager = new UnitPoolManager();
         _tickDrivenUnitManager = new TickDrivenUnitManager();
-        _battleManager = new BattleManager(_unitPoolManager, _room, _tickManager);
+        _occupationManager = new OccupationManager(this);
+        _battleManager = new BattleManager(_unitPoolManager, _room, _tickManager, _occupationManager);
         _gameTimerManager = new GameTimerManager(_tickManager);
     }
 
     public void Init()
     {
         _gameTimerManager.Init();
+        _occupationManager.Init(_room.Sessions.Keys.ToList());
         _room.BroadCast(_gameTimerManager.MakeInitPacket().Write());
         JobTimer.Instance.Push(Update);
     }
@@ -93,12 +97,6 @@ using Server;
                 unit = _unitPoolManager.GetUnit(packet.oid);
             }
 
-            unit?.Summon(packet.x, packet.y, session.SessionID);
-
-/*            if (_playerManager.GetMana(packet.reqSessionID).UseMana(packet.needMana) == false)
-                return;
-
-            packet.needMana = _playerManager.GetMana(packet.reqSessionID).GetMana();*/
 
             if( unit.UnitTypeIs() is UnitType.Tower && unit is ITickable )
             {
@@ -106,6 +104,7 @@ using Server;
                 unit.OnDead += UnregisterTickUnit;
             }
 
+            unit?.Summon(packet.x, packet.y, session.SessionID);
             _battleManager.ProcessSummon(session, packet);
         }
         catch (Exception ex)
@@ -118,18 +117,35 @@ using Server;
     {
         try
         {
-            Unit unit = _unitPoolManager.GetUnit(packet.attackerOid);
+            Unit attackerUnit = _unitPoolManager.GetUnit(packet.attackerOid);
+            Unit targetUnit = _unitPoolManager.GetUnit(packet.targetOid);
 
-            if (unit.UnitTypeIs() is UnitType.Projectile)
+
+            if (attackerUnit.UnitTypeIs() == UnitType.Projectile)
             {
-                _battleManager.ProcessProjectileAttack(session, packet);
+                if (targetUnit.UnitTypeIs() == UnitType.WallMaria)
+                {
+                    _battleManager.ProcessWallMariaProjectileAttacked(session, packet);
+                }
+                else
+                {
+                    _battleManager.ProcessProjectileAttack(session, packet);
+                }
             }
-            else
+            else // 일단은 근접 공격
             {
-                _battleManager.ProcessAttack(session, packet);
+                if (targetUnit.UnitTypeIs() == UnitType.WallMaria )
+                {
+                    _battleManager.ProcessWallMariaAttacked(session, packet);
+                }
+                else
+                {
+                    _battleManager.ProcessAttack(session, packet);
+                }
             }
 
-            Console.WriteLine($"[GameLogicManager] [ {unit.UnitTypeIs().ToString()} ] Attack: {packet.attackerOid} -> {packet.targetOid}, Tick={packet.clientAttackedTick}");
+
+            Console.WriteLine($"[GameLogicManager] Attack: {packet.attackerOid} -> {packet.targetOid}, Tick={packet.clientAttackedTick}     [ {attackerUnit.UnitTypeIs().ToString()} ]");
         }
         catch (Exception ex)
         {
@@ -177,10 +193,9 @@ using Server;
     public void RegisterTickUnit(Unit unit) => _tickDrivenUnitManager.Register(unit);
     public void UnregisterTickUnit(Unit unit) => _tickDrivenUnitManager.Unregister(unit);
 
-    public void EndGame()
+    public void EndGame(int winnerSessionId)
     {
         _gameOver = true;
-       // _tickManager.Clear();
         _playerManager.Clear();
         _battleManager.Clear();
         _deckManager.Clear();
@@ -188,7 +203,7 @@ using Server;
         _gameTimerManager.Clear();
         _gameTimerManager.Clear();
         _tickDrivenUnitManager.Clear();
-        Console.WriteLine("[GameLogicManager] Game ended and resources cleared.");
+        Console.WriteLine($"[GameLogicManager] Game ended. Winner: Session {winnerSessionId}");
     }
 
     public BattleManager Battle => _battleManager;

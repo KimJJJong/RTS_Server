@@ -8,16 +8,20 @@ class BattleManager
     private UnitPoolManager _unitPoolManager;
     private GameRoom _room;
     private TickManager _tickManager;
+    private OccupationManager _occupationManager;
 
-    private int HpDecreassTick = 10;
-    private int HpDecreassProjectileTick = 3;
-    private int SummonProjectileDelayTick = 5;
+    private int HpDecreassTick = 15;  // 근접 공격 체력 decreass Tick Delay
+    private int HpDecreassProjectileTick = 3; // 투사체 공격 체력 decreass Tick Delay
+    private int SummonProjectileDelayTick = 5; // 투사체 생성 Tick Delay
 
-    public BattleManager(UnitPoolManager unitPoolManager, GameRoom room, TickManager tickManager)
+    private int WallMariaHitTick = 3; // 월마리아 공격 Tick Delay 
+
+    public BattleManager(UnitPoolManager unitPoolManager, GameRoom room, TickManager tickManager, OccupationManager occupationManager)
     {
         _unitPoolManager = unitPoolManager;
         _room = room;
         _tickManager = tickManager;
+        _occupationManager = occupationManager;
     }
 
     public void ProcessSummon(ClientSession session, C_ReqSummon packet)
@@ -61,22 +65,7 @@ class BattleManager
 
         if (isDead)
         {
-//            target.SetDeadTick(_tickManager.GetCurrentTick());
             target.Dead(_tickManager.GetCurrentTick());
-            /*           S_AnsObjectDead ans = new S_AnsObjectDead()
-                       {
-                           attackerOid = packet.attackerOid,
-                           targetOid = packet.targetOid,
-                           targetVerifyHp = 0,
-                           attackVerifyTick = _tickManager.GetCurrentTick() + HpDecreassRateTick // hp decreass Rate
-
-                       };
-
-                       _room.BroadCast(ans.Write());
-
-                       return ;
-                       */
-
         }
         else
         {
@@ -93,6 +82,7 @@ class BattleManager
 
         _room.BroadCast(response.Write());
     }
+
     public void ProcessProjectileAttack(ClientSession session, C_AttackedRequest packet)
     {
         Unit projectile = _unitPoolManager.GetUnit(packet.attackerOid);
@@ -116,7 +106,45 @@ class BattleManager
 
         _room.BroadCast(response.Write());
     }
+    public void ProcessWallMariaAttacked(ClientSession session, C_AttackedRequest packet)
+    {
+        Unit attacker = _unitPoolManager.GetUnit(packet.attackerOid);
+        Unit target = _unitPoolManager.GetUnit(packet.targetOid);
 
+        if (attacker == null || target == null || target.UnitTypeIs() != UnitType.WallMaria )
+            return;
+
+        S_AttackConfirm response = new S_AttackConfirm
+        {
+            attackerOid = packet.attackerOid,
+            targetOid = packet.targetOid,
+            //targetVerifyHp = Math.Max(0, curHp),
+            attackVerifyTick = packet.clientAttackedTick + HpDecreassProjectileTick // hp decreass Rate
+        };
+
+        _room.BroadCast(response.Write());
+    }
+
+    public void ProcessWallMariaProjectileAttacked(ClientSession session, C_AttackedRequest packet)
+    {
+        Unit projectile = _unitPoolManager.GetUnit(packet.attackerOid);
+        Unit target = _unitPoolManager.GetUnit(packet.targetOid);
+
+        if (projectile == null || target == null || target.UnitTypeIs() != UnitType.WallMaria)
+            return;
+
+        S_AttackConfirm response = new S_AttackConfirm
+        {
+            attackerOid = packet.attackerOid,
+            targetOid = packet.targetOid,
+            //targetVerifyHp = Math.Max(0, curHp),
+            attackVerifyTick = packet.clientAttackedTick + HpDecreassProjectileTick // hp decreass Rate
+        };
+
+        projectile.Dead(_tickManager.GetCurrentTick());
+
+        _room.BroadCast(response.Write());
+    }
 
     public void ProcessSummonProjectile(ClientSession session, C_SummonProJectile packet)
     {

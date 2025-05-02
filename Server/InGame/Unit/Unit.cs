@@ -5,6 +5,7 @@ public enum UnitType
     Deaful = 1,
     Tower = 2,
     Projectile = 3,
+    WallMaria = 4,
 }
 
 public abstract class Unit
