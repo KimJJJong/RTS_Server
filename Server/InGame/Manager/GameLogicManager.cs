@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Server;
 
- class GameLogicManager
+class GameLogicManager
 {
     private TickManager _tickManager;
     private PlayerManager _playerManager;
@@ -14,6 +14,7 @@ using Server;
     private GameTimerManager _gameTimerManager;
     private TickDrivenUnitManager _tickDrivenUnitManager;
     private OccupationManager _occupationManager;
+    private TileCaptureManager _tileCaputureManager;
     private GameRoom _room;
     private bool _gameOver;
 
@@ -73,13 +74,13 @@ using Server;
 
             if (!Manas.TryGetValue(packet.reqSessionID, out var mana))
             {
-                Console.WriteLine("[GameLogicManager] ❌ 마나 정보 없음");
+                Console.WriteLine("[GameLogicManager] X 마나 정보 없음");
                 return;
             }
 
             if (!mana.UseMana(packet.needMana))
             {
-                Console.WriteLine("[GameLogicManager] ❌ 마나 부족");
+                Console.WriteLine("[GameLogicManager] X 마나 부족");
                 return;
             }
             packet.needMana = mana.GetMana();
@@ -90,7 +91,7 @@ using Server;
                 int? available = _unitPoolManager.GetAvailableOid(packet.oid);
                 if (available == null)
                 {
-                    Console.WriteLine($"[GameLogicManager] ❌ No available unit in group for OID={packet.oid}");
+                    Console.WriteLine($"[GameLogicManager] X No available unit in group for OID={packet.oid}");
                     return;
                 }
                 packet.oid = available.Value;
@@ -109,7 +110,32 @@ using Server;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[GameLogicManager] ❌ Error in OnReceiveSummon: {ex.Message}");
+            Console.WriteLine($"[GameLogicManager] (!) Error in OnReceiveSummon: {ex.Message}");
+        }
+    }
+    public void OnReciveSummonProject(ClientSession session, C_SummonProJectile packet)
+    {
+        try
+        {
+            Console.WriteLine($"[GameLogicManager] Projectile summon: OID={packet.projectileOid}, Tick={packet.clientRequestTick}");
+
+            Unit unit = _unitPoolManager.GetUnit(packet.projectileOid);
+            if (unit?.IsActive == true)
+            {
+                int? available = _unitPoolManager.GetAvailableOid(packet.projectileOid);
+                if (available == null)
+                {
+                    Console.WriteLine($"[GameLogicManager] X No available projectile in group for OID={packet.projectileOid}");
+                    return;
+                }
+                packet.projectileOid = available.Value;
+            }
+
+            _battleManager.ProcessSummonProjectile(session, packet);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[GameLogicManager] (!) Error in OnReciveSummonProject: {ex.Message}");
         }
     }
 
@@ -149,35 +175,11 @@ using Server;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[GameLogicManager] ❌ Error in OnReceiveAttack: {ex.Message}");
+            Console.WriteLine($"[GameLogicManager] (!) Error in OnReceiveAttack: {ex.Message}");
         }
     }
 
-    public void OnReciveSummonProject(ClientSession session, C_SummonProJectile packet)
-    {
-        try
-        {
-            Console.WriteLine($"[GameLogicManager] Projectile summon: OID={packet.projectileOid}, Tick={packet.clientRequestTick}");
 
-            Unit unit = _unitPoolManager.GetUnit(packet.projectileOid);
-            if (unit?.IsActive == true)
-            {
-                int? available = _unitPoolManager.GetAvailableOid(packet.projectileOid);
-                if (available == null)
-                {
-                    Console.WriteLine($"[GameLogicManager] ❌ No available projectile in group for OID={packet.projectileOid}");
-                    return;
-                }
-                packet.projectileOid = available.Value;
-            }
-
-            _battleManager.ProcessSummonProjectile(session, packet);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"[GameLogicManager] ❌ Error in OnReciveSummonProject: {ex.Message}");
-        }
-    }
 
     public void Update()
     {
@@ -197,11 +199,8 @@ using Server;
     {
         _gameOver = true;
         _playerManager.Clear();
-        _battleManager.Clear();
         _deckManager.Clear();
         _unitPoolManager.Clear();
-        _gameTimerManager.Clear();
-        _gameTimerManager.Clear();
         _tickDrivenUnitManager.Clear();
         Console.WriteLine($"[GameLogicManager] Game ended. Winner: Session {winnerSessionId}");
     }

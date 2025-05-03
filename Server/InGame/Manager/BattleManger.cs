@@ -24,6 +24,8 @@ class BattleManager
         _occupationManager = occupationManager;
     }
 
+    #region Summon
+
     public void ProcessSummon(ClientSession session, C_ReqSummon packet)
     {
         int delayTick = 30;
@@ -51,7 +53,26 @@ class BattleManager
         Unit unit = _unitPoolManager.GetUnit(response.oid);
         unit.Summon(packet.x, packet.y, session.SessionID);
     }
-
+    public void ProcessSummonProjectile(ClientSession session, C_SummonProJectile packet)
+    {
+        int shootTick = packet.clientRequestTick + SummonProjectileDelayTick;
+        S_ShootConfirm response = new S_ShootConfirm
+        {
+            projcetileOid = packet.projectileOid,
+            summonerOid = packet.summonerOid,
+            projectileSpeed = _unitPoolManager.GetUnit(packet.projectileOid).Speed, // 예시
+            startX = packet.summonerX,
+            startY = packet.summonerY,
+            targetX = packet.targetX,
+            targetY = packet.targetY,
+            shootTick = shootTick
+        };
+        Unit proj = _unitPoolManager.GetUnit(packet.projectileOid);
+        proj.Summon(packet.summonerX, packet.summonerY, session.SessionID);
+        _room.BroadCast(response.Write());
+    }
+    #endregion
+    #region Attack - Melee
     public void ProcessAttack(ClientSession session, C_AttackedRequest packet)
     {
         Unit attacker = _unitPoolManager.GetUnit(packet.attackerOid);
@@ -82,7 +103,29 @@ class BattleManager
 
         _room.BroadCast(response.Write());
     }
+    public void ProcessWallMariaAttacked(ClientSession session, C_AttackedRequest packet)
+    {
+        Unit attacker = _unitPoolManager.GetUnit(packet.attackerOid);
+        Unit target = _unitPoolManager.GetUnit(packet.targetOid);
 
+        if (attacker == null || target == null || target.UnitTypeIs() != UnitType.WallMaria)
+            return;
+
+        _occupationManager.OnWallHit(session.SessionID);
+
+        S_AttackConfirm response = new S_AttackConfirm
+        {
+            attackerOid = packet.attackerOid,
+            targetOid = packet.targetOid,
+            //targetVerifyHp = Math.Max(0, curHp),
+            attackVerifyTick = packet.clientAttackedTick + HpDecreassTick // hp decreass Rate
+        };
+
+        _room.BroadCast(response.Write());
+    }
+
+    #endregion
+    #region Attack - Projectile
     public void ProcessProjectileAttack(ClientSession session, C_AttackedRequest packet)
     {
         Unit projectile = _unitPoolManager.GetUnit(packet.attackerOid);
@@ -106,24 +149,7 @@ class BattleManager
 
         _room.BroadCast(response.Write());
     }
-    public void ProcessWallMariaAttacked(ClientSession session, C_AttackedRequest packet)
-    {
-        Unit attacker = _unitPoolManager.GetUnit(packet.attackerOid);
-        Unit target = _unitPoolManager.GetUnit(packet.targetOid);
-
-        if (attacker == null || target == null || target.UnitTypeIs() != UnitType.WallMaria )
-            return;
-
-        S_AttackConfirm response = new S_AttackConfirm
-        {
-            attackerOid = packet.attackerOid,
-            targetOid = packet.targetOid,
-            //targetVerifyHp = Math.Max(0, curHp),
-            attackVerifyTick = packet.clientAttackedTick + HpDecreassProjectileTick // hp decreass Rate
-        };
-
-        _room.BroadCast(response.Write());
-    }
+ 
 
     public void ProcessWallMariaProjectileAttacked(ClientSession session, C_AttackedRequest packet)
     {
@@ -132,6 +158,8 @@ class BattleManager
 
         if (projectile == null || target == null || target.UnitTypeIs() != UnitType.WallMaria)
             return;
+
+        _occupationManager.OnWallHit(session.SessionID);
 
         S_AttackConfirm response = new S_AttackConfirm
         {
@@ -145,27 +173,10 @@ class BattleManager
 
         _room.BroadCast(response.Write());
     }
+    #endregion 
 
-    public void ProcessSummonProjectile(ClientSession session, C_SummonProJectile packet)
-    {
-        int shootTick = packet.clientRequestTick + SummonProjectileDelayTick;
-        S_ShootConfirm response = new S_ShootConfirm
-        {
-            projcetileOid = packet.projectileOid,
-            summonerOid = packet.summonerOid,
-            projectileSpeed = _unitPoolManager.GetUnit(packet.projectileOid).Speed, // 예시
-            startX = packet.summonerX,
-            startY = packet.summonerY,
-            targetX = packet.targetX,
-            targetY = packet.targetY,
-            shootTick = shootTick
-        };
-        Unit proj = _unitPoolManager.GetUnit(packet.projectileOid);
-        proj.Summon(packet.summonerX, packet.summonerY, session.SessionID);
-        _room.BroadCast(response.Write());
-    }
     public void Clear()
     {
         _unitPoolManager.Clear();
     }
-}
+} 
