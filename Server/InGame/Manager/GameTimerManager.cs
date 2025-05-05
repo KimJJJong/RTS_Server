@@ -1,7 +1,10 @@
-﻿class GameTimerManager
+﻿using System;
+
+class GameTimerManager
 {
-    private Timer _timer;
     private TickManager _tickManager;
+    private int _startTick;
+    private const int _durationTick = 9000; // 예: 300초 * 30Tick = 9000Tick
 
     public GameTimerManager(TickManager tickManager)
     {
@@ -10,26 +13,24 @@
 
     public void Init()
     {
-        _timer = new Timer();
+        _startTick = _tickManager.GetCurrentTick();
+        Console.WriteLine($"[GameTimerManager] Game Start Tick: {_startTick}, Duration Tick: {_durationTick}");
     }
 
-    public void Update()
-    {
-        // 필요시 추가 동작
-    }
+    public int ElapsedTick => _tickManager.GetCurrentTick() - _startTick;
+    public int RemainingTick => Math.Max(0, _durationTick - ElapsedTick);
+
+    public float ElapsedSeconds => ElapsedTick * _tickManager.GetTickIntervalSec();
+    public float RemainingSeconds => RemainingTick * _tickManager.GetTickIntervalSec();
+
+    public bool IsTimeUp() => ElapsedTick >= _durationTick;
 
     public S_InitGame MakeInitPacket()
     {
         return new S_InitGame
         {
-            gameStartTime = _timer.GameStartTime,
-            duration = _timer.GameDuration
+            gameStartTime = _tickManager.GetStartTimeMs(),
+            duration = _durationTick
         };
-    }
-
-    public void Clear()
-    {
-        _timer = null;
-        _tickManager = null;
     }
 }

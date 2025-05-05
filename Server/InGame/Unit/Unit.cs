@@ -50,6 +50,7 @@ public abstract class Unit
         PositionY = y;
         PlayerID = playerId;
         CurrentHP = MaxHP;
+        DeadTick = 999999;
         IsActive = true;
     }
 
@@ -57,7 +58,6 @@ public abstract class Unit
     public virtual void Dead(int tick)
     {
         SetDeadTick(tick);
-        IsActive = false;
         OnDead?.Invoke(this);
         Reset();
     }
@@ -68,7 +68,7 @@ public abstract class Unit
         PositionY = -99;
         PlayerID = -1;
         CurrentHP = -1;
-        DeadTick = 9999999;
+        IsActive = false;
     }
 
     public void SetDeadTick(int tick) => DeadTick = tick;

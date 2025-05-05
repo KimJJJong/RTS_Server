@@ -16,12 +16,15 @@ class BattleManager
 
     private int WallMariaHitTick = 3; // 월마리아 공격 Tick Delay 
 
+    private int player0;
     public BattleManager(UnitPoolManager unitPoolManager, GameRoom room, TickManager tickManager, OccupationManager occupationManager)
     {
         _unitPoolManager = unitPoolManager;
         _room = room;
         _tickManager = tickManager;
         _occupationManager = occupationManager;
+
+        player0 = _occupationManager.GetPlayerSessionIds()[0];
     }
 
     #region Summon
@@ -34,42 +37,66 @@ class BattleManager
 
         Random rng = new Random(currentTick * 1000 + packet.reqSessionID);
 
-        S_AnsSummon response = new S_AnsSummon
+        // Server Data Save
+        var (serverX, serverY) = PositionConverter.ClientToServer(
+            packet.reqSessionID, packet.x, packet.y, player0);
+        Unit unit = _unitPoolManager.GetUnit(packet.oid);
+        unit.Summon(serverX, serverY, session.SessionID);
+
+        // Send To Client With Convert
+        foreach (int target in _occupationManager.GetPlayerSessionIds())
         {
-            oid = packet.oid,
-            reqSessionID = session.SessionID,
-            x = packet.x,
-            y = packet.y,
-            randomValue = rng.Next(0, 10),
-            reducedMana = packet.needMana, // TODO: 실제 마나 시스템 연결
-            ExcuteTick = executeTick,
-            ServerReceiveTimeMs = _tickManager.GetNowTimeMs(),
-            ServerStartTimeMs = _tickManager.GetStartTimeMs(),
-            ClientSendTimeMs = packet.ClientSendTimeMs
-        };
+            var (clientX, clientY) = PositionConverter.ServerToClient(
+                target, serverX, serverY, player0);
 
-        _room.BroadCast(response.Write());
+            S_AnsSummon response = new S_AnsSummon
+            {
+                oid = packet.oid,
+                reqSessionID = session.SessionID,
+                x = clientX,
+                y = clientY,
+                randomValue = rng.Next(0, 10),
+                reducedMana = packet.needMana, // TODO: 실제 마나 시스템 연결
+                ExcuteTick = executeTick,
+                ServerReceiveTimeMs = _tickManager.GetNowTimeMs(),
+                ServerStartTimeMs = _tickManager.GetStartTimeMs(),
+                ClientSendTimeMs = packet.ClientSendTimeMs
+            };
 
-        Unit unit = _unitPoolManager.GetUnit(response.oid);
-        unit.Summon(packet.x, packet.y, session.SessionID);
+
+            _room.SendToPlayer(target, response.Write());
+        }
     }
     public void ProcessSummonProjectile(ClientSession session, C_SummonProJectile packet)
     {
         int shootTick = packet.clientRequestTick + SummonProjectileDelayTick;
-        S_ShootConfirm response = new S_ShootConfirm
-        {
-            projcetileOid = packet.projectileOid,
-            summonerOid = packet.summonerOid,
-            projectileSpeed = _unitPoolManager.GetUnit(packet.projectileOid).Speed, // 예시
-            startX = packet.summonerX,
-            startY = packet.summonerY,
-            targetX = packet.targetX,
-            targetY = packet.targetY,
-            shootTick = shootTick
-        };
+
+        // Server Data Save
+        var (serverX, serverY) = PositionConverter.ClientToServer(
+            packet.projectileOid, packet.summonerX, packet.summonerY, player0);
         Unit proj = _unitPoolManager.GetUnit(packet.projectileOid);
-        proj.Summon(packet.summonerX, packet.summonerY, session.SessionID);
-        _room.BroadCast(response.Write());
+        proj.Summon(serverX, serverY, session.SessionID);
+
+        // Send To Client With Convert
+        foreach (int target in _occupationManager.GetPlayerSessionIds())
+        {
+            var (clientX, clientY) = PositionConverter.ServerToClient(
+                target, serverX, serverY, player0);
+
+
+            S_ShootConfirm response = new S_ShootConfirm
+            {
+                projcetileOid = packet.projectileOid,
+                summonerOid = packet.summonerOid,
+                projectileSpeed = _unitPoolManager.GetUnit(packet.projectileOid).Speed, // 예시
+                startX = clientX,
+                startY = clientY,
+                targetX = packet.targetX,
+                targetY = packet.targetY,
+                shootTick = shootTick
+            };
+            _room.SendToPlayer(target, response.Write());
+        }
     }
     #endregion
     #region Attack - Melee
@@ -175,8 +202,5 @@ class BattleManager
     }
     #endregion 
 
-    public void Clear()
-    {
-        _unitPoolManager.Clear();
-    }
+
 } 

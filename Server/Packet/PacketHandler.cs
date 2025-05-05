@@ -199,28 +199,7 @@ class PacketHandler
 
     public static void C_TargetCaptureHandler(PacketSession session, IPacket packet) { }
 
-    public static void C_AttackedRequestHandler(PacketSession session, IPacket packet)
-    {
-        var req = packet as C_AttackedRequest;
-        var client = session as ClientSession;
-        var logic = client.Room?.GameLogic;
 
-        if (logic == null)
-        {
-            Console.WriteLine("[AttackHandler] ❌ GameLogic is null");
-            return;
-        }
-
-        try
-        {
-            //Console.WriteLine($"[AttackHandler] 요청: {req.attackerOid} -> {req.targetOid}, Tick: {req.clientAttackedTick}");
-            logic.OnReciveAttack(client, req);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"[AttackHandler] ❌ 예외 발생: {ex.Message}");
-        }
-    }
 
     public static void C_SummonProJectileHandler(PacketSession session, IPacket packet)
     {
@@ -243,6 +222,42 @@ class PacketHandler
         {
             Console.WriteLine($"[ProjectileHandler] ❌ 예외 발생: {ex.Message}");
         }
+    }
+    public static void C_AttackedRequestHandler(PacketSession session, IPacket packet)
+    {
+        var req = packet as C_AttackedRequest;
+        var client = session as ClientSession;
+        var logic = client.Room?.GameLogic;
+
+        if (logic == null)
+        {
+            Console.WriteLine("[AttackHandler] ❌ GameLogic is null");
+            return;
+        }
+
+        try
+        {
+            //Console.WriteLine($"[AttackHandler] 요청: {req.attackerOid} -> {req.targetOid}, Tick: {req.clientAttackedTick}");
+            logic.OnReciveAttack(client, req);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[AttackHandler] ❌ 예외 발생: {ex.Message}");
+        }
+    }
+    public static void C_TileClaimReqHandler(PacketSession session, IPacket packet)
+    {
+        ClientSession client = session as ClientSession;
+        GameRoom room = client.Room;
+
+        if (room == null || room.GameLogic == null)
+        {
+            Console.WriteLine("[TileClaim] ❌ Room or GameLogic is null.");
+            return;
+        }
+
+        C_TileClaimReq req = packet as C_TileClaimReq;
+        room.GameLogic.OnReceiveTileClaim(client, req);
     }
 
     public static void C_RequestManaStatusHandler(PacketSession session, IPacket packet) { }

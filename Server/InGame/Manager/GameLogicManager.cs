@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Server;
 
+
 class GameLogicManager
 {
     private TickManager _tickManager;
@@ -14,20 +15,23 @@ class GameLogicManager
     private GameTimerManager _gameTimerManager;
     private TickDrivenUnitManager _tickDrivenUnitManager;
     private OccupationManager _occupationManager;
-    private TileCaptureManager _tileCaputureManager;
+    private TileManager _tileManager;
     private GameRoom _room;
     private bool _gameOver;
+    private PositionCache _positionCache;
 
     public GameLogicManager(GameRoom room)
     {
         _gameOver = false;
         _room = room;
+        _positionCache = new PositionCache(_room.Sessions.Values.Select(s =>s.SessionID).ToArray());
         _tickManager = new TickManager();
         _playerManager = new PlayerManager();
         _deckManager = new DeckManager();
         _unitPoolManager = new UnitPoolManager();
         _tickDrivenUnitManager = new TickDrivenUnitManager();
-        _occupationManager = new OccupationManager(this);
+        _occupationManager = new OccupationManager(this, _positionCache);
+        _tileManager = new TileManager(_occupationManager, _positionCache);
         _battleManager = new BattleManager(_unitPoolManager, _room, _tickManager, _occupationManager);
         _gameTimerManager = new GameTimerManager(_tickManager);
     }
@@ -72,7 +76,7 @@ class GameLogicManager
         {
             Console.WriteLine($"[GameLogicManager] Summon requested: OID={packet.oid}, Session={session.SessionID}");
 
-            if (!Manas.TryGetValue(packet.reqSessionID, out var mana))
+            if (!Manas.TryGetValue(packet.reqSessionID, out Mana mana))
             {
                 Console.WriteLine("[GameLogicManager] X 마나 정보 없음");
                 return;
@@ -99,13 +103,12 @@ class GameLogicManager
             }
 
 
-            if( unit.UnitTypeIs() is UnitType.Tower && unit is ITickable )
+            if (unit.UnitTypeIs() is UnitType.Tower && unit is ITickable)
             {
                 RegisterTickUnit(unit);
                 unit.OnDead += UnregisterTickUnit;
             }
 
-            unit?.Summon(packet.x, packet.y, session.SessionID);
             _battleManager.ProcessSummon(session, packet);
         }
         catch (Exception ex)
@@ -160,7 +163,7 @@ class GameLogicManager
             }
             else // 일단은 근접 공격
             {
-                if (targetUnit.UnitTypeIs() == UnitType.WallMaria )
+                if (targetUnit.UnitTypeIs() == UnitType.WallMaria)
                 {
                     _battleManager.ProcessWallMariaAttacked(session, packet);
                 }
@@ -179,6 +182,21 @@ class GameLogicManager
         }
     }
 
+    public void OnReceiveTileClaim(ClientSession session, C_TileClaimReq packet)
+    {
+        Unit unit = _unitPoolManager.GetUnit(packet.unitOid);
+        if (unit == null || !unit.IsActive || unit.PlayerID != session.SessionID)
+        {
+            Console.WriteLine($"[TileClaim] ❌ Invalid claim attempt: oid={packet.unitOid}");
+            return;
+        }
+
+        if (!_tileManager.TryCaptureFromClient(session, packet))
+        {
+            Console.WriteLine("[TileClaim] (!) Error");
+        }
+
+    }
 
 
     public void Update()
@@ -187,9 +205,10 @@ class GameLogicManager
             return;
 
         _playerManager.RegenManaAll();
-        _gameTimerManager.Update();
+       // _gameTimerManager.Update();
         _tickDrivenUnitManager.Update(_tickManager.GetCurrentTick());
-        JobTimer.Instance.Push(Update, 1000);
+
+        JobTimer.Instance.Push(Update, 990);
     }
 
     public void RegisterTickUnit(Unit unit) => _tickDrivenUnitManager.Register(unit);
@@ -201,14 +220,19 @@ class GameLogicManager
         _playerManager.Clear();
         _deckManager.Clear();
         _unitPoolManager.Clear();
+        _occupationManager.Clear();
         _tickDrivenUnitManager.Clear();
+        _tileManager.Clear();
         Console.WriteLine($"[GameLogicManager] Game ended. Winner: Session {winnerSessionId}");
     }
-
+    public void SendToPlayer(int sessionId, ArraySegment<byte> segment) => _room.SendToPlayer(sessionId, segment);
     public BattleManager Battle => _battleManager;
     public IReadOnlyDictionary<int, Mana> Manas => _playerManager.Manas;
     public List<Unit> UnitPool => _unitPoolManager.GetAllUnits() as List<Unit>;
     public TickManager TickManager => _tickManager;
+    public TileManager TileManager => _tileManager;
+    public OccupationManager OccupationManager => _occupationManager;
+
 }
 
 /*using Server;

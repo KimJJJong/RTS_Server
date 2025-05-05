@@ -45,6 +45,10 @@ namespace Server
                 }
             }
         }
+        public void SendToPlayer(int SessionId, ArraySegment<byte> segment)
+        {
+            _sessions[SessionId].Send(segment);
+        }
 
         public void Enter(ClientSession session)
         {
@@ -122,7 +126,7 @@ namespace Server
             LogManager.Instance.LogInfo("GameRoom", $"[{RoomId}] Distroy");
             _sessions = null;
            // Console.WriteLine($"방 {RoomId} 게임 종료");
-            GameLogic?.EndGame();
+            GameLogic?.EndGame(-1); // -1 는 비기는 거 
             GameLogic = null;
             _roomState = RoomState.Finished;
             // 필요한 후처리 추가 가능

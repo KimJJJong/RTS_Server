@@ -183,6 +183,36 @@
 	</packet>
 
 <!-- ====== -->
+
+	<!-- Occupation-->>
+	<packet name="S_OccupationSync">
+		<int name ="playerSession"/>
+		<float name ="playerOccupation"/>
+		<float name ="opponentOccupation"/>
+	</packet>
+	<!--Tile-->
+	<packet name ="S_TileClaimed">
+		<int name ="x"/>
+		<int name ="y"/>
+		<int name ="claimedBySessionId"/>
+		<float name ="occupationRate"/>
+	</packet>
+	<!--TileBulk-->
+	<packet name="S_TileBulkClaimed">
+		<int name="ReqPlayerSessionId"/>	
+		<float name="occupationRate"/>
+		<list name="TileBulk">
+			<int name="x"/>
+			<int name="y"/>
+			<int name="claimedBySessionId"/>
+		</list>
+	</packet>
+	<packet name ="C_TileClaimReq">
+		<int name="unitOid"/>
+		<int name="x"/>
+		<int name="y"/>
+	</packet>
+	
 	<packet name="C_RequestManaStatus">
 		<int name="playerId"/>
 	</packet>

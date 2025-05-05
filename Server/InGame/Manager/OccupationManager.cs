@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
+using System.Xml.Linq;
 
 class OccupationManager
 {
@@ -9,39 +11,112 @@ class OccupationManager
     private const float WallHitScore = 0.25f;
     private const float InstantWinThreshold = 80f;
 
-    private Dictionary<int, float> _occupation = new Dictionary<int, float>(); // Key = SessionID
+    private Dictionary<int, float> _occupation = new Dictionary<int, float>();  // sessionId -> 점령도
+    private List<int> _playerSessionIds = new List<int>();         // 0번, 1번 플레이어 순서대로
     private GameLogicManager _logic;
-
-    public OccupationManager(GameLogicManager logic)
+    private PositionCache _positionCache;
+    public OccupationManager(GameLogicManager logic, PositionCache positionCache)
     {
         _logic = logic;
+        _positionCache = positionCache;
     }
 
-    public void Init(List<int> sessionIds)
+    public void Init(List<int> sessionIdList)
     {
-        if (sessionIds.Count != 2)
-            throw new InvalidOperationException("Only 1vs1 supported for OccupationManager.");
+        if (sessionIdList.Count != 2)
+            throw new Exception("OccupationManager는 정확히 2명의 플레이어만 지원합니다.");
 
-        _occupation[sessionIds[0]] = 50f;
-        _occupation[sessionIds[1]] = 50f;
+        _playerSessionIds = sessionIdList;
+        _occupation[sessionIdList[0]] = 50f;
+        _occupation[sessionIdList[1]] = 50f;
     }
 
-    public void OnTileClaim(int sessionId)
+    public int[] GetPlayerSessionIds() => _playerSessionIds.ToArray();
+
+    public void OnTileClaim(int sessionId, int x, int y)
     {
         int opponent = GetOpponent(sessionId);
         AddScore(sessionId, opponent, TileClaimScore);
-    }
 
+        var ids = GetPlayerSessionIds();
+        int player0 = ids[0];
+
+        foreach (int target in ids)
+        {
+            var (clientX, clientY) = _positionCache.ServerToClient(sessionId, x, y);
+
+            S_TileClaimed packet = new S_TileClaimed()
+            {
+                x = clientX,
+                y = clientY,
+                claimedBySessionId = sessionId,
+                occupationRate = GetOccupation(sessionId)
+            };
+            _logic.SendToPlayer(target, packet.Write());
+
+            // ToDo : Client Tile 동기화
+        }
+    }
+    public void OnBulkTileClaim(int sessionId, List<(int x, int y)> tilePositions)
+    {
+        int opponet = GetOpponent(sessionId);
+        float totalBulkScore = TileClaimScore * tilePositions.Count;
+
+        var ids = GetPlayerSessionIds();
+        int player0 = ids[0];
+
+        AddScore(sessionId, opponet, totalBulkScore);
+
+        foreach(int target in GetPlayerSessionIds())
+        {
+            List<S_TileBulkClaimed.TileBulk> tileInfo = new List<S_TileBulkClaimed.TileBulk>();
+            
+            foreach(var(x,y) in tilePositions)
+            {
+                var ( clientX, clientY ) = _positionCache.ServerToClient(target, x, y);
+                tileInfo.Add(new S_TileBulkClaimed.TileBulk
+                {
+                    x = clientX,
+                    y = clientY,
+                    claimedBySessionId = sessionId
+                });
+            }
+
+            S_TileBulkClaimed packet = new S_TileBulkClaimed()
+            {
+                tileBulks = tileInfo,
+                occupationRate = GetOccupation(sessionId),
+                ReqPlayerSessionId = sessionId,
+            };
+
+            _logic.SendToPlayer(target, packet.Write());
+        }
+    }
     public void OnWallHit(int sessionId)
     {
         int opponent = GetOpponent(sessionId);
         AddScore(sessionId, opponent, WallHitScore);
+        var ids = GetPlayerSessionIds();
+        int player0 = ids[0];
+
+        foreach( int target in ids)
+        {
+            S_OccupationSync pack = new S_OccupationSync()
+            {
+                playerSession = sessionId,
+                playerOccupation = GetOccupation(sessionId),
+                opponentOccupation = GetOccupation(opponent)
+            };
+            _logic.SendToPlayer(target, pack.Write());
+
+            // ToDo : Client측 점령도 동기화
+        }
     }
 
     private void AddScore(int playerId, int opponentId, float amount)
     {
         _occupation[playerId] += amount;
-        _occupation[opponentId] -= amount;
+        _occupation[opponentId] -= Math.Max(0f, _occupation[opponentId] - amount );
         Clamp(playerId, opponentId);
 
         Console.WriteLine($"[Occupation] {playerId}: {_occupation[playerId]:0.00}, {opponentId}: {_occupation[opponentId]:0.00}");
@@ -59,7 +134,7 @@ class OccupationManager
         _occupation[p2] = Math.Clamp(_occupation[p2], 0, MaxOccupation);
 
         float total = _occupation[p1] + _occupation[p2];
-        if (Math.Abs(total - MaxOccupation) > 0.001f)
+        if (Math.Abs(total - MaxOccupation) > 0.01f)
         {
             float correction = (MaxOccupation - total) / 2f;
             _occupation[p1] += correction;
@@ -69,21 +144,26 @@ class OccupationManager
 
     public void CheckFinalWinner()
     {
-        var kvp = _occupation.OrderByDescending(kvp => kvp.Value).ToList();
-        if (kvp[0].Value > kvp[1].Value)
-            _logic.EndGame(kvp[0].Key);
+        var sorted = _occupation.OrderByDescending(kvp => kvp.Value).ToList();
+        if (sorted[0].Value > sorted[1].Value)
+            _logic.EndGame(sorted[0].Key);
         else
             _logic.EndGame(-1); // 무승부
     }
 
-    public float GetOccupation(int sessionId) => _occupation.ContainsKey(sessionId) ? _occupation[sessionId] : 0f;
+    public float GetOccupation(int sessionId)
+    {
+        return _occupation.TryGetValue(sessionId, out var val) ? val : 0f;
+    }
 
     private int GetOpponent(int sessionId)
     {
-        return _occupation.Keys.First(id => id != sessionId);
+        return _occupation.Keys.FirstOrDefault(id => id != sessionId);
     }
+
     public void Clear()
     {
         _occupation.Clear();
+        _playerSessionIds.Clear();
     }
 }

@@ -7,7 +7,6 @@ class PlayerManager
     private Dictionary<int, Mana> _manas = new Dictionary<int, Mana>();
 
     public IReadOnlyDictionary<int, Mana> Manas => _manas;
-    public IReadOnlyDictionary<int, ClientSession> Sessions => _sessions;
 
     public void AddPlayer(ClientSession session)
     {
