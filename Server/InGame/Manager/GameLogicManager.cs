@@ -7,6 +7,8 @@ using Server;
 
 class GameLogicManager
 {
+    private GameRoom _room;
+    private bool _gameOver;
     private TickManager _tickManager;
     private PlayerManager _playerManager;
     private DeckManager _deckManager;
@@ -16,24 +18,25 @@ class GameLogicManager
     private TickDrivenUnitManager _tickDrivenUnitManager;
     private OccupationManager _occupationManager;
     private TileManager _tileManager;
-    private GameRoom _room;
-    private bool _gameOver;
     private PositionCache _positionCache;
+    private DimensionManager _dimensionManager;
 
     public GameLogicManager(GameRoom room)
     {
         _gameOver = false;
         _room = room;
-        _positionCache = new PositionCache(_room.Sessions.Values.Select(s =>s.SessionID).ToArray());
         _tickManager = new TickManager();
         _playerManager = new PlayerManager();
         _deckManager = new DeckManager();
         _unitPoolManager = new UnitPoolManager();
+        _positionCache = new PositionCache(_room.Sessions.Values.Select(s =>s.SessionID).ToArray());
         _tickDrivenUnitManager = new TickDrivenUnitManager();
         _occupationManager = new OccupationManager(this, _positionCache);
         _tileManager = new TileManager(_occupationManager, _positionCache);
         _battleManager = new BattleManager(_unitPoolManager, _room, _tickManager, _occupationManager);
         _gameTimerManager = new GameTimerManager(_tickManager);
+        _dimensionManager = new DimensionManager(_tickManager);
+
     }
 
     public void Init()
@@ -42,6 +45,7 @@ class GameLogicManager
         _occupationManager.Init(_room.Sessions.Keys.ToList());
         _tileManager.Init(_room.Sessions.Keys.ToList());
         _battleManager.Init(_room.Sessions.Keys.ToList());
+        _dimensionManager.Init();
         _room.BroadCast(_gameTimerManager.MakeInitPacket().Write());
         JobTimer.Instance.Push(Update);
     }
@@ -152,7 +156,7 @@ class GameLogicManager
             Unit targetUnit = _unitPoolManager.GetUnit(packet.targetOid);
 
 
-            if( packet.targetOid <0 ) // Projectile이 시간 초과
+            if( packet.targetOid < 0 ) // Projectile이 시간 초과
             {
                 attackerUnit.Dead(_tickManager.GetCurrentTick());
                 Console.WriteLine(attackerUnit.UnitID);
@@ -213,10 +217,12 @@ class GameLogicManager
             return;
 
         _playerManager.RegenManaAll();
-       // _gameTimerManager.Update();
         _tickDrivenUnitManager.Update(_tickManager.GetCurrentTick());
 
-        JobTimer.Instance.Push(Update, 990);
+        
+        Console.WriteLine($"CurrentTime {_gameTimerManager.RemainingSeconds}");
+
+        JobTimer.Instance.Push(Update, 1000);
     }
 
     public void RegisterTickUnit(Unit unit) => _tickDrivenUnitManager.Register(unit);
