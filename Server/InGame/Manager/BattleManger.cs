@@ -1,6 +1,7 @@
 ﻿// BattleManager.cs
 using Server;
 using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
 
 class BattleManager
@@ -24,9 +25,12 @@ class BattleManager
         _tickManager = tickManager;
         _occupationManager = occupationManager;
 
-        player0 = _occupationManager.GetPlayerSessionIds()[0];
+        
     }
-
+    public void Init(List<int> sessionListId)
+    {
+        player0 = sessionListId[0];
+    }
     #region Summon
 
     public void ProcessSummon(ClientSession session, C_ReqSummon packet)
@@ -73,9 +77,12 @@ class BattleManager
 
         // Server Data Save
         var (serverX, serverY) = PositionConverter.ClientToServer(
-            packet.projectileOid, packet.summonerX, packet.summonerY, player0);
+            session.SessionID, packet.summonerX, packet.summonerY, player0);
         Unit proj = _unitPoolManager.GetUnit(packet.projectileOid);
         proj.Summon(serverX, serverY, session.SessionID);
+
+        var (serverTargetX, serverTargetY) = PositionConverter.ClientToServer(
+            session.SessionID, packet.targetX, packet.targetY, player0);
 
         // Send To Client With Convert
         foreach (int target in _occupationManager.GetPlayerSessionIds())
@@ -83,16 +90,19 @@ class BattleManager
             var (clientX, clientY) = PositionConverter.ServerToClient(
                 target, serverX, serverY, player0);
 
+            var (clientTargetX, clientTargetY) = PositionConverter.ServerToClient(
+                target, serverTargetX, serverTargetY, player0);
 
             S_ShootConfirm response = new S_ShootConfirm
             {
                 projcetileOid = packet.projectileOid,
                 summonerOid = packet.summonerOid,
+                targetOid = packet.targetOid,
                 projectileSpeed = _unitPoolManager.GetUnit(packet.projectileOid).Speed, // 예시
                 startX = clientX,
                 startY = clientY,
-                targetX = packet.targetX,
-                targetY = packet.targetY,
+                targetX = clientTargetX,
+                targetY = clientTargetY,
                 shootTick = shootTick
             };
             _room.SendToPlayer(target, response.Write());
@@ -140,7 +150,7 @@ class BattleManager
 
         _occupationManager.OnWallHit(session.SessionID);
 
-        S_AttackConfirm response = new S_AttackConfirm
+ /*       S_AttackConfirm response = new S_AttackConfirm
         {
             attackerOid = packet.attackerOid,
             targetOid = packet.targetOid,
@@ -148,7 +158,7 @@ class BattleManager
             attackVerifyTick = packet.clientAttackedTick + HpDecreassTick // hp decreass Rate
         };
 
-        _room.BroadCast(response.Write());
+        _room.BroadCast(response.Write());*/
     }
 
     #endregion
@@ -188,7 +198,7 @@ class BattleManager
 
         _occupationManager.OnWallHit(session.SessionID);
 
-        S_AttackConfirm response = new S_AttackConfirm
+/*        S_AttackConfirm response = new S_AttackConfirm
         {
             attackerOid = packet.attackerOid,
             targetOid = packet.targetOid,
@@ -196,9 +206,9 @@ class BattleManager
             attackVerifyTick = packet.clientAttackedTick + HpDecreassProjectileTick // hp decreass Rate
         };
 
-        projectile.Dead(_tickManager.GetCurrentTick());
+        _room.BroadCast(response.Write());*/
 
-        _room.BroadCast(response.Write());
+        projectile.Dead(_tickManager.GetCurrentTick());
     }
     #endregion 
 

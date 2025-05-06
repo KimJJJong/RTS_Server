@@ -17,8 +17,13 @@ class TileManager
         _occupationManager = occupationManager;
         _positionCache = positionCache;
 
-        var player0 = _occupationManager.GetPlayerSessionIds()[0];
-        var player1 = _occupationManager.GetPlayerSessionIds()[1];
+        
+    }
+
+    public void Init(List<int> sessionIdList)
+    {
+        var player0 = sessionIdList[0];
+        var player1 = sessionIdList[1];
 
         this.player0 = player0;
 
@@ -35,7 +40,6 @@ class TileManager
             }
         }
     }
-
     public bool TryCaptureFromClient(ClientSession session, C_TileClaimReq packet)
     {
         var (serverX, serverY) = _positionCache.ClientToServer(session.SessionID, packet.x, packet.y);

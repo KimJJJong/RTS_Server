@@ -16,7 +16,7 @@ class UnitPoolManager
             {
                 Unit unit = UnitFactory.CreateUnit(card.ID, card.LV);
                 _unitPool.Add(unit);
-                Console.WriteLine($"UID : {card.ID}");
+                //Console.WriteLine($"UID : {card.ID}");
             }
         }
         Console.WriteLine($"[UnitPoolManager] 총 유닛 수: {_unitPool.Count}");

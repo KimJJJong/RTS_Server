@@ -29,6 +29,8 @@ class OccupationManager
         _playerSessionIds = sessionIdList;
         _occupation[sessionIdList[0]] = 50f;
         _occupation[sessionIdList[1]] = 50f;
+
+        Console.WriteLine($"[Occupation] {sessionIdList[0]}: {_occupation[sessionIdList[0]]:0.00}, {sessionIdList[1]}: {_occupation[sessionIdList[1]]:0.00}");
     }
 
     public int[] GetPlayerSessionIds() => _playerSessionIds.ToArray();
@@ -116,7 +118,7 @@ class OccupationManager
     private void AddScore(int playerId, int opponentId, float amount)
     {
         _occupation[playerId] += amount;
-        _occupation[opponentId] -= Math.Max(0f, _occupation[opponentId] - amount );
+        _occupation[opponentId] -= amount;
         Clamp(playerId, opponentId);
 
         Console.WriteLine($"[Occupation] {playerId}: {_occupation[playerId]:0.00}, {opponentId}: {_occupation[opponentId]:0.00}");

@@ -40,6 +40,8 @@ class GameLogicManager
     {
         _gameTimerManager.Init();
         _occupationManager.Init(_room.Sessions.Keys.ToList());
+        _tileManager.Init(_room.Sessions.Keys.ToList());
+        _battleManager.Init(_room.Sessions.Keys.ToList());
         _room.BroadCast(_gameTimerManager.MakeInitPacket().Write());
         JobTimer.Instance.Push(Update);
     }
@@ -150,8 +152,14 @@ class GameLogicManager
             Unit targetUnit = _unitPoolManager.GetUnit(packet.targetOid);
 
 
-            if (attackerUnit.UnitTypeIs() == UnitType.Projectile)
+            if( packet.targetOid <0 ) // Projectile이 시간 초과
             {
+                attackerUnit.Dead(_tickManager.GetCurrentTick());
+                Console.WriteLine(attackerUnit.UnitID);
+            }
+            else if (attackerUnit.UnitTypeIs() == UnitType.Projectile)
+            {
+
                 if (targetUnit.UnitTypeIs() == UnitType.WallMaria)
                 {
                     _battleManager.ProcessWallMariaProjectileAttacked(session, packet);

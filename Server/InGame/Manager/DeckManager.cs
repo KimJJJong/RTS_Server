@@ -48,7 +48,7 @@ class DeckManager
             if (meta != null && meta.IsRanged && !string.IsNullOrEmpty(meta.ProjectileCardID))
             {
                 extraProjectiles.Add(new Card(meta.ProjectileCardID, card.LV));
-                LogManager.Instance.LogInfo("DeckManager", $"[Projectile Add] {meta.ProjectileCardID} for {card.ID}");
+                //LogManager.Instance.LogInfo("DeckManager", $"[Projectile Add] {meta.ProjectileCardID} for {card.ID}");
             }
         }
 
