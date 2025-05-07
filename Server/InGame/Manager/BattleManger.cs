@@ -150,15 +150,7 @@ class BattleManager
 
         _occupationManager.OnWallHit(session.SessionID);
 
- /*       S_AttackConfirm response = new S_AttackConfirm
-        {
-            attackerOid = packet.attackerOid,
-            targetOid = packet.targetOid,
-            //targetVerifyHp = Math.Max(0, curHp),
-            attackVerifyTick = packet.clientAttackedTick + HpDecreassTick // hp decreass Rate
-        };
 
-        _room.BroadCast(response.Write());*/
     }
 
     #endregion
@@ -198,15 +190,7 @@ class BattleManager
 
         _occupationManager.OnWallHit(session.SessionID);
 
-/*        S_AttackConfirm response = new S_AttackConfirm
-        {
-            attackerOid = packet.attackerOid,
-            targetOid = packet.targetOid,
-            //targetVerifyHp = Math.Max(0, curHp),
-            attackVerifyTick = packet.clientAttackedTick + HpDecreassProjectileTick // hp decreass Rate
-        };
 
-        _room.BroadCast(response.Write());*/
 
         projectile.Dead(_tickManager.GetCurrentTick());
     }
