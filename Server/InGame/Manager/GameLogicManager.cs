@@ -21,6 +21,8 @@ class GameLogicManager
     private PositionCache _positionCache;
     private DimensionManager _dimensionManager;
 
+
+
     public GameLogicManager(GameRoom room)
     {
         _gameOver = false;
@@ -31,7 +33,7 @@ class GameLogicManager
         _unitPoolManager = new UnitPoolManager();
         _positionCache = new PositionCache(_room.Sessions.Values.Select(s =>s.SessionID).ToArray());
         _tickDrivenUnitManager = new TickDrivenUnitManager();
-        _occupationManager = new OccupationManager(this, _positionCache);
+        _occupationManager = new OccupationManager(this, _positionCache, _tickManager);
         _tileManager = new TileManager(_occupationManager, _positionCache);
         _battleManager = new BattleManager(_unitPoolManager, _room, _tickManager, _occupationManager);
         _gameTimerManager = new GameTimerManager(_tickManager);
@@ -219,6 +221,7 @@ class GameLogicManager
         _playerManager.RegenManaAll();
         _tickDrivenUnitManager.Update(_tickManager.GetCurrentTick());
 
+        _dimensionManager.Update(this);
         
         Console.WriteLine($"CurrentTime {_gameTimerManager.RemainingSeconds}");
 

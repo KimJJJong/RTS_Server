@@ -187,6 +187,7 @@
 	<!-- Occupation-->>
 	<packet name="S_OccupationSync">
 		<int name ="playerSession"/>
+		<int name ="excutionTick"/>
 		<float name ="playerOccupation"/>
 		<float name ="opponentOccupation"/>
 	</packet>
@@ -194,12 +195,15 @@
 	<packet name ="S_TileClaimed">
 		<int name ="x"/>
 		<int name ="y"/>
-		<int name ="claimedBySessionId"/>
-		<float name ="occupationRate"/>
+		<int name ="excutionTick"/>
+		<int name ="playerSession"/>
+		<float name ="playerOccupation"/>
+		<float name ="opponentOccupation"/>
 	</packet>
 	<!--TileBulk-->
 	<packet name="S_TileBulkClaimed">
-		<int name="ReqPlayerSessionId"/>	
+		<int name="ReqPlayerSessionId"/>
+		<int name ="excutionTick"/>
 		<float name="occupationRate"/>
 		<list name="TileBulk">
 			<int name="x"/>

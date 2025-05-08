@@ -11,14 +11,18 @@ class OccupationManager
     private const float WallHitScore = 0.25f;
     private const float InstantWinThreshold = 80f;
 
+    private const int WallHitDelay = 2;
+
     private Dictionary<int, float> _occupation = new Dictionary<int, float>();  // sessionId -> 점령도
     private List<int> _playerSessionIds = new List<int>();         // 0번, 1번 플레이어 순서대로
     private GameLogicManager _logic;
     private PositionCache _positionCache;
-    public OccupationManager(GameLogicManager logic, PositionCache positionCache)
+    private TickManager _tickManager;
+    public OccupationManager(GameLogicManager logic, PositionCache positionCache, TickManager tickManager)
     {
         _logic = logic;
         _positionCache = positionCache;
+        _tickManager = tickManager;
     }
 
     public void Init(List<int> sessionIdList)
@@ -51,8 +55,12 @@ class OccupationManager
             {
                 x = clientX,
                 y = clientY,
-                claimedBySessionId = sessionId,
-                occupationRate = GetOccupation(sessionId)
+
+                excutionTick = _tickManager.GetCurrentTick()+WallHitDelay,
+
+                playerSession = sessionId,
+                playerOccupation = GetOccupation(sessionId),
+                opponentOccupation = GetOccupation(opponent)
             };
             _logic.SendToPlayer(target, packet.Write());
 
@@ -88,6 +96,7 @@ class OccupationManager
             {
                 tileBulks = tileInfo,
                 occupationRate = GetOccupation(sessionId),
+                excutionTick = _tickManager.GetCurrentTick()+ WallHitDelay,
                 ReqPlayerSessionId = sessionId,
             };
 
@@ -106,6 +115,7 @@ class OccupationManager
             S_OccupationSync pack = new S_OccupationSync()
             {
                 playerSession = sessionId,
+                excutionTick = _tickManager.GetCurrentTick() + WallHitDelay,
                 playerOccupation = GetOccupation(sessionId),
                 opponentOccupation = GetOccupation(opponent)
             };

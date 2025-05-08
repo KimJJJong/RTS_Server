@@ -1564,6 +1564,7 @@ public class S_ShootConfirm : IPacket
 public class S_OccupationSync : IPacket
 {
 	public int playerSession;
+	public int excutionTick;
 	public float playerOccupation;
 	public float opponentOccupation;
 
@@ -1577,6 +1578,8 @@ public class S_OccupationSync : IPacket
 		count += sizeof(ushort);
 		count += sizeof(ushort);
 		this.playerSession = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+		this.excutionTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
 		this.playerOccupation = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
@@ -1597,6 +1600,8 @@ public class S_OccupationSync : IPacket
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.playerSession);
 		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.excutionTick);
+		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.playerOccupation);
 		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.opponentOccupation);
@@ -1612,8 +1617,10 @@ public class S_TileClaimed : IPacket
 {
 	public int x;
 	public int y;
-	public int claimedBySessionId;
-	public float occupationRate;
+	public int excutionTick;
+	public int playerSession;
+	public float playerOccupation;
+	public float opponentOccupation;
 
 	public ushort Protocol { get { return (ushort)PacketID.S_TileClaimed; } }
 
@@ -1628,9 +1635,13 @@ public class S_TileClaimed : IPacket
 		count += sizeof(int);
 		this.y = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
-		this.claimedBySessionId = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		this.excutionTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
-		this.occupationRate = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		this.playerSession = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+		this.playerOccupation = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
+		this.opponentOccupation = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
 	}
 
@@ -1649,9 +1660,13 @@ public class S_TileClaimed : IPacket
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.y);
 		count += sizeof(int);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.claimedBySessionId);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.excutionTick);
 		count += sizeof(int);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.occupationRate);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.playerSession);
+		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.playerOccupation);
+		count += sizeof(float);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.opponentOccupation);
 		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
@@ -1663,6 +1678,7 @@ public class S_TileClaimed : IPacket
 public class S_TileBulkClaimed : IPacket
 {
 	public int ReqPlayerSessionId;
+	public int excutionTick;
 	public float occupationRate;
 	public class TileBulk
 	{
@@ -1707,6 +1723,8 @@ public class S_TileBulkClaimed : IPacket
 		count += sizeof(ushort);
 		this.ReqPlayerSessionId = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
+		this.excutionTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
 		this.occupationRate = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
 		this.tileBulks.Clear();
@@ -1732,6 +1750,8 @@ public class S_TileBulkClaimed : IPacket
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_TileBulkClaimed);
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.ReqPlayerSessionId);
+		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.excutionTick);
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.occupationRate);
 		count += sizeof(float);
