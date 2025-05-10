@@ -36,6 +36,10 @@ using System.Text;
     {
 
     }
+    public static void S_CardPoolHandler(PacketSession session, IPacket packet)
+    {
+
+    }
     public static void S_InitGameHandler(PacketSession session, IPacket packet)
     {
 
@@ -69,6 +73,18 @@ using System.Text;
 
     }
     public static void S_UnitActionHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void S_VerifyCaptureHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void S_AttackConfirmHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void S_ShootConfirmHandler(PacketSession session, IPacket packet)
     {
 
     }

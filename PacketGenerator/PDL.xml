@@ -38,36 +38,51 @@
 		<string name="roomId"/>
 	</packet>
 
+	<packet name ="C_MatchRequest">
+	</packet>
+
+	<packet name ="C_MatchCancel">
+	</packet>
 	
 	<!-- 준비 상태 -->
 	<packet name="C_Ready">
 		<bool name="isReady"/>
 	</packet>
 	<packet name="S_Ready">
-		<map name="playerReadyState">
-			<int name="playerId"/>
-			<bool name="isReady"/>
-		</map>
 	</packet>
 	<packet name="S_StartGame">
 		<string name="gameId"/>
 	</packet>
+	
+	
+	<packet name ="C_SetCardPool">
+		<list name="cardCombination">
+			<int name ="lv"/>
+			<string name="uid"/>
+		</list>
+	</packet>
+	
 	<packet name ="C_SceneLoaded">
 		<bool name="isLoad"/>
 	</packet>
 	
 	<packet name="S_SceneLoad">
+		<double name="StartTime"/>
+		<double name="ServerSendTime"/>
 	</packet>
 
 	<!-- 게임 -->
 	<packet name="S_InitGame">
+		<double name ="gameStartTime"/>
+		<double name ="duration"/>
+	</packet>
+	
+	<packet name ="S_CardPool">
+		<int name ="size"/>
 		<list name="cardCombination">
 			<int name ="lv"/>
 			<string name="uid"/>
-		</list>
-		<int name="size"/>
-		<double name ="gameStartTime"/>
-		<double name ="duration"/>
+		</list>	
 	</packet>
 	
 	<packet name="S_GameUpdate">
@@ -78,24 +93,130 @@
 			<float name="y"/>
 		</list>
 	</packet>
+<!-- UnitSummon -->
 	<packet name="C_ReqSummon">
 		<float name="x"/>
 		<float name="y"/>
 		<int name="oid"/>
-		<int name="needMana"/>
+		<float name="needMana"/>
 		<int name="reqSessionID"/>
-		<double name="clientSendTime"/>
+		<long name="ClientSendTimeMs"/>
 	</packet>
 	<packet name="S_AnsSummon">
 		<float name="x"/>
 		<float name="y"/>
+		<float name="reducedMana"/>
 		<int name="oid"/>
-		<int name="reducedMana"/>
 		<int name="reqSessionID"/>
-		<double name="summonTime"/>
-		<double name="serverReceiveTime"/>
-		<double name="clientSendTime"/>
+		<int name="randomValue"/>
+		<int name="ExcuteTick"/>
+		<long name="ServerReceiveTimeMs"/>
+		<long name="ServerStartTimeMs"/>
+		<long name="ClientSendTimeMs"/>
 	</packet>
+<!--=========-->
+	
+
+<!-- TargetCapture -->
+	<packet name ="C_TargetCapture">
+		<int name="attackerOid"/>
+		<int name="targetOid"/>
+		<float name="attackerX"/>
+		<float name="attackerY"/>
+		<float name="targetX"/>
+		<float name="targetY"/>
+		<int name="localTick"/>
+	</packet>
+
+	<packet name="S_VerifyCapture">
+		<float name="correctedDir"/>
+		<float name="correctedX"/>
+		<float name="correctedY"/>
+		<int name="correctedTick"/>
+	</packet>
+<!--===============-->>
+<!-- Attack -->
+	<packet name="C_AttackedRequest">
+		<int name="attackerOid"/>
+		<int name="targetOid"/>
+		<float name="attackerX"/>
+		<float name="attackerY"/>
+		<float name="targetX"/>
+		<float name="targetY"/>
+		<int name ="hpDecreaseTick"/>
+		<int name="clientAttackedTick"/>
+	</packet>
+
+	<packet name="S_AttackConfirm">
+		<int name="attackerOid"/>
+		<int name="targetOid"/>
+		<float name="dir"/>
+		<float name="correctedX"/>
+		<float name="correctedY"/>
+		<float name="targetVerifyHp"/>
+		<int name="attackVerifyTick"/>
+	</packet>
+
+	<packet name ="C_SummonProJectile">
+		<int name="summonerOid"/>
+		<int name="targetOid"/>
+		<int name="projectileOid"/>
+		<float name="summonerX"/>
+		<float name="summonerY"/>
+		<float name="targetX"/>
+		<float name="targetY"/>
+		<int name="clientRequestTick"/>
+	</packet>
+	
+	<packet name="S_ShootConfirm">
+		<int name ="summonerOid"/>
+		<int name="targetOid"/>
+		<int name="projcetileOid"/>
+		<float name="projectileSpeed"/>
+		<float name="targetX"/>
+		<float name="targetY"/>
+		<!--<float name="projectileDir"/>
+		<float name="projcetilDistance"/>-->
+		<float name="startX"/>
+		<float name="startY"/>
+		<int name="shootTick"/>
+	</packet>
+
+<!-- ====== -->
+
+	<!-- Occupation-->>
+	<packet name="S_OccupationSync">
+		<int name ="playerSession"/>
+		<int name ="excutionTick"/>
+		<float name ="playerOccupation"/>
+		<float name ="opponentOccupation"/>
+	</packet>
+	<!--Tile-->
+	<packet name ="S_TileClaimed">
+		<int name ="x"/>
+		<int name ="y"/>
+		<int name ="excutionTick"/>
+		<int name ="playerSession"/>
+		<float name ="playerOccupation"/>
+		<float name ="opponentOccupation"/>
+	</packet>
+	<!--TileBulk-->
+	<packet name="S_TileBulkClaimed">
+		<int name="ReqPlayerSessionId"/>
+		<int name ="excutionTick"/>
+		<float name="occupationRate"/>
+		<list name="TileBulk">
+			<int name="x"/>
+			<int name="y"/>
+			<int name="claimedBySessionId"/>
+		</list>
+	</packet>
+	<packet name ="C_TileClaimReq">
+		<int name="unitOid"/>
+		<int name="x"/>
+		<int name="y"/>
+	</packet>
+	
 	<packet name="C_RequestManaStatus">
 		<int name="playerId"/>
 	</packet>
@@ -111,15 +232,15 @@
 			<int name="hp"/>
 		</list>
 		<list name="mana">
-			<int name="playerMana"/>
+			<float name="playerMana"/>
 			<int name="sessionID"/>
 		</list>
 		<double name="serverTime"/>
 	</packet>
 
-	<packet name="S_ManaUpdate">
+<packet name="S_ManaUpdate">
 		<int name="playerId"/>
-		<int name="currentMana"/>
+		<float name="currentMana"/>
 	</packet>
 
 	<packet name="S_UnitAction">
@@ -129,6 +250,9 @@
 		<string name="actionType"/>
 	</packet>
 
+	<packet name ="C_GoToLobby">
+	</packet>
+	
 	<packet name="S_GameOver">
 		<int name="winnerId"/>
 		<string name="resultMessage"/>

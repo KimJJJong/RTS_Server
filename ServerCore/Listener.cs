@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
+using Shared;
 
 namespace ServerCore
 {
@@ -53,17 +52,28 @@ namespace ServerCore
 		// Multi Threading Start : BeCareful RaceCondition 
 		void OnAcceptCompleted(object sender, SocketAsyncEventArgs args /* CallBack Parameter : Clinet delegate Socket */ )
 		{
-			if (args.SocketError == SocketError.Success)
+			try
 			{
-				Session session = _sessionFactory.Invoke();
-				session.Start(args.AcceptSocket);
-				session.OnConnected(args.AcceptSocket.RemoteEndPoint);
+                if (args.SocketError == SocketError.Success)
+                {
+                    Session session = _sessionFactory.Invoke();
+                    session.Start(args.AcceptSocket);
+                    session.OnConnected(args.AcceptSocket.RemoteEndPoint);
+                    LogManager.Instance.LogInfo("Listener", $"Accepted connection from {args.AcceptSocket.RemoteEndPoint}");
+                }
+                /*else
+                    Console.WriteLine(args.SocketError.ToString());*/
+            }
+			catch (Exception e)
+			{
+                LogManager.Instance.LogError("Listener", $"AcceptSocket Error: {e}");
+                //Console.WriteLine($"Err Connect Fail : { e.Message }");
 			}
-			else
-				Console.WriteLine(args.SocketError.ToString());
-
+			finally
+			{
 			// Re Casting
 			RegisterAccept(args);
+			}
 		}
 	}
 }

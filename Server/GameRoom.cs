@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Shared;
 
 namespace Server
 {
@@ -10,13 +11,12 @@ namespace Server
         Finished   // 게임 종료됨
     }
 
-    class GameRoom : IJobQueue
+    class GameRoom 
     {
         public string RoomId { get; }
         private Dictionary<int, ClientSession> _sessions = new Dictionary<int, ClientSession>();
-        private JobQueue _jobQueue = new JobQueue();
         private RoomState _roomState;
-        public GameLogicManager GameLogic { get; private set; }
+        public GameLogicManager GameLogic { get;  set; }
         public IReadOnlyDictionary<int, ClientSession> Sessions => _sessions;
 
         public GameRoom()
@@ -24,15 +24,30 @@ namespace Server
             RoomId = Guid.NewGuid().ToString().Substring(0, 5);
             _roomState = RoomState.Waiting;
         }
+        public GameRoom(string roomId)
+        {
+            RoomId = roomId;
+            _roomState = RoomState.Waiting;
+        }
 
-        public void Push(Action action) => _jobQueue.Push(action);
 
         public void BroadCast(ArraySegment<byte> segment)
         {
             foreach (var session in _sessions.Values)
             {
-                session.Send(segment);
+                try
+                {
+                    session.Send(segment);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"BroadCast 오류: {ex.Message}");
+                }
             }
+        }
+        public void SendToPlayer(int SessionId, ArraySegment<byte> segment)
+        {
+            _sessions[SessionId].Send(segment);
         }
 
         public void Enter(ClientSession session)
@@ -55,15 +70,23 @@ namespace Server
                 sessionID = session.SessionID
             };
             session.Send(joinPacket.Write());
-
-            Console.WriteLine($"클라이언트 {session.SessionID}가 방 {RoomId}에 입장");
+            //Console.WriteLine($"클라이언트 {session.SessionID}가 방 {RoomId}에 입장");
+            LogManager.Instance.LogInfo("GameRoom", $"[{RoomId}] Player {session.SessionID} entered room");
 
         }
 
-        public void StartGame()
+        public void BothReady()
+        {
+            S_Ready s_Ready = new S_Ready();
+
+            BroadCast(s_Ready.Write());
+        }
+
+        public void ReadyStartGame()
         {
             _roomState = RoomState.InGame;
-            Console.WriteLine($"게임 시작! Room ID: {RoomId}");
+            //Console.WriteLine($"게임 시작! Room ID: {RoomId}");
+            LogManager.Instance.LogInfo("GameRoom", $"[{RoomId}] Game started");
 
             GameLogic = new GameLogicManager(this);
             foreach (var session in _sessions.Values)
@@ -80,12 +103,16 @@ namespace Server
 
         public void Leave(ClientSession session)
         {
-            if (_sessions.ContainsKey(session.SessionID))
-            {
-                Console.WriteLine($"클라이언트 {session.SessionID}가 방 {RoomId}에서 퇴장");
-                _sessions.Remove(session.SessionID);
-                session.Room = null;
-            }
+            if (!_sessions.ContainsKey(session.SessionID))
+                return;
+
+                     //Console.WriteLine($"클라이언트 {session.SessionID}가 방 {RoomId}에서 퇴장");
+            LogManager.Instance.LogInfo("GameRoom", $"클라이언트 {session.SessionID}가 방 {RoomId}에서 퇴장");
+            _sessions.Remove(session.SessionID);
+            session.isLoad = false;
+            session.isReady = false;
+            session.Room = null;
+
 
             if (_sessions.Count == 0)
             {
@@ -93,9 +120,14 @@ namespace Server
             }
         }
 
-        public void EndGame()
+        private void EndGame()
         {
-            Console.WriteLine($"방 {RoomId} 게임 종료");
+            //_sessions.Clear();
+            LogManager.Instance.LogInfo("GameRoom", $"[{RoomId}] Distroy");
+            _sessions = null;
+           // Console.WriteLine($"방 {RoomId} 게임 종료");
+            GameLogic?.EndGame(-1); // -1 는 비기는 거 
+            GameLogic = null;
             _roomState = RoomState.Finished;
             // 필요한 후처리 추가 가능
         }

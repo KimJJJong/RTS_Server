@@ -2,18 +2,18 @@
 
 class Mana
 {
-    private int _maxMana = 10;
-    private int _currentMana;
-    private int _regenRate = 1; // 초당 회복량
+    private float _maxMana = 10;
+    private float _currentMana;
+    private float _regenRate = 0.5f; // 초당 회복량
 
     public Mana()
     {
         _currentMana = 0; // 초기 마나 
     }
 
-    public int GetMana() => _currentMana;
+    public float GetMana() => _currentMana;
 
-    public bool UseMana(int cost)
+    public bool UseMana(float cost)
     {
         if (_currentMana >= cost)
         {

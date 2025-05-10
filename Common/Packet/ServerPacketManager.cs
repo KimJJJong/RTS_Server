@@ -29,14 +29,30 @@ public class PacketManager
 		_handler.Add((ushort)PacketID.C_CreateRoom, PacketHandler.C_CreateRoomHandler);
 		_makeFunc.Add((ushort)PacketID.C_JoinRoom, MakePacket<C_JoinRoom>);
 		_handler.Add((ushort)PacketID.C_JoinRoom, PacketHandler.C_JoinRoomHandler);
+		_makeFunc.Add((ushort)PacketID.C_MatchRequest, MakePacket<C_MatchRequest>);
+		_handler.Add((ushort)PacketID.C_MatchRequest, PacketHandler.C_MatchRequestHandler);
+		_makeFunc.Add((ushort)PacketID.C_MatchCancel, MakePacket<C_MatchCancel>);
+		_handler.Add((ushort)PacketID.C_MatchCancel, PacketHandler.C_MatchCancelHandler);
 		_makeFunc.Add((ushort)PacketID.C_Ready, MakePacket<C_Ready>);
 		_handler.Add((ushort)PacketID.C_Ready, PacketHandler.C_ReadyHandler);
+		_makeFunc.Add((ushort)PacketID.C_SetCardPool, MakePacket<C_SetCardPool>);
+		_handler.Add((ushort)PacketID.C_SetCardPool, PacketHandler.C_SetCardPoolHandler);
 		_makeFunc.Add((ushort)PacketID.C_SceneLoaded, MakePacket<C_SceneLoaded>);
 		_handler.Add((ushort)PacketID.C_SceneLoaded, PacketHandler.C_SceneLoadedHandler);
 		_makeFunc.Add((ushort)PacketID.C_ReqSummon, MakePacket<C_ReqSummon>);
 		_handler.Add((ushort)PacketID.C_ReqSummon, PacketHandler.C_ReqSummonHandler);
+		_makeFunc.Add((ushort)PacketID.C_TargetCapture, MakePacket<C_TargetCapture>);
+		_handler.Add((ushort)PacketID.C_TargetCapture, PacketHandler.C_TargetCaptureHandler);
+		_makeFunc.Add((ushort)PacketID.C_AttackedRequest, MakePacket<C_AttackedRequest>);
+		_handler.Add((ushort)PacketID.C_AttackedRequest, PacketHandler.C_AttackedRequestHandler);
+		_makeFunc.Add((ushort)PacketID.C_SummonProJectile, MakePacket<C_SummonProJectile>);
+		_handler.Add((ushort)PacketID.C_SummonProJectile, PacketHandler.C_SummonProJectileHandler);
+		_makeFunc.Add((ushort)PacketID.C_TileClaimReq, MakePacket<C_TileClaimReq>);
+		_handler.Add((ushort)PacketID.C_TileClaimReq, PacketHandler.C_TileClaimReqHandler);
 		_makeFunc.Add((ushort)PacketID.C_RequestManaStatus, MakePacket<C_RequestManaStatus>);
 		_handler.Add((ushort)PacketID.C_RequestManaStatus, PacketHandler.C_RequestManaStatusHandler);
+		_makeFunc.Add((ushort)PacketID.C_GoToLobby, MakePacket<C_GoToLobby>);
+		_handler.Add((ushort)PacketID.C_GoToLobby, PacketHandler.C_GoToLobbyHandler);
 
 	}
 

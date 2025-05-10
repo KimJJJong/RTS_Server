@@ -1,6 +1,10 @@
 ﻿using ServerCore;
+using Shared;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Net;
+using System.Threading;
 
 namespace Server
 {
@@ -17,13 +21,13 @@ namespace Server
         {
             lock (_lock)
             {
-                //int sessionId = ++_sessionId;
+                int sessionId = ++_sessionId;
 
                 ClientSession session = new ClientSession();
-                //session.SessionID = sessionId;
+                session.SessionID = sessionId;
 
-                //_sessions.Add(sessionId, session);
-                //Console.WriteLine($"Connected : {sessionId}");
+                _sessions.Add(sessionId, session);
+                Console.WriteLine($"Connected : {sessionId}");
 
                 return session;
 
@@ -31,7 +35,7 @@ namespace Server
         }
         public void Add(ClientSession clientSession)
         {
-          lock ( _lock)
+            lock (_lock)
             {
                 int sessionId = ++_sessionId;
 
@@ -60,3 +64,4 @@ namespace Server
         }
     }
 }
+  
