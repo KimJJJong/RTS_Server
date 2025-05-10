@@ -115,7 +115,8 @@ class OccupationManager
             S_OccupationSync pack = new S_OccupationSync()
             {
                 playerSession = sessionId,
-                excutionTick = _tickManager.GetCurrentTick() + WallHitDelay,
+                excutionTick = _tickManager.GetCurrentTick() + WallHitDelay
+                ,
                 playerOccupation = GetOccupation(sessionId),
                 opponentOccupation = GetOccupation(opponent)
             };
