@@ -84,6 +84,19 @@ using System.Text;
     {
 
     }
+
+    public static void S_OccupationSyncHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void S_TileClaimedHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void S_TileBulkClaimedHandler(PacketSession session, IPacket packet)
+    {
+
+    }
     public static void S_ShootConfirmHandler(PacketSession session, IPacket packet)
     {
 
