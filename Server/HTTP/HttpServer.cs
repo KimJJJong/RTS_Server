@@ -21,7 +21,7 @@ namespace Server
             _httpHost = Host.CreateDefaultBuilder()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseUrls($"http://P{localIp}:{port}");
+                    webBuilder.UseUrls($"http://{localIp}:{port}");
                     webBuilder.Configure(app =>
                     {
                         app.UseRouting();

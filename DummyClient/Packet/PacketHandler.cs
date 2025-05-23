@@ -28,6 +28,10 @@ using System.Text;
     {
 
     }
+    public static void S_GameInitBundleHandler(PacketSession session, IPacket packet)
+    {
+
+    }
     public static void S_StartGameHandler(PacketSession session, IPacket packet)
     {
         Console.WriteLine("Game Start");

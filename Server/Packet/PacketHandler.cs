@@ -169,7 +169,7 @@ class PacketHandler
     {
         var req = packet as C_ReqSummon;
         var client = session as ClientSession;
-        var logic = client.Room?.GameLogicManager;
+        var logic = client.Room?.GameLogic;
 
         if (logic == null)
         {
@@ -196,7 +196,7 @@ class PacketHandler
     {
         var req = packet as C_SummonProJectile;
         var client = session as ClientSession;
-        var logic = client.Room.GameLogicManager;
+        var logic = client.Room.GameLogic;
 
         if (logic == null)
         {
@@ -218,7 +218,7 @@ class PacketHandler
     {
         var req = packet as C_AttackedRequest;
         var client = session as ClientSession;
-        var logic = client.Room?.GameLogicManager;
+        var logic = client.Room?.GameLogic;
 
         if (logic == null)
         {
@@ -241,14 +241,14 @@ class PacketHandler
         ClientSession client = session as ClientSession;
         GameRoom room = client.Room;
 
-        if (room == null || room.GameLogicManager == null)
+        if (room == null || room.GameLogic == null)
         {
             Console.WriteLine("[TileClaim] ❌ Room or GameLogic is null.");
             return;
         }
 
         C_TileClaimReq req = packet as C_TileClaimReq;
-        room.GameLogicManager.OnReceiveTileClaim(client, req);
+        room.GameLogic.OnReceiveTileClaim(client, req);
     }
 
     public static void C_RequestManaStatusHandler(PacketSession session, IPacket packet) { }
