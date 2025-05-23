@@ -80,6 +80,13 @@ class GameLogicManager
 
     public void OnReceiveSummon(ClientSession session, C_ReqSummon packet)
     {
+        if (_gameOver)
+        {
+            Console.WriteLine($"[GameLogicManager] Game has ended. Ignoring request from session {session.SessionID}");
+            return;
+        }
+
+
         try
         {
             Console.WriteLine($"[GameLogicManager] Summon requested: OID={packet.oid}, Session={session.SessionID}");
@@ -126,6 +133,13 @@ class GameLogicManager
     }
     public void OnReciveSummonProject(ClientSession session, C_SummonProJectile packet)
     {
+        if (_gameOver)
+        {
+            Console.WriteLine($"[GameLogicManager] Game has ended. Ignoring request from session {session.SessionID}");
+            return;
+        }
+
+
         try
         {
             Console.WriteLine($"[GameLogicManager] Projectile summon: OID={packet.projectileOid}, Tick={packet.clientRequestTick}");
@@ -152,6 +166,13 @@ class GameLogicManager
 
     public void OnReciveAttack(ClientSession session, C_AttackedRequest packet)
     {
+        if (_gameOver)
+        {
+            Console.WriteLine($"[GameLogicManager] Game has ended. Ignoring request from session {session.SessionID}");
+            return;
+        }
+
+
         try
         {
             Unit attackerUnit = _unitPoolManager.GetUnit(packet.attackerOid);
@@ -198,10 +219,17 @@ class GameLogicManager
 
     public void OnReceiveTileClaim(ClientSession session, C_TileClaimReq packet)
     {
+        if (_gameOver)
+        {
+            Console.WriteLine($"[GameLogicManager] Game has ended. Ignoring request from session {session.SessionID}");
+            return;
+        }
+
+
         Unit unit = _unitPoolManager.GetUnit(packet.unitOid);
         if (unit == null || !unit.IsActive || unit.PlayerID != session.SessionID)
         {
-            Console.WriteLine($"[TileClaim] ❌ Invalid claim attempt: oid={packet.unitOid}");
+            Console.WriteLine($"[TileClaim] ❌ Invalid claim attempt: oid={packet.unitOid} || IsUnit Active? :{unit.IsActive} || IsSameWith ReqSession : {unit.PlayerID != session.SessionID}");
             return;
         }
 
@@ -243,6 +271,7 @@ class GameLogicManager
         Console.WriteLine($"[GameLogicManager] Game ended. Winner: Session {winnerSessionId}");
     }
     public void SendToPlayer(int sessionId, ArraySegment<byte> segment) => _room.SendToPlayer(sessionId, segment);
+    public bool GameOver => _gameOver;
     public BattleManager Battle => _battleManager;
     public IReadOnlyDictionary<int, Mana> Manas => _playerManager.Manas;
     public List<Unit> UnitPool => _unitPoolManager.GetAllUnits() as List<Unit>;

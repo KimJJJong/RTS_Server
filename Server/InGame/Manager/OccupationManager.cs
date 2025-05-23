@@ -49,7 +49,7 @@ class OccupationManager
 
         foreach (int target in ids)
         {
-            var (clientX, clientY) = _positionCache.ServerToClient(sessionId, x, y);
+            var (clientX, clientY) = _positionCache.ServerToClient(target, x, y);
 
             S_TileClaimed packet = new S_TileClaimed()
             {
@@ -62,6 +62,7 @@ class OccupationManager
                 playerOccupation = GetOccupation(sessionId),
                 opponentOccupation = GetOccupation(opponent)
             };
+            Console.WriteLine($"Send To {target} [X : {clientX} / Y : {clientY} ]");
             _logic.SendToPlayer(target, packet.Write());
 
             // ToDo : Client Tile 동기화

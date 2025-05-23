@@ -255,7 +255,6 @@ class PacketHandler
             Console.WriteLine("[TileClaim] ❌ Room or GameLogic is null.");
             return;
         }
-
         C_TileClaimReq req = packet as C_TileClaimReq;
         room.GameLogic.OnReceiveTileClaim(client, req);
     }

@@ -183,7 +183,12 @@
 	</packet>
 
 <!-- ====== -->
-
+	<!-- DeActivateTick -->
+	<packet name ="S_DeActivateConfirm">
+		<int name = "attackerOid"/>
+		<int name ="deActivateOid"/>
+		<int name ="deActivateTick"/>	
+	</packet>
 	<!-- Occupation-->>
 	<packet name="S_OccupationSync">
 		<int name ="playerSession"/>
