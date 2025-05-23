@@ -1,11 +1,37 @@
 ﻿using Server;
+using ServerCore;
 using Shared;
+using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 
 class DeckManager
 {
     private Dictionary<int, List<Card>> _playerDecks = new Dictionary<int, List<Card>>();
     private List<Card> _cardPool = new List<Card>();
+
+    public void Init(IEnumerable<ClientSession> clientSessions)
+    {
+        _playerDecks.Clear();
+        _cardPool.Clear();
+
+        foreach (var session in clientSessions)
+        {
+            int id = session.SessionID;
+            var deck = session.OwnDeck ?? new List<Card>();
+
+            _playerDecks[id] = new List<Card>(deck);
+            _cardPool.AddRange(deck);
+        }
+
+        Console.WriteLine("CardPool is ready, sending to Player");
+
+
+            _cardPool = GetAllCards();
+            _unitPoolManager.Initialize(allCards);
+            _room.BroadCast(MakeCardPoolPacket().Write());
+
+    }
 
     public bool ReceiveDeck(ClientSession session, C_SetCardPool packet)
     {
@@ -59,7 +85,7 @@ class DeckManager
     {
         S_CardPool packet = new S_CardPool();
         packet.size = 10;   // TODO : 야...이거왜 size가 UnitPoolManager에 있냐... 맞긴 한데...그래;;;
-        foreach (var card in GetAllCards())
+        foreach (var card in _cardPool)
         {
             packet.cardCombinations.Add(new S_CardPool.CardCombination
             {
@@ -76,4 +102,6 @@ class DeckManager
         _playerDecks.Clear();
         _cardPool.Clear();
     }
+
+    public List<Card> CardPoolList => _cardPool;
 }

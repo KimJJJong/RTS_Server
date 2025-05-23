@@ -7,7 +7,7 @@ class UnitPoolManager
     private List<Unit> _unitPool = new List<Unit>();
     private int _unitPoolSize = 10; // 각 카드당 풀 크기
 
-    public void Initialize(List<Card> cardPool)
+    public void Init(List<Card> cardPool)
     {
         _unitPool.Clear();
         foreach (var card in cardPool)

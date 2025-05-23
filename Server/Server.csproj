@@ -6,15 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EPPlus" Version="7.5.3" />
-    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.6.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Logging" Version="8.6.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.6.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.6.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ServerCore\ServerCore.csproj" />
+	<FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 </Project>

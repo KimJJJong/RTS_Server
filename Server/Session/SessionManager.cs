@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 
-namespace Server
-{
     class SessionManager
     {
         static SessionManager _session = new SessionManager();
@@ -63,5 +61,3 @@ namespace Server
             }
         }
     }
-}
-  
