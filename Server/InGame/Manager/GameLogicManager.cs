@@ -5,7 +5,7 @@ using System.Linq;
 using Server;
 
 
-class GameLogicManager
+public class GameLogicManager
 {
     private GameRoom _room;
     private bool _gameOver;
@@ -53,8 +53,7 @@ class GameLogicManager
         _playerManager.Init(_room.ClientSessions);
         _unitPoolManager.Init(_deckManager.CardPoolList);
 
-
-        _room.BroadCast(_timerManager.MakeInitPacket().Write());
+        _room.BroadCast(MakeInitBundlePacket().Write());
 
         JobTimer.Instance.Push(Update);
     }
@@ -68,7 +67,7 @@ class GameLogicManager
         {
             Console.WriteLine($"[GameLogicManager] Summon requested: OID={packet.oid}, Session={session.SessionID}");
 
-            if (!Manas.TryGetValue(packet.reqSessionID, out Mana mana))
+            if (!_playerManager.Manas.TryGetValue(packet.reqSessionID, out Mana mana))
             {
                 Console.WriteLine("[GameLogicManager] X 마나 정보 없음");
                 return;
@@ -211,7 +210,10 @@ class GameLogicManager
 
         JobTimer.Instance.Push(Update, 1000);
     }
-
+    /// <summary>
+    /// Duration, StartTime, PoolSize, AllObjectList
+    /// </summary>
+    /// <returns></returns>
     public S_GameInitBundle MakeInitBundlePacket()
     {
         var cardPool = _deckManager.GetAllCards();
@@ -219,8 +221,8 @@ class GameLogicManager
         {
             gameStartTime = _tickManager.GetStartTimeMs(),
             duration = _timerManager.Duratino,
-            size = cardPool.Count,
-            cardCombinations = cardPool.Select(card => new S_GameInitBundle.CardCombination
+            size = 10,      // ObjectPool Size
+            cardCombinationss = cardPool.Select(card => new S_GameInitBundle.CardCombinations
             {
                 uid = card.ID,
                 lv = card.LV
@@ -244,11 +246,6 @@ class GameLogicManager
         Console.WriteLine($"[GameLogicManager] Game ended. Winner: Session {winnerSessionId}");
     }
     public void SendToPlayer(int sessionId, ArraySegment<byte> segment) => _room.SendToPlayer(sessionId, segment);
-    public BattleManager Battle => _battleManager;
-    public IReadOnlyDictionary<int, Mana> Manas => _playerManager.Manas;
-    public List<Unit> UnitPool => _unitPoolManager.GetAllUnits() as List<Unit>;
-    public TickManager TickManager => _tickManager;
-    public TileManager TileManager => _tileManager;
-    public OccupationManager OccupationManager => _occupationManager;
+
 
 }

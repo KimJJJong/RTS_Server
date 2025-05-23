@@ -31,18 +31,7 @@ using System.Threading;
 
             }
         }
-        public void Add(ClientSession clientSession)
-        {
-            lock (_lock)
-            {
-                int sessionId = ++_sessionId;
 
-                clientSession.SessionID = sessionId;
-
-                _sessions.Add(sessionId, clientSession);
-                Console.WriteLine($"Connected : {sessionId}");
-            }
-        }
         public ClientSession Find(int id)
         {
             lock (_lock)

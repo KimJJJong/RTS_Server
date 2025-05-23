@@ -1,8 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <PDL>
-
-
-
 	<!-- 게임 -->
 	<packet name="S_InitGame">
 		<double name ="gameStartTime"/>
@@ -27,6 +24,15 @@
 	</packet>
 	
 	<!-- InitSetting -->
+	<packet name ="C_ReqJoinGameServer">
+		<int name="playerUid"/>
+		<string name="roomId"/>
+		<list name="playerOwnCards">
+			<int name ="lv"/>
+			<string name="uid"/>
+		</list>
+	</packet>
+	
 	<packet name="S_GameInitBundle">
 		<double name="gameStartTime"/>
 		<double name="duration"/>
@@ -36,6 +42,7 @@
 			<string name="uid"/>
 		</list>
 	</packet>
+	<!--=========-->
 
 	<!-- UnitSummon -->
 	<packet name="C_ReqSummon">

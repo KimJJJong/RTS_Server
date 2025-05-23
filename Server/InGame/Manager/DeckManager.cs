@@ -24,27 +24,10 @@ class DeckManager
             _cardPool.AddRange(deck);
         }
 
-        Console.WriteLine("CardPool is ready, sending to Player");
-
-
-            _cardPool = GetAllCards();
-            _unitPoolManager.Initialize(allCards);
-            _room.BroadCast(MakeCardPoolPacket().Write());
+        Console.WriteLine("CardPool is ready, ");
 
     }
 
-    public bool ReceiveDeck(ClientSession session, C_SetCardPool packet)
-    {
-        if (!_playerDecks.ContainsKey(session.SessionID))
-            _playerDecks[session.SessionID] = new List<Card>();
-
-        _playerDecks[session.SessionID].Clear();
-
-        foreach (var cardData in packet.cardCombinations)
-            _playerDecks[session.SessionID].Add(new Card(cardData.uid, cardData.lv));
-
-        return _playerDecks.Count == 2;
-    }
 
     public List<Card> GetAllCards()
     {

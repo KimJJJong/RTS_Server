@@ -9,25 +9,27 @@ public enum PacketID
 	S_InitGame = 1,
 	S_CardPool = 2,
 	S_GameUpdate = 3,
-	C_ReqSummon = 4,
-	S_AnsSummon = 5,
-	C_TargetCapture = 6,
-	S_VerifyCapture = 7,
-	C_AttackedRequest = 8,
-	S_AttackConfirm = 9,
-	C_SummonProJectile = 10,
-	S_ShootConfirm = 11,
-	S_OccupationSync = 12,
-	S_TileClaimed = 13,
-	S_TileBulkClaimed = 14,
-	C_TileClaimReq = 15,
-	C_RequestManaStatus = 16,
-	S_SyncTime = 17,
-	S_GameStateUpdate = 18,
-	S_ManaUpdate = 19,
-	S_UnitAction = 20,
-	C_GoToLobby = 21,
-	S_GameOver = 22,
+	C_ReqJoinGameServer = 4,
+	S_GameInitBundle = 5,
+	C_ReqSummon = 6,
+	S_AnsSummon = 7,
+	C_TargetCapture = 8,
+	S_VerifyCapture = 9,
+	C_AttackedRequest = 10,
+	S_AttackConfirm = 11,
+	C_SummonProJectile = 12,
+	S_ShootConfirm = 13,
+	S_OccupationSync = 14,
+	S_TileClaimed = 15,
+	S_TileBulkClaimed = 16,
+	C_TileClaimReq = 17,
+	C_RequestManaStatus = 18,
+	S_SyncTime = 19,
+	S_GameStateUpdate = 20,
+	S_ManaUpdate = 21,
+	S_UnitAction = 22,
+	C_GoToLobby = 23,
+	S_GameOver = 24,
 	
 }
 
@@ -235,6 +237,185 @@ public class S_GameUpdate : IPacket
 		count += sizeof(ushort);
 		foreach (Pool pool in this.pools)
 			success &= pool.Write(s, ref count);
+		success &= BitConverter.TryWriteBytes(s, count);
+		if (success == false)
+			return null;
+		return SendBufferHelper.Close(count);
+	}
+}
+
+public class C_ReqJoinGameServer : IPacket
+{
+	public int playerUid;
+	public string roomId;
+	public class PlayerOwnCards
+	{
+		public int lv;
+		public string uid;
+	
+		public void Read(ReadOnlySpan<byte> s, ref ushort count)
+		{
+			this.lv = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+			count += sizeof(int);
+			ushort uidLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+			count += sizeof(ushort);
+			this.uid = Encoding.Unicode.GetString(s.Slice(count, uidLen));
+			count += uidLen;
+		}
+	
+		public bool Write(Span<byte> s, ref ushort count)
+		{
+			ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+	
+			bool success = true;
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.lv);
+			count += sizeof(int);
+			ushort uidLen = (ushort)Encoding.Unicode.GetBytes(this.uid, 0, this.uid.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), uidLen);
+			count += sizeof(ushort);
+			count += uidLen;
+			return success;
+		}	
+	}
+	public List<PlayerOwnCards> playerOwnCardss = new List<PlayerOwnCards>();
+
+	public ushort Protocol { get { return (ushort)PacketID.C_ReqJoinGameServer; } }
+
+	public void Read(ArraySegment<byte> segment)
+	{
+		ushort count = 0;
+
+		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
+		count += sizeof(ushort);
+		count += sizeof(ushort);
+		this.playerUid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+		ushort roomIdLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+		count += sizeof(ushort);
+		this.roomId = Encoding.Unicode.GetString(s.Slice(count, roomIdLen));
+		count += roomIdLen;
+		this.playerOwnCardss.Clear();
+		ushort playerOwnCardsLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+		count += sizeof(ushort);
+		for (int i = 0; i < playerOwnCardsLen; i++)
+		{
+			PlayerOwnCards playerOwnCards = new PlayerOwnCards();
+			playerOwnCards.Read(s, ref count);
+			playerOwnCardss.Add(playerOwnCards);
+		}
+	}
+
+	public ArraySegment<byte> Write()
+	{
+		ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+		ushort count = 0;
+		bool success = true;
+
+		Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
+
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.C_ReqJoinGameServer);
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.playerUid);
+		count += sizeof(int);
+		ushort roomIdLen = (ushort)Encoding.Unicode.GetBytes(this.roomId, 0, this.roomId.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), roomIdLen);
+		count += sizeof(ushort);
+		count += roomIdLen;
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)this.playerOwnCardss.Count);
+		count += sizeof(ushort);
+		foreach (PlayerOwnCards playerOwnCards in this.playerOwnCardss)
+			success &= playerOwnCards.Write(s, ref count);
+		success &= BitConverter.TryWriteBytes(s, count);
+		if (success == false)
+			return null;
+		return SendBufferHelper.Close(count);
+	}
+}
+
+public class S_GameInitBundle : IPacket
+{
+	public double gameStartTime;
+	public double duration;
+	public int size;
+	public class CardCombinations
+	{
+		public int lv;
+		public string uid;
+	
+		public void Read(ReadOnlySpan<byte> s, ref ushort count)
+		{
+			this.lv = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+			count += sizeof(int);
+			ushort uidLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+			count += sizeof(ushort);
+			this.uid = Encoding.Unicode.GetString(s.Slice(count, uidLen));
+			count += uidLen;
+		}
+	
+		public bool Write(Span<byte> s, ref ushort count)
+		{
+			ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+	
+			bool success = true;
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.lv);
+			count += sizeof(int);
+			ushort uidLen = (ushort)Encoding.Unicode.GetBytes(this.uid, 0, this.uid.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), uidLen);
+			count += sizeof(ushort);
+			count += uidLen;
+			return success;
+		}	
+	}
+	public List<CardCombinations> cardCombinationss = new List<CardCombinations>();
+
+	public ushort Protocol { get { return (ushort)PacketID.S_GameInitBundle; } }
+
+	public void Read(ArraySegment<byte> segment)
+	{
+		ushort count = 0;
+
+		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
+		count += sizeof(ushort);
+		count += sizeof(ushort);
+		this.gameStartTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
+		count += sizeof(double);
+		this.duration = BitConverter.ToDouble(s.Slice(count, s.Length - count));
+		count += sizeof(double);
+		this.size = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+		this.cardCombinationss.Clear();
+		ushort cardCombinationsLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+		count += sizeof(ushort);
+		for (int i = 0; i < cardCombinationsLen; i++)
+		{
+			CardCombinations cardCombinations = new CardCombinations();
+			cardCombinations.Read(s, ref count);
+			cardCombinationss.Add(cardCombinations);
+		}
+	}
+
+	public ArraySegment<byte> Write()
+	{
+		ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+		ushort count = 0;
+		bool success = true;
+
+		Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
+
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_GameInitBundle);
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.gameStartTime);
+		count += sizeof(double);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.duration);
+		count += sizeof(double);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.size);
+		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)this.cardCombinationss.Count);
+		count += sizeof(ushort);
+		foreach (CardCombinations cardCombinations in this.cardCombinationss)
+			success &= cardCombinations.Write(s, ref count);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;

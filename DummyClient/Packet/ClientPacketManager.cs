@@ -25,6 +25,8 @@ public class PacketManager
 		_handler.Add((ushort)PacketID.S_CardPool, PacketHandler.S_CardPoolHandler);
 		_makeFunc.Add((ushort)PacketID.S_GameUpdate, MakePacket<S_GameUpdate>);
 		_handler.Add((ushort)PacketID.S_GameUpdate, PacketHandler.S_GameUpdateHandler);
+		_makeFunc.Add((ushort)PacketID.S_GameInitBundle, MakePacket<S_GameInitBundle>);
+		_handler.Add((ushort)PacketID.S_GameInitBundle, PacketHandler.S_GameInitBundleHandler);
 		_makeFunc.Add((ushort)PacketID.S_AnsSummon, MakePacket<S_AnsSummon>);
 		_handler.Add((ushort)PacketID.S_AnsSummon, PacketHandler.S_AnsSummonHandler);
 		_makeFunc.Add((ushort)PacketID.S_VerifyCapture, MakePacket<S_VerifyCapture>);

@@ -5,7 +5,7 @@ using Shared;
 using System.Collections.Generic;
 
 
-class ClientSession : PacketSession
+public class ClientSession : PacketSession
 {
     public bool isReady { get; set; }
     public bool isLoad {  get; set; }
@@ -16,18 +16,18 @@ class ClientSession : PacketSession
 
     public override void OnConnected(EndPoint endPoint)
     {
-    // tmp : Check PlayerNum
-    // Console.WriteLine($"OnConnected : {SessionID} In");
+        // tmp : Check PlayerNum
+        // Console.WriteLine($"OnConnected : {SessionID} In");
 
-    // TODO : Client 요청에 따른 Enter 관리
-    //Program.Room.Enter(this); 직접 처리 하지 않고 JobQueue : Push
-    //Program.Lobby.Push(() => Program.Lobby.Enter(this));
+        // TODO : Client 요청에 따른 Enter 관리
+        //Program.Room.Enter(this); 직접 처리 하지 않고 JobQueue : Push
+        //Program.Lobby.Push(() => Program.Lobby.Enter(this));
 
-    //Program.Room.Push(() => Program.Room.Enter(this));
-    //Program.Room.Enter(this);
-    //Console.WriteLine($"GameServer와 연결되었습니다: {endPoint}");
+        //Program.Room.Push(() => Program.Room.Enter(this));
+        //Program.Room.Enter(this);
+        Console.WriteLine($"GameServer와 연결되었습니다: {endPoint}");
 
-    S_ReqSessionInit reqPacket = new S_ReqSessionInit();
+//    S_ReqSessionInit reqPacket = new S_ReqSessionInit();
 
 
 

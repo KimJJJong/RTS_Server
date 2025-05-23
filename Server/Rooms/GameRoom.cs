@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using Server;
 
 
-     class GameRoom : IGameRoom
+     public class GameRoom : IGameRoom
     {
         public string RoomId { get; }
         private List<int> _playerIds;
@@ -12,7 +12,7 @@ using Server;
         private RoomState _roomState;
         private GameLogicManager _logicManager;
         public GameLogicManager GameLogicManager { get { return _logicManager; } }
-        public GameRoom(string roomId, List<int> playerIds)
+         public GameRoom(string roomId, List<int> playerIds)
         {
             RoomId = roomId;
             _playerIds = playerIds;
