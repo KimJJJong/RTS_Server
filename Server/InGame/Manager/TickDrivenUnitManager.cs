@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Server;
+using System;
 using System.Collections.Generic;
 
 class TickDrivenUnitManager
 {
+    private GameRoom _room;
+    private TickManager _tickManager;
     private readonly List<Unit> _tickUnits = new List<Unit>();
 
     public void Register(Unit unit)
@@ -14,7 +17,13 @@ class TickDrivenUnitManager
 
     public void Unregister(Unit unit)
     {
-        //Console.WriteLine($"[Unit : {unit.UnitID} is UnRegisting]");
+        S_DeActivateConfirm packet = new S_DeActivateConfirm()
+        {
+            attackerOid = -1,
+            deActivateOid = unit.OId,
+            deActivateTick = _tickManager.GetCurrentTick()
+        };
+        _room.BroadCast(packet.Write());
         _tickUnits.Remove(unit);
     }
 

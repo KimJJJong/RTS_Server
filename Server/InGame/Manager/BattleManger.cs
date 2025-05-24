@@ -46,7 +46,7 @@ class BattleManager
         var (serverX, serverY) = PositionConverter.ClientToServer(
             packet.reqSessionID, packet.x, packet.y, player0);
         Unit unit = _unitPoolManager.GetUnit(packet.oid);
-        unit.Summon(serverX, serverY, session.SessionID);
+        unit.Summon(serverX, serverY, session.SessionID, _tickManager.GetCurrentTick());
 
         // Send To Client With Convert
         foreach (int target in _occupationManager.GetPlayerSessionIds())
@@ -80,7 +80,7 @@ class BattleManager
         var (serverX, serverY) = PositionConverter.ClientToServer(
             session.SessionID, packet.summonerX, packet.summonerY, player0);
         Unit proj = _unitPoolManager.GetUnit(packet.projectileOid);
-        proj.Summon(serverX, serverY, session.SessionID);
+        proj.Summon(serverX, serverY, session.SessionID, _tickManager.GetCurrentTick());
 
         var (serverTargetX, serverTargetY) = PositionConverter.ClientToServer(
             session.SessionID, packet.targetX, packet.targetY, player0);
@@ -113,34 +113,18 @@ class BattleManager
     #region Attack - Melee
     public void ProcessAttack(ClientSession session, C_AttackedRequest packet)
     {
-        Unit attacker = _unitPoolManager.GetUnit(packet.attackerOid);
-        Unit target = _unitPoolManager.GetUnit(packet.targetOid);
-
-        if (attacker == null || target == null)
-            return;
-
-        float curHp = target.CurrentHP - attacker.AttackPower;
-        bool isDead = curHp <= 0;
-
-        if (isDead)
+        try
         {
-            target.Dead(_tickManager.GetCurrentTick());
-            // Dead Packet and return;
+            Unit attacker = _unitPoolManager.GetUnit(packet.attackerOid);
+            Unit target = _unitPoolManager.GetUnit(packet.targetOid);
+
+            ApplyDamage(attacker, target, attacker.AttackPower,packet.clientAttackedTick, HpDecreassTick);
         }
-        else
+        catch (Exception ex)
         {
-            target.CurrentHP = curHp;
+            Console.WriteLine($"[BattleManager:ProcessAttack] Exception: {ex}");
         }
 
-        S_AttackConfirm response = new S_AttackConfirm
-        {
-            attackerOid = packet.attackerOid,
-            targetOid = packet.targetOid,
-            targetVerifyHp = Math.Max(0, curHp),
-            attackVerifyTick = packet.clientAttackedTick + HpDecreassTick  // hp decreass Rate
-        };
-
-        _room.BroadCast(response.Write());
     }
     public void ProcessWallMariaAttacked(ClientSession session, C_AttackedRequest packet)
     {
@@ -164,42 +148,13 @@ class BattleManager
             Unit projectile = _unitPoolManager.GetUnit(packet.attackerOid);
             Unit target = _unitPoolManager.GetUnit(packet.targetOid);
 
-            if (projectile == null || target == null)
-            {
-                Console.WriteLine("[Combat]", $"Projectile or Target is null. attackerOid: {packet.attackerOid}, targetOid: {packet.targetOid}");
-                return;
-            }
+            ApplyDamage(projectile, target, projectile.AttackPower,packet.clientAttackedTick , HpDecreassProjectileTick);
 
-            float curHp = target.CurrentHP - projectile.AttackPower;
-            bool isDead = curHp <= 0;
-
-            if (isDead)
-            {
-                target.Dead(_tickManager.GetCurrentTick());
-                Console.WriteLine("[Combat]", $"Target {packet.targetOid} died by projectile {packet.attackerOid}");
-            }
-            else
-            {
-                target.CurrentHP = curHp;
-                LogManager.Instance.LogInfo("[Combat]", $"Target {packet.targetOid} hit by {packet.attackerOid}, HP: {curHp}");
-            }
-
-            S_AttackConfirm response = new S_AttackConfirm
-            {
-                attackerOid = packet.attackerOid,
-                targetOid = packet.targetOid,
-                targetVerifyHp = Math.Max(0, curHp),
-                attackVerifyTick = packet.clientAttackedTick + HpDecreassProjectileTick
-            };
-
-            // 투사체는 공격 후 제거
-            projectile.Dead(_tickManager.GetCurrentTick());
-
-            _room.BroadCast(response.Write());
+            projectile?.Dead(_tickManager.GetCurrentTick());
         }
         catch (Exception ex)
         {
-            LogManager.Instance.LogError("ProcessProjectileAttack", $"Exception: {ex}");
+            Console.WriteLine($"[BattleManager:ProjectilAttack]Exception: {ex}");
         }
     }
 
@@ -218,7 +173,55 @@ class BattleManager
 
         projectile.Dead(_tickManager.GetCurrentTick());
     }
-    #endregion 
+    #endregion
 
 
-} 
+
+
+    #region AttackLogic
+    private void ApplyDamage(Unit attacker, Unit target, float damage,int clientTick, int delayTick)
+    {
+        if (attacker == null || target == null)
+        {
+            Console.WriteLine($"[BattleManager]Null attacker or target. Attacker: {attacker?.OId}, Target: {target?.OId}");
+            return;
+        }
+
+        float curHp = target.CurrentHP - damage;
+        bool isDead = curHp <= 0;
+        int effectTick = clientTick + delayTick;
+
+        if (isDead)
+        {
+            target.Dead(effectTick);
+
+            S_DeActivateConfirm deadPacket = new S_DeActivateConfirm
+            {
+                attackerOid = attacker.OId,
+                deActivateOid = target.OId,
+                deActivateTick = effectTick
+            };
+
+            Console.WriteLine($"[Dead] {attacker.OId} → {target.OId} at Tick {effectTick}");
+            _room.BroadCast(deadPacket.Write());
+        }
+        else
+        {
+            target.CurrentHP = curHp;
+
+            S_AttackConfirm response = new S_AttackConfirm
+            {
+                attackerOid = attacker.OId,
+                targetOid = target.OId,
+                targetVerifyHp = curHp,
+                attackVerifyTick = effectTick
+            };
+
+            Console.WriteLine($"[Hit] {attacker.OId} → {target.OId} | Damage: {damage}, HP: {curHp}, Tick: {effectTick}");
+            _room.BroadCast(response.Write());
+        }
+    }
+
+    #endregion
+
+}

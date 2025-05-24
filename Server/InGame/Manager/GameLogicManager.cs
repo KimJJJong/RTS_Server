@@ -117,6 +117,7 @@ class GameLogicManager
                 unit = _unitPoolManager.GetUnit(packet.oid);
             }
 
+            unit.OnDead += HandleUnitDeActivate;
 
             if (unit.UnitTypeIs() is UnitType.Tower && unit is ITickable)
             {
@@ -251,13 +252,23 @@ class GameLogicManager
 
         _dimensionManager.Update(this);
         
-        Console.WriteLine($"CurrentTime {_gameTimerManager.RemainingSeconds}");
+        //Console.WriteLine($"CurrentTime {_gameTimerManager.RemainingSeconds}");
 
         JobTimer.Instance.Push(Update, 1000);
     }
 
-    public void RegisterTickUnit(Unit unit) => _tickDrivenUnitManager.Register(unit);
-    public void UnregisterTickUnit(Unit unit) => _tickDrivenUnitManager.Unregister(unit);
+    private void RegisterTickUnit(Unit unit) => _tickDrivenUnitManager.Register(unit);
+    private void UnregisterTickUnit(Unit unit) => _tickDrivenUnitManager.Unregister(unit);
+    private void HandleUnitDeActivate(Unit unit)
+    {
+        S_DeActivateConfirm packet = new S_DeActivateConfirm()
+        {
+            attackerOid = -1,
+            deActivateOid = unit.OId,
+            deActivateTick = unit.DeadTick,
+        };
+        _room.BroadCast(packet.Write());
+    }
 
     public void EndGame(int winnerSessionId)
     {

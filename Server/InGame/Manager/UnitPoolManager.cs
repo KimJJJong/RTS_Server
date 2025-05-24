@@ -10,13 +10,14 @@ class UnitPoolManager
     public void Initialize(List<Card> cardPool)
     {
         _unitPool.Clear();
+        int oidCounter = 0;
+
         foreach (var card in cardPool)
         {
             for (int i = 0; i < _unitPoolSize; i++)
             {
-                Unit unit = UnitFactory.CreateUnit(card.ID, card.LV);
+                Unit unit = UnitFactory.CreateUnit(card.ID, card.LV, oidCounter++);
                 _unitPool.Add(unit);
-                //Console.WriteLine($"UID : {card.ID}");
             }
         }
         Console.WriteLine($"[UnitPoolManager] 총 유닛 수: {_unitPool.Count}");
