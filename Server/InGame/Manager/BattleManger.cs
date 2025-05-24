@@ -1,5 +1,6 @@
 ﻿// BattleManager.cs
 using Server;
+using Shared;
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -124,6 +125,7 @@ class BattleManager
         if (isDead)
         {
             target.Dead(_tickManager.GetCurrentTick());
+            // Dead Packet and return;
         }
         else
         {
@@ -157,28 +159,50 @@ class BattleManager
     #region Attack - Projectile
     public void ProcessProjectileAttack(ClientSession session, C_AttackedRequest packet)
     {
-        Unit projectile = _unitPoolManager.GetUnit(packet.attackerOid);
-        Unit target = _unitPoolManager.GetUnit(packet.targetOid);
-
-        if (projectile == null || target == null) return;
-
-
-        float curHp = target.CurrentHP - projectile.AttackPower;
-        target.CurrentHP = curHp;
-        Console.WriteLine($"targetHP : {target.CurrentHP} || Damage : { projectile.AttackPower } || Resaurt : {curHp}");
-        S_AttackConfirm response = new S_AttackConfirm
+        try
         {
-            attackerOid = packet.attackerOid,
-            targetOid = packet.targetOid,
-            targetVerifyHp = Math.Max(0, curHp),
-            attackVerifyTick = packet.clientAttackedTick + HpDecreassProjectileTick // hp decreass Rate
-        };
+            Unit projectile = _unitPoolManager.GetUnit(packet.attackerOid);
+            Unit target = _unitPoolManager.GetUnit(packet.targetOid);
 
-        projectile.Dead(_tickManager.GetCurrentTick());
+            if (projectile == null || target == null)
+            {
+                Console.WriteLine("[Combat]", $"Projectile or Target is null. attackerOid: {packet.attackerOid}, targetOid: {packet.targetOid}");
+                return;
+            }
 
-        _room.BroadCast(response.Write());
+            float curHp = target.CurrentHP - projectile.AttackPower;
+            bool isDead = curHp <= 0;
+
+            if (isDead)
+            {
+                target.Dead(_tickManager.GetCurrentTick());
+                Console.WriteLine("[Combat]", $"Target {packet.targetOid} died by projectile {packet.attackerOid}");
+            }
+            else
+            {
+                target.CurrentHP = curHp;
+                LogManager.Instance.LogInfo("[Combat]", $"Target {packet.targetOid} hit by {packet.attackerOid}, HP: {curHp}");
+            }
+
+            S_AttackConfirm response = new S_AttackConfirm
+            {
+                attackerOid = packet.attackerOid,
+                targetOid = packet.targetOid,
+                targetVerifyHp = Math.Max(0, curHp),
+                attackVerifyTick = packet.clientAttackedTick + HpDecreassProjectileTick
+            };
+
+            // 투사체는 공격 후 제거
+            projectile.Dead(_tickManager.GetCurrentTick());
+
+            _room.BroadCast(response.Write());
+        }
+        catch (Exception ex)
+        {
+            LogManager.Instance.LogError("ProcessProjectileAttack", $"Exception: {ex}");
+        }
     }
- 
+
 
     public void ProcessWallMariaProjectileAttacked(ClientSession session, C_AttackedRequest packet)
     {

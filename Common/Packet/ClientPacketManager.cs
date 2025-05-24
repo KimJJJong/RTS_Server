@@ -47,6 +47,8 @@ public class PacketManager
 		_handler.Add((ushort)PacketID.S_AttackConfirm, PacketHandler.S_AttackConfirmHandler);
 		_makeFunc.Add((ushort)PacketID.S_ShootConfirm, MakePacket<S_ShootConfirm>);
 		_handler.Add((ushort)PacketID.S_ShootConfirm, PacketHandler.S_ShootConfirmHandler);
+		_makeFunc.Add((ushort)PacketID.S_DeActivateConfirm, MakePacket<S_DeActivateConfirm>);
+		_handler.Add((ushort)PacketID.S_DeActivateConfirm, PacketHandler.S_DeActivateConfirmHandler);
 		_makeFunc.Add((ushort)PacketID.S_OccupationSync, MakePacket<S_OccupationSync>);
 		_handler.Add((ushort)PacketID.S_OccupationSync, PacketHandler.S_OccupationSyncHandler);
 		_makeFunc.Add((ushort)PacketID.S_TileClaimed, MakePacket<S_TileClaimed>);

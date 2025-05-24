@@ -34,17 +34,18 @@ public enum PacketID
 	S_AttackConfirm = 26,
 	C_SummonProJectile = 27,
 	S_ShootConfirm = 28,
-	S_OccupationSync = 29,
-	S_TileClaimed = 30,
-	S_TileBulkClaimed = 31,
-	C_TileClaimReq = 32,
-	C_RequestManaStatus = 33,
-	S_SyncTime = 34,
-	S_GameStateUpdate = 35,
-	S_ManaUpdate = 36,
-	S_UnitAction = 37,
-	C_GoToLobby = 38,
-	S_GameOver = 39,
+	S_DeActivateConfirm = 29,
+	S_OccupationSync = 30,
+	S_TileClaimed = 31,
+	S_TileBulkClaimed = 32,
+	C_TileClaimReq = 33,
+	C_RequestManaStatus = 34,
+	S_SyncTime = 35,
+	S_GameStateUpdate = 36,
+	S_ManaUpdate = 37,
+	S_UnitAction = 38,
+	C_GoToLobby = 39,
+	S_GameOver = 40,
 	
 }
 
@@ -1553,6 +1554,53 @@ public class S_ShootConfirm : IPacket
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.startY);
 		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.shootTick);
+		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s, count);
+		if (success == false)
+			return null;
+		return SendBufferHelper.Close(count);
+	}
+}
+
+public class S_DeActivateConfirm : IPacket
+{
+	public int attackerOid;
+	public int deActivateOid;
+	public int deActivateTick;
+
+	public ushort Protocol { get { return (ushort)PacketID.S_DeActivateConfirm; } }
+
+	public void Read(ArraySegment<byte> segment)
+	{
+		ushort count = 0;
+
+		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
+		count += sizeof(ushort);
+		count += sizeof(ushort);
+		this.attackerOid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+		this.deActivateOid = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+		this.deActivateTick = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+		count += sizeof(int);
+	}
+
+	public ArraySegment<byte> Write()
+	{
+		ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+		ushort count = 0;
+		bool success = true;
+
+		Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
+
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_DeActivateConfirm);
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.attackerOid);
+		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.deActivateOid);
+		count += sizeof(int);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.deActivateTick);
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
