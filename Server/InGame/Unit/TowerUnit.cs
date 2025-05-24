@@ -19,19 +19,14 @@ public class TowerUnit : Unit, ITickable
 
         }          
     }
+    public override void Summon(float x, float y, float playerId, int spawnTick)
+    {
+        base.Summon(x, y, playerId, spawnTick);
+        _lastProcessedTick = -1;
+        _accumulatedDecay = 0f;
+    }
     public override void TickUpdate(int tick)
     {
-        /*        if (!IsActive) return;
-
-                CurrentHP -= TowerDecayPerSecond;
-                if (CurrentHP <= 0)
-                {
-                    Console.WriteLine("DEadTickUpdate <= 0");
-                    CurrentHP = 0;
-                    //SetDeadTick(tick);
-                    Dead(tick);
-                }*/
-
         if (!IsActive) return;
 
         if (_lastProcessedTick == -1)
@@ -54,7 +49,7 @@ public class TowerUnit : Unit, ITickable
             if (CurrentHP <= 0)
             {
                 CurrentHP = 0;
-                Dead(tick);
+                Deactivate(tick);
             }
         }
     }

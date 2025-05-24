@@ -150,7 +150,7 @@ class BattleManager
 
             ApplyDamage(projectile, target, projectile.AttackPower,packet.clientAttackedTick , HpDecreassProjectileTick);
 
-            projectile?.Dead(_tickManager.GetCurrentTick());
+            projectile?.Deactivate(_tickManager.GetCurrentTick());
         }
         catch (Exception ex)
         {
@@ -171,7 +171,7 @@ class BattleManager
 
 
 
-        projectile.Dead(_tickManager.GetCurrentTick());
+        projectile.Deactivate(_tickManager.GetCurrentTick());
     }
     #endregion
 
@@ -193,17 +193,7 @@ class BattleManager
 
         if (isDead)
         {
-            target.Dead(effectTick);
-
-            S_DeActivateConfirm deadPacket = new S_DeActivateConfirm
-            {
-                attackerOid = attacker.OId,
-                deActivateOid = target.OId,
-                deActivateTick = effectTick
-            };
-
-            Console.WriteLine($"[Dead] {attacker.OId} → {target.OId} at Tick {effectTick}");
-            _room.BroadCast(deadPacket.Write());
+            target.Deactivate(effectTick);
         }
         else
         {

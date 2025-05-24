@@ -182,7 +182,7 @@ class GameLogicManager
 
             if( packet.targetOid < 0 ) // Projectile이 시간 초과
             {
-                attackerUnit.Dead(_tickManager.GetCurrentTick());
+                attackerUnit.Deactivate(_tickManager.GetCurrentTick());
                 Console.WriteLine(attackerUnit.UnitID);
             }
             else if (attackerUnit.UnitTypeIs() == UnitType.Projectile)
@@ -265,8 +265,9 @@ class GameLogicManager
         {
             attackerOid = -1,
             deActivateOid = unit.OId,
-            deActivateTick = unit.DeadTick,
+            deActivateTick = unit.DeactivateTick,
         };
+        Console.WriteLine($"[Dead] {unit.OId} at Tick {unit.DeactivateTick}");
         _room.BroadCast(packet.Write());
     }
 

@@ -27,7 +27,7 @@ public abstract class Unit
 
     public bool IsActive { get; protected set; }
     public int SpawnTick {  get; protected set; }
-    public int DeadTick { get; protected set; }
+    public int DeactivateTick { get; protected set; }
 
     public Action<Unit> OnDead; // Event callback for external use
 
@@ -55,12 +55,12 @@ public abstract class Unit
         PlayerID = playerId;
         SpawnTick = spawnTick;
         CurrentHP = MaxHP;
-        DeadTick = 999999;
+        DeactivateTick = 999999;
         IsActive = true;
     }
 
 
-    public virtual void Dead(int tick)
+    public virtual void Deactivate(int tick)
     {
         SetDeadTick(tick);
         OnDead?.Invoke(this);
@@ -75,9 +75,10 @@ public abstract class Unit
         PlayerID = -1;
         CurrentHP = -1;
         IsActive = false;
+        OnDead = null;
     }
 
-    public void SetDeadTick(int tick) => DeadTick = tick;
+    public void SetDeadTick(int tick) => DeactivateTick = tick;
 
     public abstract void TickUpdate(int tick);
     public abstract UnitType UnitTypeIs();
