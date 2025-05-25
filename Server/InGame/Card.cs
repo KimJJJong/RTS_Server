@@ -43,7 +43,7 @@ public static class CardMetaDatabase
             CardID = "U-JOS-004",
             Level = 1,
             IsRanged = true,
-            ProjectileCardID = "PRJ-U-JOS-003"  // tmp modife
+            ProjectileCardID = "PRJ-U-JOS-004"  // tmp modife
         };
 
         // Crossbowman - U-ENG-003 → PRJ-U-ENG-003

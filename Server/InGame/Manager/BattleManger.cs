@@ -150,7 +150,7 @@ class BattleManager
 
             ApplyDamage(projectile, target, projectile.AttackPower,packet.clientAttackedTick , HpDecreassProjectileTick);
 
-            projectile?.Deactivate(_tickManager.GetCurrentTick());
+            projectile.Deactivate(_tickManager.GetCurrentTick());
         }
         catch (Exception ex)
         {
@@ -174,9 +174,7 @@ class BattleManager
         projectile.Deactivate(_tickManager.GetCurrentTick());
     }
     #endregion
-
-
-
+ 
 
     #region AttackLogic
     private void ApplyDamage(Unit attacker, Unit target, float damage,int clientTick, int delayTick)
@@ -193,7 +191,7 @@ class BattleManager
 
         if (isDead)
         {
-            target.Deactivate(effectTick);
+            target.Deactivate(clientTick+ 5);
         }
         else
         {

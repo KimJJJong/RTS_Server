@@ -1,5 +1,6 @@
 ﻿using Server;
 using Shared;
+using System;
 using System.Collections.Generic;
 
 class DeckManager
@@ -12,7 +13,7 @@ class DeckManager
         if (!_playerDecks.ContainsKey(session.SessionID))
             _playerDecks[session.SessionID] = new List<Card>();
 
-        _playerDecks[session.SessionID].Clear();
+        //_playerDecks[session.SessionID].Clear();
 
         foreach (var cardData in packet.cardCombinations)
             _playerDecks[session.SessionID].Add(new Card(cardData.uid, cardData.lv));
@@ -30,7 +31,11 @@ class DeckManager
 
         // Card Object 추가
         foreach (var deck in _playerDecks.Values)
+        {
             allCards.AddRange(deck);
+            foreach(var card in deck)
+            Console.WriteLine(card.ID);
+        }
 
         // 파생 데미지 관련 추가
         AppendProjectileCards(allCards);

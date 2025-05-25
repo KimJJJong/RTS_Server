@@ -56,7 +56,7 @@ class TileManager
         tile.Claim(sessionId);
         _occupationManager.OnTileClaim(sessionId, x, y);
 
-        Console.WriteLine($"[TileManager] Tile Captured: ({x}, {y}) by Session {sessionId}");
+    //    Console.WriteLine($"[TileManager] Tile Captured: ({x}, {y}) by Session {sessionId}");
         return true;
     }
 

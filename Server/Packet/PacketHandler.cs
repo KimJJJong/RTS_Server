@@ -115,6 +115,12 @@ class PacketHandler
         GameRoom gameRoom = clientSession.Room;
         clientSession.isReady = true;
 
+        foreach(var card in c_SetCardPool.cardCombinations)
+        {
+            Console.WriteLine($"{clientSession.SessionID} in {card.uid}");
+        }
+
+
         try
         {
             if (gameRoom.Sessions.Count == 2)

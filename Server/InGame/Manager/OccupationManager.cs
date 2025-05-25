@@ -62,7 +62,7 @@ class OccupationManager
                 playerOccupation = GetOccupation(sessionId),
                 opponentOccupation = GetOccupation(opponent)
             };
-            Console.WriteLine($"Send To {target} [X : {clientX} / Y : {clientY} ]");
+            //Console.WriteLine($"Send To {target} [X : {clientX} / Y : {clientY} ]");
             _logic.SendToPlayer(target, packet.Write());
 
             // ToDo : Client Tile 동기화
@@ -133,7 +133,7 @@ class OccupationManager
         _occupation[opponentId] -= amount;
         Clamp(playerId, opponentId);
 
-        Console.WriteLine($"[Occupation] {playerId}: {_occupation[playerId]:0.00}, {opponentId}: {_occupation[opponentId]:0.00}");
+      //  Console.WriteLine($"[Occupation] {playerId}: {_occupation[playerId]:0.00}, {opponentId}: {_occupation[opponentId]:0.00}");
 
         if (_occupation[playerId] >= InstantWinThreshold)
         {

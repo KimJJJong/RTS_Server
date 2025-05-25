@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Server;
+using Shared;
 
 
 class GameLogicManager
@@ -32,7 +33,7 @@ class GameLogicManager
         _deckManager = new DeckManager();
         _unitPoolManager = new UnitPoolManager();
         _positionCache = new PositionCache(_room.Sessions.Values.Select(s =>s.SessionID).ToArray());
-        _tickDrivenUnitManager = new TickDrivenUnitManager();
+        _tickDrivenUnitManager = new TickDrivenUnitManager(_room, _tickManager);
         _occupationManager = new OccupationManager(this, _positionCache, _tickManager);
         _tileManager = new TileManager(_occupationManager, _positionCache);
         _battleManager = new BattleManager(_unitPoolManager, _room, _tickManager, _occupationManager);
@@ -89,7 +90,7 @@ class GameLogicManager
 
         try
         {
-            Console.WriteLine($"[GameLogicManager] Summon requested: OID={packet.oid}, Session={session.SessionID}");
+           // Console.WriteLine($"[GameLogicManager] Summon requested: OID={packet.oid}, Session={session.SessionID}");
 
             if (!Manas.TryGetValue(packet.reqSessionID, out Mana mana))
             {
@@ -143,7 +144,7 @@ class GameLogicManager
 
         try
         {
-            Console.WriteLine($"[GameLogicManager] Projectile summon: OID={packet.projectileOid}, Tick={packet.clientRequestTick}");
+           // Console.WriteLine($"[GameLogicManager] Projectile summon: OID={packet.projectileOid}, Tick={packet.clientRequestTick}");
 
             Unit unit = _unitPoolManager.GetUnit(packet.projectileOid);
             if (unit?.IsActive == true)
@@ -151,7 +152,7 @@ class GameLogicManager
                 int? available = _unitPoolManager.GetAvailableOid(packet.projectileOid);
                 if (available == null)
                 {
-                    Console.WriteLine($"[GameLogicManager] X No available projectile in group for OID={packet.projectileOid}");
+                //    Console.WriteLine($"[GameLogicManager] X No available projectile in group for OID={packet.projectileOid}");
                     return;
                 }
                 packet.projectileOid = available.Value;
@@ -164,7 +165,6 @@ class GameLogicManager
             Console.WriteLine($"[GameLogicManager] (!) Error in OnReciveSummonProject: {ex.Message}");
         }
     }
-
     public void OnReciveAttack(ClientSession session, C_AttackedRequest packet)
     {
         if (_gameOver)
@@ -173,50 +173,97 @@ class GameLogicManager
             return;
         }
 
-
         try
         {
-            Unit attackerUnit = _unitPoolManager.GetUnit(packet.attackerOid);
-            Unit targetUnit = _unitPoolManager.GetUnit(packet.targetOid);
+            Unit attacker = _unitPoolManager.GetUnit(packet.attackerOid);
+            Unit target = _unitPoolManager.GetUnit(packet.targetOid);
 
-
-            if( packet.targetOid < 0 ) // Projectile이 시간 초과
+            if (packet.targetOid < 0)
             {
-                attackerUnit.Deactivate(_tickManager.GetCurrentTick());
-                Console.WriteLine(attackerUnit.UnitID);
+                // 투사체가 시간 초과로 자동 제거
+                attacker.Deactivate(_tickManager.GetCurrentTick());
+                Console.WriteLine($"[GameLogicManager] Projectile timed out: {attacker.UnitID}");
+                return;
             }
-            else if (attackerUnit.UnitTypeIs() == UnitType.Projectile)
-            {
 
-                if (targetUnit.UnitTypeIs() == UnitType.WallMaria)
-                {
+            bool isAttackerProjectile = attacker.UnitTypeIs() == UnitType.Projectile;
+            bool isTargetWall = target.UnitTypeIs() == UnitType.WallMaria;
+
+            if (isAttackerProjectile)
+            {
+                if (isTargetWall)
                     _battleManager.ProcessWallMariaProjectileAttacked(session, packet);
-                }
                 else
-                {
                     _battleManager.ProcessProjectileAttack(session, packet);
-                }
             }
-            else // 일단은 근접 공격
+            else
             {
-                if (targetUnit.UnitTypeIs() == UnitType.WallMaria)
-                {
+                if (isTargetWall)
                     _battleManager.ProcessWallMariaAttacked(session, packet);
-                }
                 else
-                {
                     _battleManager.ProcessAttack(session, packet);
-                }
             }
 
-
-            Console.WriteLine($"[GameLogicManager] Attack: {packet.attackerOid} -> {packet.targetOid}, Tick={packet.clientAttackedTick}     [ {attackerUnit.UnitTypeIs().ToString()} ]");
+           // Console.WriteLine($"[GameLogicManager] Attack: {packet.attackerOid} -> {packet.targetOid}, Tick={packet.clientAttackedTick} [ {attacker.UnitTypeIs()} ]");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[GameLogicManager] (!) Error in OnReceiveAttack: {ex.Message}");
+            LogManager.Instance.LogError("GameLogicManager", $"OnReciveAttack Error: {ex.Message}");
         }
     }
+
+    /* public void OnReciveAttack(ClientSession session, C_AttackedRequest packet)
+     {
+         if (_gameOver)
+         {
+             Console.WriteLine($"[GameLogicManager] Game has ended. Ignoring request from session {session.SessionID}");
+             return;
+         }
+
+
+         try
+         {
+             Unit attackerUnit = _unitPoolManager.GetUnit(packet.attackerOid);
+             Unit targetUnit = _unitPoolManager.GetUnit(packet.targetOid);
+
+
+             if( packet.targetOid < 0 ) // Projectile이 시간 초과
+             {
+                 attackerUnit.Deactivate(_tickManager.GetCurrentTick());
+                 Console.WriteLine(attackerUnit.UnitID);
+             }
+             else if (attackerUnit.UnitTypeIs() == UnitType.Projectile)
+             {
+
+                 if (targetUnit.UnitTypeIs() == UnitType.WallMaria)
+                 {
+                     _battleManager.ProcessWallMariaProjectileAttacked(session, packet);
+                 }
+                 else
+                 {
+                     _battleManager.ProcessProjectileAttack(session, packet);
+                 }
+             }
+             else // 일단은 근접 공격
+             {
+                 if (targetUnit.UnitTypeIs() == UnitType.WallMaria)
+                 {
+                     _battleManager.ProcessWallMariaAttacked(session, packet);
+                 }
+                 else
+                 {
+                     _battleManager.ProcessAttack(session, packet);
+                 }
+             }
+
+
+             Console.WriteLine($"[GameLogicManager] Attack: {packet.attackerOid} -> {packet.targetOid}, Tick={packet.clientAttackedTick}     [ {attackerUnit.UnitTypeIs().ToString()} ]");
+         }
+         catch (Exception ex)
+         {
+             Console.WriteLine($"[GameLogicManager] (!) Error in OnReceiveAttack: {ex.Message}");
+         }
+     }*/
 
     public void OnReceiveTileClaim(ClientSession session, C_TileClaimReq packet)
     {
@@ -250,7 +297,7 @@ class GameLogicManager
         _playerManager.RegenManaAll();
         _tickDrivenUnitManager.Update(_tickManager.GetCurrentTick());
 
-        _dimensionManager.Update(this);
+       // _dimensionManager.Update(this);
         
         //Console.WriteLine($"CurrentTime {_gameTimerManager.RemainingSeconds}");
 
