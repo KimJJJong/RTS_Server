@@ -243,9 +243,10 @@
 		<double name="serverTime"/>
 	</packet>
 
-<packet name="S_ManaUpdate">
+	<packet name="S_ManaUpdate">
 		<int name="playerId"/>
 		<float name="currentMana"/>
+		<long name="serverTick"/>
 	</packet>
 
 	<packet name="S_UnitAction">

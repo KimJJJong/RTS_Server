@@ -29,9 +29,9 @@ class GameLogicManager
         _gameOver = false;
         _room = room;
         _tickManager = new TickManager();
-        _playerManager = new PlayerManager();
         _deckManager = new DeckManager();
         _unitPoolManager = new UnitPoolManager();
+        _playerManager = new PlayerManager(_tickManager);
         _positionCache = new PositionCache(_room.Sessions.Values.Select(s =>s.SessionID).ToArray());
         _tickDrivenUnitManager = new TickDrivenUnitManager(_room, _tickManager);
         _occupationManager = new OccupationManager(this, _positionCache, _tickManager);

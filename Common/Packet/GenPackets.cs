@@ -2069,6 +2069,7 @@ public class S_ManaUpdate : IPacket
 {
 	public int playerId;
 	public float currentMana;
+	public long serverTick;
 
 	public ushort Protocol { get { return (ushort)PacketID.S_ManaUpdate; } }
 
@@ -2083,6 +2084,8 @@ public class S_ManaUpdate : IPacket
 		count += sizeof(int);
 		this.currentMana = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
+		this.serverTick = BitConverter.ToInt64(s.Slice(count, s.Length - count));
+		count += sizeof(long);
 	}
 
 	public ArraySegment<byte> Write()
@@ -2100,6 +2103,8 @@ public class S_ManaUpdate : IPacket
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.currentMana);
 		count += sizeof(float);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.serverTick);
+		count += sizeof(long);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;
