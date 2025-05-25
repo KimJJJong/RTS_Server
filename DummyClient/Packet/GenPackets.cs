@@ -1075,6 +1075,7 @@ public class C_ReqSummon : IPacket
 
 public class S_AnsSummon : IPacket
 {
+	public bool canSummon;
 	public float x;
 	public float y;
 	public float reducedMana;
@@ -1095,6 +1096,8 @@ public class S_AnsSummon : IPacket
 		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 		count += sizeof(ushort);
 		count += sizeof(ushort);
+		this.canSummon = BitConverter.ToBoolean(s.Slice(count, s.Length - count));
+		count += sizeof(bool);
 		this.x = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
 		this.y = BitConverter.ToSingle(s.Slice(count, s.Length - count));
@@ -1128,6 +1131,8 @@ public class S_AnsSummon : IPacket
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_AnsSummon);
 		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.canSummon);
+		count += sizeof(bool);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.x);
 		count += sizeof(float);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.y);

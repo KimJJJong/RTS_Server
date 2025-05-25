@@ -101,6 +101,10 @@ class GameLogicManager
             if (!mana.UseMana(packet.needMana))
             {
                 Console.WriteLine("[GameLogicManager] X 마나 부족");
+                S_AnsSummon s_AnsSummon = new S_AnsSummon()
+                {
+                    canSummon = false
+                };
                 return;
             }
             packet.needMana = mana.GetMana();
@@ -112,6 +116,10 @@ class GameLogicManager
                 if (available == null)
                 {
                     Console.WriteLine($"[GameLogicManager] X No available unit in group for OID={packet.oid}");
+                    S_AnsSummon s_AnsSummon = new S_AnsSummon()
+                    {
+                        canSummon = false
+                    };
                     return;
                 }
                 packet.oid = available.Value;

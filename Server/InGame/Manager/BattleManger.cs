@@ -56,6 +56,7 @@ class BattleManager
 
             S_AnsSummon response = new S_AnsSummon
             {
+                canSummon = true,
                 oid = packet.oid,
                 reqSessionID = session.SessionID,
                 x = clientX,

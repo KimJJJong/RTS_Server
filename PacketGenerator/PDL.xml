@@ -103,6 +103,7 @@
 		<long name="ClientSendTimeMs"/>
 	</packet>
 	<packet name="S_AnsSummon">
+		<bool name="canSummon"/>
 		<float name="x"/>
 		<float name="y"/>
 		<float name="reducedMana"/>
@@ -114,6 +115,7 @@
 		<long name="ServerStartTimeMs"/>
 		<long name="ClientSendTimeMs"/>
 	</packet>
+
 <!--=========-->
 	
 
