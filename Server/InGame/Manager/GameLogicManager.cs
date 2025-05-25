@@ -40,6 +40,7 @@ class GameLogicManager
         _gameTimerManager = new GameTimerManager(_tickManager);
         _dimensionManager = new DimensionManager(_tickManager);
 
+        Init();
     }
 
     public void Init()
@@ -105,6 +106,7 @@ class GameLogicManager
                 {
                     canSummon = false
                 };
+                _room.SendToPlayer(packet.reqSessionID, s_AnsSummon.Write());
                 return;
             }
             packet.needMana = mana.GetMana();
@@ -120,6 +122,8 @@ class GameLogicManager
                     {
                         canSummon = false
                     };
+                    _room.SendToPlayer(packet.reqSessionID, s_AnsSummon.Write());
+
                     return;
                 }
                 packet.oid = available.Value;
@@ -307,7 +311,7 @@ class GameLogicManager
 
        // _dimensionManager.Update(this);
         
-        //Console.WriteLine($"CurrentTime {_gameTimerManager.RemainingSeconds}");
+        Console.WriteLine($"CurrentTime {_gameTimerManager.RemainingSeconds}");
 
         JobTimer.Instance.Push(Update, 1000);
     }

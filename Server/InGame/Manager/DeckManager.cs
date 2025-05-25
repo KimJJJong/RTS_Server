@@ -30,10 +30,10 @@ class DeckManager
         allCards.AddRange(castles);
 
         // Card Object 추가
-        foreach (var deck in _playerDecks.Values)
+        foreach (var player in _playerDecks.Keys)
         {
-            allCards.AddRange(deck);
-            foreach(var card in deck)
+            allCards.AddRange(_playerDecks[player]);
+            foreach(var card in _playerDecks[player])
             Console.WriteLine(card.ID);
         }
 

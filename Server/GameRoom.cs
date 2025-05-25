@@ -93,7 +93,6 @@ namespace Server
             {
                 GameLogic.AddPlayer(session);
             }
-            GameLogic.Init();
 
             S_StartGame startPacket = new S_StartGame();
             startPacket.gameId = RoomId;
