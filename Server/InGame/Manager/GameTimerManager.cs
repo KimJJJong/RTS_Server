@@ -19,8 +19,8 @@ class GameTimerManager
         Console.WriteLine($"[GameTimerManager] Game Start Tick: {_startTick}, Duration Tick: {_durationTick}");
     }
 
-    private int ElapsedTick => _tickManager.GetCurrentTick() - _startTick;
-    private int RemainingTick => Math.Max(0, _durationTick - ElapsedTick);
+    private long ElapsedTick => _tickManager.GetCurrentTick() - _startTick;
+    private long RemainingTick => Math.Max(0, _durationTick - ElapsedTick);
 
     public float ElapsedSeconds => ElapsedTick * _tickManager.GetTickIntervalSec();
     public float RemainingSeconds => RemainingTick * _tickManager.GetTickIntervalSec();

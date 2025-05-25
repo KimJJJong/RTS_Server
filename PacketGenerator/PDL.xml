@@ -73,8 +73,8 @@
 
 	<!-- 게임 -->
 	<packet name="S_InitGame">
-		<double name ="gameStartTime"/>
-		<double name ="duration"/>
+		<long name ="gameStartTime"/>
+		<long name ="duration"/>
 	</packet>
 	
 	<packet name ="S_CardPool">

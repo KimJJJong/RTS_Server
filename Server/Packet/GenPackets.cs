@@ -810,8 +810,8 @@ public class S_SceneLoad : IPacket
 
 public class S_InitGame : IPacket
 {
-	public double gameStartTime;
-	public double duration;
+	public long gameStartTime;
+	public long duration;
 
 	public ushort Protocol { get { return (ushort)PacketID.S_InitGame; } }
 
@@ -822,10 +822,10 @@ public class S_InitGame : IPacket
 		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 		count += sizeof(ushort);
 		count += sizeof(ushort);
-		this.gameStartTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
-		count += sizeof(double);
-		this.duration = BitConverter.ToDouble(s.Slice(count, s.Length - count));
-		count += sizeof(double);
+		this.gameStartTime = BitConverter.ToInt64(s.Slice(count, s.Length - count));
+		count += sizeof(long);
+		this.duration = BitConverter.ToInt64(s.Slice(count, s.Length - count));
+		count += sizeof(long);
 	}
 
 	public ArraySegment<byte> Write()
@@ -840,9 +840,9 @@ public class S_InitGame : IPacket
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_InitGame);
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.gameStartTime);
-		count += sizeof(double);
+		count += sizeof(long);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.duration);
-		count += sizeof(double);
+		count += sizeof(long);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;
