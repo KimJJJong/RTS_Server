@@ -1,4 +1,5 @@
 ﻿using Server;
+using System;
 using System.Collections.Generic;
 
 class PlayerManager
@@ -39,7 +40,12 @@ class PlayerManager
         _manas.TryGetValue(sessionId, out Mana mana);
         return mana;
     }
-
+    public void SetManaRegenRate(float setRegenRate)
+    {
+        Console.WriteLine($"[PlayerManager] Set Mana RegenRate : {setRegenRate}");
+        foreach (var playerManaInfo in _manas.Values)
+            playerManaInfo.SetManaRegenRate(setRegenRate);
+    }
     
 
     public void Clear()

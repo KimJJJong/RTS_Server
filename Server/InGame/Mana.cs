@@ -11,6 +11,11 @@ class Mana
         _currentMana = 0; // 초기 마나 
     }
 
+    public float SetManaRegenRate(float regenRate)
+    {
+        Console.WriteLine($"Set{ regenRate}");
+        return _regenRate = regenRate;
+    }
     public float GetMana() => _currentMana;
 
     public bool UseMana(float cost)

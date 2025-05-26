@@ -20,7 +20,7 @@ class GameLogicManager
     private OccupationManager _occupationManager;
     private TileManager _tileManager;
     private PositionCache _positionCache;
-    private DimensionManager _dimensionManager;
+    private EventManager _dimensionManager;
 
 
 
@@ -31,14 +31,14 @@ class GameLogicManager
         _tickManager = new TickManager();
         _deckManager = new DeckManager();
         _unitPoolManager = new UnitPoolManager();
-        _playerManager = new PlayerManager(_tickManager);
         _positionCache = new PositionCache(_room.Sessions.Values.Select(s =>s.SessionID).ToArray());
         _tickDrivenUnitManager = new TickDrivenUnitManager(_room, _tickManager);
         _occupationManager = new OccupationManager(this, _positionCache, _tickManager);
         _tileManager = new TileManager(_occupationManager, _positionCache);
         _battleManager = new BattleManager(_unitPoolManager, _room, _tickManager, _occupationManager);
         _gameTimerManager = new GameTimerManager(_tickManager);
-        _dimensionManager = new DimensionManager(_tickManager);
+        _playerManager = new PlayerManager(_tickManager);
+        _dimensionManager = new EventManager(_tickManager, _playerManager);
 
         Init();
     }
@@ -309,9 +309,9 @@ class GameLogicManager
         _playerManager.RegenManaAll();
         _tickDrivenUnitManager.Update(_tickManager.GetCurrentTick());
 
-       // _dimensionManager.Update(this);
+        _dimensionManager.Update(this);
         
-        Console.WriteLine($"CurrentTime {_gameTimerManager.RemainingSeconds}");
+        Console.WriteLine($"CurrentTime {_gameTimerManager.RemainingSeconds}|| CurrentTick {_tickManager.GetCurrentTick()}Tick");
 
         JobTimer.Instance.Push(Update, 1000);
     }

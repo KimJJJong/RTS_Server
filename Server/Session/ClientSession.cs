@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Net.Sockets;
 using Shared;
+using System.Collections.Generic;
 
 namespace Server
 {
@@ -16,6 +17,8 @@ namespace Server
         public int SessionID { get; set; }
         public GameRoom Room { get; set; }
         public Lobby Lobby { get; set; }
+        public List<Card> OwnDeck { get; set; }
+
         public override void OnConnected(EndPoint endPoint)
         {
             // tmp : Check PlayerNum

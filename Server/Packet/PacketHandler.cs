@@ -115,21 +115,27 @@ class PacketHandler
         GameRoom gameRoom = clientSession.Room;
         clientSession.isReady = true;
 
-        foreach(var card in c_SetCardPool.cardCombinations)
-        {
-            Console.WriteLine($"{clientSession.SessionID} in {card.uid}");
-        }
+        
+        List<Card> tmpCard = new List<Card>();
+        foreach (var cardData in c_SetCardPool.cardCombinations)
+            tmpCard.Add(new Card(cardData.uid, cardData.lv));
 
+        clientSession.OwnDeck = tmpCard;
+
+        foreach (var card in tmpCard)
+        {
+            Console.WriteLine($"{clientSession.SessionID} in {card.ID}");
+        }
 
         try
         {
             if (gameRoom.Sessions.Count == 2)
             {
-                Console.WriteLine("GetTwo");
                 foreach (ClientSession _session in gameRoom.Sessions.Values)
                 {
                     if (_session.isReady == false) return;
                 }
+                Console.WriteLine("GetTwo");
                 clientSession.Room.ReadyStartGame();
                 foreach(var player in gameRoom.Sessions.Values)
                 clientSession.Room.GameLogic.OnReceiveDeck(player, c_SetCardPool);

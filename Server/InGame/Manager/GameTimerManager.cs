@@ -4,8 +4,8 @@ using System.Collections.Generic;
 class GameTimerManager
 {
     private TickManager _tickManager;
-    private long _startTick;
-    private const int _durationTick = 9000; // 예: 300초 * 30Tick = 9000Tick
+    private int _startTick;
+    private const int _durationTick = 9091; // 예: 300초 * 30Tick = 9000Tick
 
     
     public GameTimerManager(TickManager tickManager)
@@ -15,12 +15,12 @@ class GameTimerManager
 
     public void Init()
     {
-        _startTick = _tickManager.GetStartTimeMs();
+        _startTick = _tickManager.GetCurrentTick();
         Console.WriteLine($"[GameTimerManager] Game Start Tick: {_startTick}, Duration Tick: {_durationTick}");
     }
 
-    private long ElapsedTick => _tickManager.GetCurrentTick() - _startTick;
-    private long RemainingTick => Math.Max(0, _durationTick - ElapsedTick);
+    public int ElapsedTick => _tickManager.GetCurrentTick() - _startTick;
+    public int RemainingTick => Math.Max(0, _durationTick - ElapsedTick);
 
     public float ElapsedSeconds => ElapsedTick * _tickManager.GetTickIntervalSec();
     public float RemainingSeconds => RemainingTick * _tickManager.GetTickIntervalSec();
@@ -31,7 +31,7 @@ class GameTimerManager
     {
         return new S_InitGame
         {
-            gameStartTime = _tickManager.GetStartTimeMs(),
+            gameStartTime = _startTick/*_tickManager.GetStartTimeMs()*/,
             duration = _durationTick
         };
     }

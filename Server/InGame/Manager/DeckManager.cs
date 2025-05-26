@@ -15,8 +15,8 @@ class DeckManager
 
         //_playerDecks[session.SessionID].Clear();
 
-        foreach (var cardData in packet.cardCombinations)
-            _playerDecks[session.SessionID].Add(new Card(cardData.uid, cardData.lv));
+        foreach (var cardData in session.OwnDeck)
+            _playerDecks[session.SessionID].Add(new Card(cardData.ID, cardData.LV));
 
         return _playerDecks.Count == 2;
     }
