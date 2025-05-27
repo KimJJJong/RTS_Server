@@ -249,7 +249,7 @@ class PacketHandler
 
         try
         {
-            //Console.WriteLine($"[AttackHandler] 요청: {req.attackerOid} -> {req.targetOid}, Tick: {req.clientAttackedTick}");
+            Console.WriteLine($"[AttackHandler] 요청: {req.attackerOid} -> {req.targetOid}, Tick: {req.clientAttackedTick}");
             logic.OnReciveAttack(client, req);
         }
         catch (Exception ex)

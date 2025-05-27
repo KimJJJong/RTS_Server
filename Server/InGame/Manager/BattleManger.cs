@@ -12,8 +12,8 @@ class BattleManager
     private TickManager _tickManager;
     private OccupationManager _occupationManager;
 
-    private int HpDecreassTick = 15;  // 근접 공격 체력 decreass Tick Delay
-    private int HpDecreassProjectileTick = 3; // 투사체 공격 체력 decreass Tick Delay
+    private int HpDecreassTick = 10;  // 근접 공격 체력 decreass Tick Delay
+    private int HpDecreassProjectileTick = 15; // 투사체 공격 체력 decreass Tick Delay
     private int SummonProjectileDelayTick = 5; // 투사체 생성 Tick Delay
 
     private int WallMariaHitTick = 3; // 월마리아 공격 Tick Delay 
@@ -180,11 +180,11 @@ class BattleManager
     #region AttackLogic
     private void ApplyDamage(Unit attacker, Unit target, float damage,int clientTick, int delayTick)
     {
-        if (attacker == null || target == null)
+  /*      if (*//*attacker == null || *//*target == null)
         {
             Console.WriteLine($"[BattleManager]Null attacker or target. Attacker: {attacker?.OId}, Target: {target?.OId}");
             return;
-        }
+        }*/
 
         float curHp = target.CurrentHP - damage;
         bool isDead = curHp <= 0;
@@ -192,7 +192,7 @@ class BattleManager
 
         if (isDead)
         {
-            target.Deactivate(clientTick+ 5);
+            target.Deactivate(clientTick);
         }
         else
         {
@@ -206,7 +206,7 @@ class BattleManager
                 attackVerifyTick = effectTick
             };
 
-            Console.WriteLine($"[Hit] {attacker.OId} → {target.OId} | Damage: {damage}, HP: {curHp}, Tick: {effectTick}");
+            Console.WriteLine($"[Hit Send] {attacker.OId} → {target.OId} | Damage: {damage}, HP: {curHp}, Tick: {effectTick}");
             _room.BroadCast(response.Write());
         }
     }

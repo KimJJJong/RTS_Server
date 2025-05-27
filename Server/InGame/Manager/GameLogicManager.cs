@@ -311,7 +311,7 @@ class GameLogicManager
 
         _dimensionManager.Update(this);
         
-        Console.WriteLine($"CurrentTime {_gameTimerManager.RemainingSeconds}|| CurrentTick {_tickManager.GetCurrentTick()}Tick");
+        //Console.WriteLine($"CurrentTime {_gameTimerManager.RemainingSeconds}|| CurrentTick {_tickManager.GetCurrentTick()}Tick");
 
         JobTimer.Instance.Push(Update, 1000);
     }

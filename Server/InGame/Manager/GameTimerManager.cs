@@ -5,7 +5,7 @@ class GameTimerManager
 {
     private TickManager _tickManager;
     private int _startTick;
-    private const int _durationTick = 9091; // 예: 300초 * 30Tick = 9000Tick
+    private const int _durationTick = 7273; // 예: 300초 * 30Tick = 9000Tick
 
     
     public GameTimerManager(TickManager tickManager)

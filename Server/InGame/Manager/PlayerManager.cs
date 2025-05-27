@@ -23,16 +23,23 @@ class PlayerManager
 
     public void RegenManaAll()
     {
-        foreach (var mana in _manas)
+        try
         {
-            mana.Value.RegenMana();
-            S_ManaUpdate packet = new S_ManaUpdate
+            foreach (var mana in _manas)
             {
-                currentMana = mana.Value.GetMana(),
-                serverTick = _tickManager.GetCurrentTick()
-            };
-            
-            _sessions[mana.Key].Send(packet.Write());
+                mana.Value.RegenMana();
+                S_ManaUpdate packet = new S_ManaUpdate
+                {
+                    currentMana = mana.Value.GetMana(),
+                    serverTick = _tickManager.GetCurrentTick()
+                };
+
+                _sessions[mana.Key].Send(packet.Write());
+            }
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine($"[PlayerManager] : {ex}");
         }
     }
     public Mana GetMana(int sessionId)
