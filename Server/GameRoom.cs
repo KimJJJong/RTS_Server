@@ -33,7 +33,7 @@ namespace Server
 
         public void BroadCast(ArraySegment<byte> segment)
         {
-            foreach (var session in _sessions.Values)
+            foreach (var session in _sessions?.Values)
             {
                 try
                 {
@@ -124,8 +124,9 @@ namespace Server
             //_sessions.Clear();
             LogManager.Instance.LogInfo("GameRoom", $"[{RoomId}] Distroy");
             _sessions = null;
-           // Console.WriteLine($"방 {RoomId} 게임 종료");
-            GameLogic?.EndGame(-1); // -1 는 비기는 거 
+            // Console.WriteLine($"방 {RoomId} 게임 종료");
+            GameLogic?.EndGame(0); // -1 는 비기는 거 
+            //GameLogic.GameOver = true;
             GameLogic = null;
             _roomState = RoomState.Finished;
             // 필요한 후처리 추가 가능

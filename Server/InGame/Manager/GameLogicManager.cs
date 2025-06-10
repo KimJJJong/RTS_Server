@@ -99,7 +99,10 @@ class GameLogicManager
                 return;
             }
 
-            if (!mana.UseMana(packet.needMana))
+            float available = mana.GetMana();
+            bool success = mana.UseMana(packet.needMana);
+
+            if ( !success )
             {
                 Console.WriteLine("[GameLogicManager] X 마나 부족");
                 S_AnsSummon s_AnsSummon = new S_AnsSummon()
@@ -114,8 +117,8 @@ class GameLogicManager
             Unit unit = _unitPoolManager.GetUnit(packet.oid);
             if (unit?.IsActive == true)     // 이거 그 oid 겹치는거 소환 요청 했을때 처리
             {
-                int? available = _unitPoolManager.GetAvailableOid(packet.oid);
-                if (available == null)
+                int? _available = _unitPoolManager.GetAvailableOid(packet.oid);
+                if (_available == null)
                 {
                     Console.WriteLine($"[GameLogicManager] X No available unit in group for OID={packet.oid}");
                     S_AnsSummon s_AnsSummon = new S_AnsSummon()
@@ -126,7 +129,7 @@ class GameLogicManager
 
                     return;
                 }
-                packet.oid = available.Value;
+                packet.oid = _available.Value;
                 unit = _unitPoolManager.GetUnit(packet.oid);
             }
 
@@ -313,6 +316,8 @@ class GameLogicManager
         
         //Console.WriteLine($"CurrentTime {_gameTimerManager.RemainingSeconds}|| CurrentTick {_tickManager.GetCurrentTick()}Tick");
 
+        if(_gameTimerManager.IsTimeUp())   _occupationManager.CheckFinalWinner();
+
         JobTimer.Instance.Push(Update, 1000);
     }
 
@@ -332,6 +337,25 @@ class GameLogicManager
 
     public void EndGame(int winnerSessionId)
     {
+
+        if (_room.Sessions?.Count == 2)
+        {
+             S_GameOver s_GameOver = new S_GameOver() 
+            { 
+            winnerId = winnerSessionId,
+            resultMessage = ":<",
+            };
+            _room.BroadCast(s_GameOver.Write());
+        }
+        else if( _room.Sessions?.Count == 1)
+        {
+            S_GameOver s_GameOver = new S_GameOver()
+            {
+                winnerId = winnerSessionId,
+                resultMessage = ":<",
+            };
+            _room.SendToPlayer( winnerSessionId , s_GameOver.Write());
+        }
         _gameOver = true;
         _playerManager.Clear();
         _deckManager.Clear();
@@ -339,6 +363,9 @@ class GameLogicManager
         _occupationManager.Clear();
         _tickDrivenUnitManager.Clear();
         _tileManager.Clear();
+
+
+
         Console.WriteLine($"[GameLogicManager] Game ended. Winner: Session {winnerSessionId}");
     }
     public void SendToPlayer(int sessionId, ArraySegment<byte> segment) => _room.SendToPlayer(sessionId, segment);

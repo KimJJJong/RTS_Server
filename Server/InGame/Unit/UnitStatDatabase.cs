@@ -21,16 +21,16 @@ public static class UnitStatDatabase
     public static void Load()
     {
         // Joseon
-        _stats[("U-JOS-001", 1)] = new UnitStat { UnitID = "U-JOS-001", Level = 1, MaxHP = 160, Speed = 0.5f, AttackPower = 20, AttackRange = 0.5f, IsProjectile = false };
-        _stats[("U-JOS-002", 1)] = new UnitStat { UnitID = "U-JOS-002", Level = 1, MaxHP = 100, Speed = 0.8f, AttackPower = 60, AttackRange = 0.3f, IsProjectile = false };
-        _stats[("U-JOS-003", 1)] = new UnitStat { UnitID = "U-JOS-003", Level = 1, MaxHP = 40,  Speed = 0.6f, AttackPower = 0,  AttackRange =   2f, IsProjectile = false };
+        _stats[("U-JOS-001", 1)] = new UnitStat { UnitID = "U-JOS-001", Level = 1, MaxHP = 170, Speed = 0.5f, AttackPower = 20, AttackRange = 0.5f, IsProjectile = false };
+        _stats[("U-JOS-002", 1)] = new UnitStat { UnitID = "U-JOS-002", Level = 1, MaxHP = 100, Speed = 0.8f, AttackPower = 40, AttackRange = 0.3f, IsProjectile = false };
+        _stats[("U-JOS-003", 1)] = new UnitStat { UnitID = "U-JOS-003", Level = 1, MaxHP = 50,  Speed = 0.6f, AttackPower = 0,  AttackRange =   2f, IsProjectile = false };
         _stats[("U-JOS-004", 1)] = new UnitStat { UnitID = "U-JOS-004", Level = 1, MaxHP = 80,  Speed = 0.5f, AttackPower = 0,  AttackRange = 1.4f, IsProjectile = false };
 
         // England
-        _stats[("U-ENG-001", 1)] = new UnitStat { UnitID = "U-ENG-001", Level = 1, MaxHP = 180, Speed = 0.7f, AttackPower = 35, AttackRange = 0.8f, IsProjectile = false};
-        _stats[("U-ENG-002", 1)] = new UnitStat { UnitID = "U-ENG-002", Level = 1, MaxHP = 120, Speed = 0.6f, AttackPower = 50, AttackRange = 1.2f, IsProjectile = false };
-        _stats[("U-ENG-003", 1)] = new UnitStat { UnitID = "U-ENG-003", Level = 1, MaxHP =  60, Speed = 0.4f, AttackPower =  0, AttackRange = 2.8f, IsProjectile = false };
-        _stats[("U-ENG-004", 1)] = new UnitStat { UnitID = "U-ENG-004", Level = 1, MaxHP = 300, Speed = 0.5f, AttackPower = 30, AttackRange =   1f, IsProjectile = false };
+        _stats[("U-ENG-001", 1)] = new UnitStat { UnitID = "U-ENG-001", Level = 1, MaxHP = 165, Speed = 0.4f, AttackPower = 35, AttackRange = 0.8f, IsProjectile = false};
+        _stats[("U-ENG-002", 1)] = new UnitStat { UnitID = "U-ENG-002", Level = 1, MaxHP = 145, Speed = 0.3f, AttackPower = 50, AttackRange = 1.2f, IsProjectile = false };
+        _stats[("U-ENG-003", 1)] = new UnitStat { UnitID = "U-ENG-003", Level = 1, MaxHP =  65, Speed = 0.4f, AttackPower =  0, AttackRange = 2.8f, IsProjectile = false };
+        _stats[("U-ENG-004", 1)] = new UnitStat { UnitID = "U-ENG-004", Level = 1, MaxHP = 190, Speed = 0.4f, AttackPower = 25, AttackRange =   1f, IsProjectile = false };
 
         // Spell
         _stats[("SP-PNT-001", 1)] = new UnitStat { UnitID = "SP-PNT-001", Level = 1, MaxHP = -1, Speed = -1, AttackPower = -1, AttackRange = -1, IsProjectile = false };

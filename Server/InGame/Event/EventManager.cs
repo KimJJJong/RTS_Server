@@ -12,7 +12,7 @@ class EventManager
     public const long  Morning   =   1818;
     public const long  Afternoon =   1818 * 2;
     public const long  Evening   =   1818 * 3;
-    public const long  FeverTime =   1818 * 1;
+    public const long  FeverTime =   1818 * 3;
     public EventManager(TickManager tickManager, PlayerManager playerManager)
     {
         _tickManager   = tickManager;
@@ -94,7 +94,7 @@ class EventManager
     public void FeverActiveHandler()
     {
         Console.WriteLine("Fever");
-        _playerManager.SetManaRegenRate(1f);
+        _playerManager.SetManaRegenRate(0.6f);
     }
 
     public void Clear()

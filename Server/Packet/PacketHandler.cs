@@ -52,10 +52,12 @@ class PacketHandler
     public static void C_MatchCancelHandler(PacketSession session, IPacket packet)
     {
         ClientSession clientSession = session as ClientSession;
-       
+
+        clientSession.isMatching = false;
+
         if (clientSession == null)
             return;
-
+        Console.WriteLine("LevaMatchQueue");
         Program.Lobby.Push(() => Program.Lobby.LeaveMatchQueue(clientSession));
     }
     public static void C_CreateRoomHandler(PacketSession session, IPacket packet)
@@ -176,7 +178,7 @@ class PacketHandler
                 StartTime = 180 + 2d
             };
 
-            room.BroadCast(response.Write());
+            room?.BroadCast(response.Write());
         }
         else
         {
@@ -287,7 +289,7 @@ class PacketHandler
                 return;
             }
 
-            room.Leave(client);
+                room?.Leave(client);
         
 
 

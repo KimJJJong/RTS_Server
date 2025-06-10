@@ -160,9 +160,15 @@ class OccupationManager
     {
         var sorted = _occupation.OrderByDescending(kvp => kvp.Value).ToList();
         if (sorted[0].Value > sorted[1].Value)
+        {
             _logic.EndGame(sorted[0].Key);
+            Console.WriteLine($"Player {sorted[0].Key} Win");
+        }
         else
+        {
             _logic.EndGame(-1); // 무승부
+            Console.WriteLine("비김 ㅋ");
+        }
     }
 
     public float GetOccupation(int sessionId)

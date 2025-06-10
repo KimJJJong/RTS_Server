@@ -12,8 +12,9 @@ class BattleManager
     private TickManager _tickManager;
     private OccupationManager _occupationManager;
 
-    private int HpDecreassTick = 10;  // 근접 공격 체력 decreass Tick Delay
-    private int HpDecreassProjectileTick = 15; // 투사체 공격 체력 decreass Tick Delay
+
+    private int HpDecreassTick = 15;  // 근접 공격 체력 decreass Tick Delay
+    private int HpDecreassProjectileTick = 3; // 투사체 공격 체력 decreass Tick Delay
     private int SummonProjectileDelayTick = 5; // 투사체 생성 Tick Delay
 
     private int WallMariaHitTick = 3; // 월마리아 공격 Tick Delay 
@@ -192,7 +193,7 @@ class BattleManager
 
         if (isDead)
         {
-            target.Deactivate(clientTick);
+            target.Deactivate(clientTick+8);
         }
         else
         {
