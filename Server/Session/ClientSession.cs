@@ -10,8 +10,9 @@ public class ClientSession : PacketSession
     public bool isReady { get; set; }
     public bool isLoad {  get; set; }
     public bool isMatching {  get; set; }
-    public int SessionID { get; set; }
+    public string UserID { get; set; }
     public GameRoom Room { get; set; }
+    public int PlayingID {  get; set; }
     public List<Card> OwnDeck {  get; set; }
 
     public override void OnConnected(EndPoint endPoint)
@@ -25,7 +26,7 @@ public class ClientSession : PacketSession
 
         //Program.Room.Push(() => Program.Room.Enter(this));
         //Program.Room.Enter(this);
-        Console.WriteLine($"GameServer와 연결되었습니다: {endPoint}");
+        Console.WriteLine($"GameServer와 ClientSession 이 연결되었습니다: {endPoint}");
 
 //    S_ReqSessionInit reqPacket = new S_ReqSessionInit();
 
@@ -46,7 +47,7 @@ public class ClientSession : PacketSession
         if (Room != null)
         {
             GameRoom room = Room;
-            room.RemoveClient(SessionID);
+            room.RemoveClient(PlayingID);
             Room = null;
         }
 

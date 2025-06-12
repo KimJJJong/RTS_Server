@@ -12,7 +12,7 @@ class PacketHandler
 
     public static void C_ReqJoinGameServerHandler(PacketSession session, IPacket packet)
     {
-        C_ReqJoinGameServer reqPacket = packet as C_ReqJoinGameServer;
+   /*     C_ReqJoinGameServer reqPacket = packet as C_ReqJoinGameServer;
         ClientSession clientSession = session as ClientSession;
 
         int playerId = reqPacket.playerUid;
@@ -26,7 +26,7 @@ class PacketHandler
 
         if ( gameRoom.AddClient(playerId, clientSession) is false) return;
 
-
+*/
     }
 
     //public static void C_MatchRequestHandler(PacketSession session, IPacket packet)

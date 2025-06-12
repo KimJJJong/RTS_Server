@@ -8,7 +8,8 @@ namespace Server
 {
     class Program
     {
-        static Listener _listener = new Listener();
+        static Listener _clientListener = new Listener();
+        static Listener _matchingListener = new Listener();
         //static HttpServer _httpServer;
 
         //static void FlushLobby()
@@ -17,7 +18,7 @@ namespace Server
         //}
         static void FlushMatchQueue()
         {
-            while (true)
+    /*        while (true)
             {
                 var match = RedisMatchQueue.Dequeue();
                 if (match == null)
@@ -26,7 +27,7 @@ namespace Server
                 string roomId = GameRoomManager.Instance.CreateRoom(match);
                 Console.WriteLine($"[GameServer] Created room {roomId} for players: {string.Join(", ", match)}");
             }
-            JobTimer.Instance.Push(FlushMatchQueue, 500);
+            JobTimer.Instance.Push(FlushMatchQueue, 500);*/
         }
 
         static void Main(string[] args)
@@ -37,22 +38,29 @@ namespace Server
                 LogManager.Instance.Shutdown();
             };
 
+            //TCP Listener (내부 매칭 서버 연결)
+            string mHost = Dns.GetHostName();
+            IPHostEntry mIpHost = Dns.GetHostEntry(mHost);
+            IPEndPoint mEndPoint = new IPEndPoint(IPAddress.Parse("192.168.0.2"), 13222);
+
+
             // TCP Listener (클라이언트 연결 처리)
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
             IPAddress ipAddr = ipHost.AddressList[0];
-            IPEndPoint endPoint = new IPEndPoint(ipAddr, 13221);
+            IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("192.168.0.2")/*ipAddr*/, 13221);
 
-            _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
+
+            _clientListener.Init(endPoint, () => { return SessionManager.Instance.Generate<ClientSession>(); });
             LogManager.Instance.LogInfo("Program", "[Game Server Start]");
-            Console.WriteLine("Listening...");
+            Console.WriteLine("ClientSession Listening...");
 
-            //JobTimer.Instance.Push(FlushLobby);
-            JobTimer.Instance.Push(FlushMatchQueue);
+            _matchingListener.Init(mEndPoint, () => { return SessionManager.Instance.Generate<MatchSession>(); } );
+            LogManager.Instance.LogInfo("Program", "[Matching Stand By Start]");
+            Console.WriteLine("MatchingSession Listening...");
 
-            // HTTP API 서버 실행 (로비 서버로부터 매칭 수신)
-            //_httpServer = new HttpServer();
-            //await _httpServer.Start(13222);
+            
+  
 
             while (true)
             {

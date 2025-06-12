@@ -1,21 +1,34 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
-using ServerCore;
-using Shared;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
-    class Program
-    {
-        static HttpServer _httpServer;
+var builder = WebApplication.CreateBuilder(args);
 
-        static async Task Main(string[] args)
-        {
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5000);
+});
+
+// 로그 레벨 수동 조정
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.SetMinimumLevel(LogLevel.Information);
+
+// 특정 Provider 레벨 따로 조정
+builder.Logging.AddFilter("Microsoft", LogLevel.Warning);
+builder.Logging.AddFilter("Microsoft.Hosting.Lifetime", LogLevel.Warning);
 
 
-            // HTTP API 서버 실행 (로비 서버로부터 매칭 수신)
-            _httpServer = new HttpServer();
-            await _httpServer.Start(13222);
+
+builder.Services.AddSingleton<MatchQueue>();
+builder.Services.AddSingleton<RoomMapping>();
+builder.Services.AddHostedService<MatchMakerService>();
+builder.Services.AddSingleton<GameServerConnector>();
+builder.Services.AddControllers();
 
 
-        }
-    }
+
+var app = builder.Build();
+app.MapControllers();
+app.Run();

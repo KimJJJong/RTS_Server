@@ -10,12 +10,12 @@ using System.Net.Sockets;
         private Dictionary<string, IGameRoom> _rooms = new Dictionary<string, IGameRoom>();
 
         // Room 생성 <HTTP API 호출>
-        public string CreateRoom(List<int> players)
+        public string CreateRoom(List<string> players)
         {
             string roomId = Guid.NewGuid().ToString().Substring(0, 5);
             IGameRoom room = GameRoomFactory.CreateRoom(roomId, players);
             _rooms[roomId] = room;
-            Console.WriteLine($"[GameRoomManager] Room {roomId} created for Players: {string.Join(", ", players)}");
+            Console.WriteLine($"[GameRoomManager] Room {roomId} created for Players: {string.Join(", ", players)} but join players");
             return roomId;
         }
 
