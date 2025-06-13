@@ -1,76 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <PDL>
-	<!-- 로그인 -->
-	<packet name="C_LoginAuth">
-		<string name="accessToken"/>
-	</packet>
-	
-	<packet name="C_Login">
-		<string name="username"/>
-		<string name="password"/>
-	</packet>
-	<packet name="S_Login">
-		<bool name="success"/>
-		<string name="message"/>
-	</packet>
-
-	<!-- 로비 -->
-	<packet name="C_EnterLobby">
-		<int name="userId"/>
-	</packet>
-	<packet name="S_EnterLobby">
-		<list name="roomList">
-			<int name="roomId"/>
-		</list>
-	</packet>
-	<packet name="C_CreateRoom">
-		<string name="roomName"/>
-	</packet>
-	<packet name="S_CreateRoom">
-		<bool name="success"/>
-		<string name="roomId"/>
-	</packet>
-	<packet name="C_JoinRoom">
-		<string name="roomId"/>
-	</packet>
-	<packet name="S_JoinRoom">
-		<int name="sessionID"/>
-		<string name="roomId"/>
-	</packet>
-
-	<packet name ="C_MatchRequest">
-	</packet>
-
-	<packet name ="C_MatchCancel">
-	</packet>
-	
-	<!-- 준비 상태 -->
-	<packet name="C_Ready">
-		<bool name="isReady"/>
-	</packet>
-	<packet name="S_Ready">
-	</packet>
-	<packet name="S_StartGame">
-		<string name="gameId"/>
-	</packet>
-	
-	
-	<packet name ="C_SetCardPool">
-		<list name="cardCombination">
-			<int name ="lv"/>
-			<string name="uid"/>
-		</list>
-	</packet>
-	
-	<packet name ="C_SceneLoaded">
-		<bool name="isLoad"/>
-	</packet>
-	
-	<packet name="S_SceneLoad">
-		<double name="StartTime"/>
-		<double name="ServerSendTime"/>
-	</packet>
-
 	<!-- 게임 -->
 	<packet name="S_InitGame">
 		<double name ="gameStartTime"/>
@@ -93,7 +22,29 @@
 			<float name="y"/>
 		</list>
 	</packet>
-<!-- UnitSummon -->
+	
+	<!-- InitSetting -->
+	<packet name ="C_ReqJoinGameServer">
+		<int name="playerUid"/>
+		<string name="roomId"/>
+		<list name="playerOwnCards">
+			<int name ="lv"/>
+			<string name="uid"/>
+		</list>
+	</packet>
+	
+	<packet name="S_GameInitBundle">
+		<double name="gameStartTime"/>
+		<double name="duration"/>
+		<int name="size"/>
+		<list name="cardCombinations">
+			<int name="lv"/>
+			<string name="uid"/>
+		</list>
+	</packet>
+	<!--=========-->
+
+	<!-- UnitSummon -->
 	<packet name="C_ReqSummon">
 		<float name="x"/>
 		<float name="y"/>

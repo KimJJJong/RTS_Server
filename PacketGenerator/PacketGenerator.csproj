@@ -14,16 +14,4 @@
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="PacketExcelGenerator.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="PacketExcelGenerator.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="EPPlus" Version="7.5.3" />
-  </ItemGroup>
-
 </Project>

@@ -19,26 +19,14 @@ public class PacketManager
 		
 	public void Register()
 	{
-		_makeFunc.Add((ushort)PacketID.S_Login, MakePacket<S_Login>);
-		_handler.Add((ushort)PacketID.S_Login, PacketHandler.S_LoginHandler);
-		_makeFunc.Add((ushort)PacketID.S_EnterLobby, MakePacket<S_EnterLobby>);
-		_handler.Add((ushort)PacketID.S_EnterLobby, PacketHandler.S_EnterLobbyHandler);
-		_makeFunc.Add((ushort)PacketID.S_CreateRoom, MakePacket<S_CreateRoom>);
-		_handler.Add((ushort)PacketID.S_CreateRoom, PacketHandler.S_CreateRoomHandler);
-		_makeFunc.Add((ushort)PacketID.S_JoinRoom, MakePacket<S_JoinRoom>);
-		_handler.Add((ushort)PacketID.S_JoinRoom, PacketHandler.S_JoinRoomHandler);
-		_makeFunc.Add((ushort)PacketID.S_Ready, MakePacket<S_Ready>);
-		_handler.Add((ushort)PacketID.S_Ready, PacketHandler.S_ReadyHandler);
-		_makeFunc.Add((ushort)PacketID.S_StartGame, MakePacket<S_StartGame>);
-		_handler.Add((ushort)PacketID.S_StartGame, PacketHandler.S_StartGameHandler);
-		_makeFunc.Add((ushort)PacketID.S_SceneLoad, MakePacket<S_SceneLoad>);
-		_handler.Add((ushort)PacketID.S_SceneLoad, PacketHandler.S_SceneLoadHandler);
 		_makeFunc.Add((ushort)PacketID.S_InitGame, MakePacket<S_InitGame>);
 		_handler.Add((ushort)PacketID.S_InitGame, PacketHandler.S_InitGameHandler);
 		_makeFunc.Add((ushort)PacketID.S_CardPool, MakePacket<S_CardPool>);
 		_handler.Add((ushort)PacketID.S_CardPool, PacketHandler.S_CardPoolHandler);
 		_makeFunc.Add((ushort)PacketID.S_GameUpdate, MakePacket<S_GameUpdate>);
 		_handler.Add((ushort)PacketID.S_GameUpdate, PacketHandler.S_GameUpdateHandler);
+		_makeFunc.Add((ushort)PacketID.S_GameInitBundle, MakePacket<S_GameInitBundle>);
+		_handler.Add((ushort)PacketID.S_GameInitBundle, PacketHandler.S_GameInitBundleHandler);
 		_makeFunc.Add((ushort)PacketID.S_AnsSummon, MakePacket<S_AnsSummon>);
 		_handler.Add((ushort)PacketID.S_AnsSummon, PacketHandler.S_AnsSummonHandler);
 		_makeFunc.Add((ushort)PacketID.S_VerifyCapture, MakePacket<S_VerifyCapture>);

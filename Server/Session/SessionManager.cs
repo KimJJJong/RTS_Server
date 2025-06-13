@@ -6,56 +6,47 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 
-namespace Server
-{
+
+
     class SessionManager
     {
         static SessionManager _session = new SessionManager();
         public static SessionManager Instance { get { return _session; } }
 
         int _sessionId = 0;
-        Dictionary<int, ClientSession> _sessions = new Dictionary<int, ClientSession>();
+        Dictionary<int, PacketSession> _sessions = new Dictionary<int, PacketSession>();
+    
         object _lock = new object();
 
-        public ClientSession Generate()
+        public T Generate<T>() where T : PacketSession, new()
         {
             lock (_lock)
             {
                 int sessionId = ++_sessionId;
 
-                ClientSession session = new ClientSession();
+                T session = new T();
                 session.SessionID = sessionId;
 
                 _sessions.Add(sessionId, session);
-                Console.WriteLine($"Connected : {sessionId}");
+            Console.WriteLine($"[SessionManager] Connected: {sessionId} ({typeof(T).Name})");
 
-                return session;
+            return session;
 
             }
         }
-        public void Add(ClientSession clientSession)
+
+
+        public PacketSession ClientSessionFind(int id)
         {
             lock (_lock)
             {
-                int sessionId = ++_sessionId;
-
-                clientSession.SessionID = sessionId;
-
-                _sessions.Add(sessionId, clientSession);
-                Console.WriteLine($"Connected : {sessionId}");
-            }
-        }
-        public ClientSession Find(int id)
-        {
-            lock (_lock)
-            {
-                ClientSession session = null;
+            PacketSession session = null;
                 _sessions.TryGetValue(id, out session);
                 return session;
             }
         }
 
-        public void Remove(ClientSession session)
+        public void Remove(PacketSession session)
         {
             lock (_lock)
             {
@@ -63,5 +54,3 @@ namespace Server
             }
         }
     }
-}
-  

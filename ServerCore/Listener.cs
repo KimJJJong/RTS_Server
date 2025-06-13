@@ -8,7 +8,7 @@ namespace ServerCore
 	public class Listener
 	{
 		Socket _listenSocket;
-		Func<Session> _sessionFactory;
+		Func<PacketSession> _sessionFactory;
 		/// <summary>
 		/// Init ListenerSocket on the Server
 		/// </summary>
@@ -16,7 +16,7 @@ namespace ServerCore
 		/// <param name="sessionFactory">Function to create a new session for incoming client connections</param>
 		/// <param name="register">ListenerNum</param>
 		/// <param name="backlog">backLog</param>
-		public void Init(IPEndPoint endPoint, Func<Session> sessionFactory, int register = 10, int backlog = 100)
+		public void Init(IPEndPoint endPoint, Func<PacketSession> sessionFactory, int register = 10, int backlog = 100)
 		{
             // Create the Listener socket
             _listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);

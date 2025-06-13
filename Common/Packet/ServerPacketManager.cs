@@ -19,26 +19,8 @@ public class PacketManager
 		
 	public void Register()
 	{
-		_makeFunc.Add((ushort)PacketID.C_LoginAuth, MakePacket<C_LoginAuth>);
-		_handler.Add((ushort)PacketID.C_LoginAuth, PacketHandler.C_LoginAuthHandler);
-		_makeFunc.Add((ushort)PacketID.C_Login, MakePacket<C_Login>);
-		_handler.Add((ushort)PacketID.C_Login, PacketHandler.C_LoginHandler);
-		_makeFunc.Add((ushort)PacketID.C_EnterLobby, MakePacket<C_EnterLobby>);
-		_handler.Add((ushort)PacketID.C_EnterLobby, PacketHandler.C_EnterLobbyHandler);
-		_makeFunc.Add((ushort)PacketID.C_CreateRoom, MakePacket<C_CreateRoom>);
-		_handler.Add((ushort)PacketID.C_CreateRoom, PacketHandler.C_CreateRoomHandler);
-		_makeFunc.Add((ushort)PacketID.C_JoinRoom, MakePacket<C_JoinRoom>);
-		_handler.Add((ushort)PacketID.C_JoinRoom, PacketHandler.C_JoinRoomHandler);
-		_makeFunc.Add((ushort)PacketID.C_MatchRequest, MakePacket<C_MatchRequest>);
-		_handler.Add((ushort)PacketID.C_MatchRequest, PacketHandler.C_MatchRequestHandler);
-		_makeFunc.Add((ushort)PacketID.C_MatchCancel, MakePacket<C_MatchCancel>);
-		_handler.Add((ushort)PacketID.C_MatchCancel, PacketHandler.C_MatchCancelHandler);
-		_makeFunc.Add((ushort)PacketID.C_Ready, MakePacket<C_Ready>);
-		_handler.Add((ushort)PacketID.C_Ready, PacketHandler.C_ReadyHandler);
-		_makeFunc.Add((ushort)PacketID.C_SetCardPool, MakePacket<C_SetCardPool>);
-		_handler.Add((ushort)PacketID.C_SetCardPool, PacketHandler.C_SetCardPoolHandler);
-		_makeFunc.Add((ushort)PacketID.C_SceneLoaded, MakePacket<C_SceneLoaded>);
-		_handler.Add((ushort)PacketID.C_SceneLoaded, PacketHandler.C_SceneLoadedHandler);
+		_makeFunc.Add((ushort)PacketID.C_ReqJoinGameServer, MakePacket<C_ReqJoinGameServer>);
+		_handler.Add((ushort)PacketID.C_ReqJoinGameServer, PacketHandler.C_ReqJoinGameServerHandler);
 		_makeFunc.Add((ushort)PacketID.C_ReqSummon, MakePacket<C_ReqSummon>);
 		_handler.Add((ushort)PacketID.C_ReqSummon, PacketHandler.C_ReqSummonHandler);
 		_makeFunc.Add((ushort)PacketID.C_TargetCapture, MakePacket<C_TargetCapture>);

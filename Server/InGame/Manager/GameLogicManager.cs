@@ -5,7 +5,7 @@ using System.Linq;
 using Server;
 
 
-class GameLogicManager
+public class GameLogicManager
 {
     private GameRoom _room;
     private bool _gameOver;
@@ -14,7 +14,7 @@ class GameLogicManager
     private DeckManager _deckManager;
     private BattleManager _battleManager;
     private UnitPoolManager _unitPoolManager;
-    private GameTimerManager _gameTimerManager;
+    private TimerManager _timerManager;
     private TickDrivenUnitManager _tickDrivenUnitManager;
     private OccupationManager _occupationManager;
     private TileManager _tileManager;
@@ -31,52 +31,35 @@ class GameLogicManager
         _playerManager = new PlayerManager();
         _deckManager = new DeckManager();
         _unitPoolManager = new UnitPoolManager();
-        _positionCache = new PositionCache(_room.Sessions.Values.Select(s =>s.SessionID).ToArray());
+        _positionCache = new PositionCache(_room.Players.ToArray());
         _tickDrivenUnitManager = new TickDrivenUnitManager();
         _occupationManager = new OccupationManager(this, _positionCache, _tickManager);
         _tileManager = new TileManager(_occupationManager, _positionCache);
         _battleManager = new BattleManager(_unitPoolManager, _room, _tickManager, _occupationManager);
-        _gameTimerManager = new GameTimerManager(_tickManager);
+        _timerManager = new TimerManager(_tickManager);
         _dimensionManager = new DimensionManager(_tickManager);
 
+        Init();
     }
 
     public void Init()
     {
-        _gameTimerManager.Init();
-        _occupationManager.Init(_room.Sessions.Keys.ToList());
-        _tileManager.Init(_room.Sessions.Keys.ToList());
-        _battleManager.Init(_room.Sessions.Keys.ToList());
+        _timerManager.Init();
         _dimensionManager.Init();
-        _room.BroadCast(_gameTimerManager.MakeInitPacket().Write());
+        _occupationManager.Init(_room.Players);
+        _tileManager.Init(_room.Players);
+        _battleManager.Init(_room.Players);
+        _deckManager.Init(_room.ClientSessions);
+        _playerManager.Init(_room.ClientSessions);
+        _unitPoolManager.Init(_deckManager.CardPoolList);
+
+        _room.BroadCast(MakeInitBundlePacket().Write());
+
         JobTimer.Instance.Push(Update);
     }
 
-    public void AddPlayer(ClientSession session)
-    {
-        _playerManager.AddPlayer(session);
-        Console.WriteLine($"[GameLogicManager] Player {session.SessionID} added.");
-    }
 
-    public void OnReceiveDeck(ClientSession session, C_SetCardPool packet)
-    {
-        Console.WriteLine($"[GameLogicManager] Receive deck from session {session.SessionID}");
-        bool ready = _deckManager.ReceiveDeck(session, packet);
 
-        if (ready)
-        {
-            List<Card> allCards = _deckManager.GetAllCards();
-            _unitPoolManager.Initialize(allCards);
-            _room.BroadCast(_deckManager.MakeCardPoolPacket().Write());
-
-            foreach (Card card in allCards)
-            {
-                Console.WriteLine($"UID : {card.ID} LV : {card.LV}");
-            }
-
-            Console.WriteLine("[GameLogicManager] Decks ready and unit pool initialized.");
-        }
-    }
 
     public void OnReceiveSummon(ClientSession session, C_ReqSummon packet)
     {
@@ -84,7 +67,7 @@ class GameLogicManager
         {
             Console.WriteLine($"[GameLogicManager] Summon requested: OID={packet.oid}, Session={session.SessionID}");
 
-            if (!Manas.TryGetValue(packet.reqSessionID, out Mana mana))
+            if (!_playerManager.Manas.TryGetValue(packet.reqSessionID, out Mana mana))
             {
                 Console.WriteLine("[GameLogicManager] X 마나 정보 없음");
                 return;
@@ -223,10 +206,30 @@ class GameLogicManager
 
         _dimensionManager.Update(this);
         
-        Console.WriteLine($"CurrentTime {_gameTimerManager.RemainingSeconds}");
+        Console.WriteLine($"CurrentTime {_timerManager.RemainingSeconds}");
 
         JobTimer.Instance.Push(Update, 1000);
     }
+    /// <summary>
+    /// Duration, StartTime, PoolSize, AllObjectList
+    /// </summary>
+    /// <returns></returns>
+    public S_GameInitBundle MakeInitBundlePacket()
+    {
+        var cardPool = _deckManager.GetAllCards();
+        return new S_GameInitBundle
+        {
+            gameStartTime = _tickManager.GetStartTimeMs(),
+            duration = _timerManager.Duratino,
+            size = 10,      // ObjectPool Size
+            cardCombinationss = cardPool.Select(card => new S_GameInitBundle.CardCombinations
+            {
+                uid = card.ID,
+                lv = card.LV
+            }).ToList()
+        };
+    }
+
 
     public void RegisterTickUnit(Unit unit) => _tickDrivenUnitManager.Register(unit);
     public void UnregisterTickUnit(Unit unit) => _tickDrivenUnitManager.Unregister(unit);
@@ -243,11 +246,6 @@ class GameLogicManager
         Console.WriteLine($"[GameLogicManager] Game ended. Winner: Session {winnerSessionId}");
     }
     public void SendToPlayer(int sessionId, ArraySegment<byte> segment) => _room.SendToPlayer(sessionId, segment);
-    public BattleManager Battle => _battleManager;
-    public IReadOnlyDictionary<int, Mana> Manas => _playerManager.Manas;
-    public List<Unit> UnitPool => _unitPoolManager.GetAllUnits() as List<Unit>;
-    public TickManager TickManager => _tickManager;
-    public TileManager TileManager => _tileManager;
-    public OccupationManager OccupationManager => _occupationManager;
+
 
 }

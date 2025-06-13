@@ -27,10 +27,10 @@ class UnitSpeedBuffEvent : IGameEvent
     public void Execute(GameLogicManager logic)
     {
         Console.WriteLine("[Event] 유닛 이동 속도 증가 이벤트 실행");
-        foreach (var unit in logic.UnitPool)
-        {
-         
-        }
+        //foreach (var unit in logic.UnitPool)
+        //{
+
+        //}
     }
 
 }

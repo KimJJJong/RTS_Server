@@ -1,24 +1,33 @@
 ﻿using Server;
+using ServerCore;
 using Shared;
+using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 
 class DeckManager
 {
     private Dictionary<int, List<Card>> _playerDecks = new Dictionary<int, List<Card>>();
     private List<Card> _cardPool = new List<Card>();
 
-    public bool ReceiveDeck(ClientSession session, C_SetCardPool packet)
+    public void Init(IEnumerable<ClientSession> clientSessions)
     {
-        if (!_playerDecks.ContainsKey(session.SessionID))
-            _playerDecks[session.SessionID] = new List<Card>();
+        _playerDecks.Clear();
+        _cardPool.Clear();
 
-        _playerDecks[session.SessionID].Clear();
+        foreach (var session in clientSessions)
+        {
+            int id = session.SessionID;
+            var deck = session.OwnDeck ?? new List<Card>();
 
-        foreach (var cardData in packet.cardCombinations)
-            _playerDecks[session.SessionID].Add(new Card(cardData.uid, cardData.lv));
+            _playerDecks[id] = new List<Card>(deck);
+            _cardPool.AddRange(deck);
+        }
 
-        return _playerDecks.Count == 2;
+        Console.WriteLine("CardPool is ready, ");
+
     }
+
 
     public List<Card> GetAllCards()
     {
@@ -59,7 +68,7 @@ class DeckManager
     {
         S_CardPool packet = new S_CardPool();
         packet.size = 10;   // TODO : 야...이거왜 size가 UnitPoolManager에 있냐... 맞긴 한데...그래;;;
-        foreach (var card in GetAllCards())
+        foreach (var card in _cardPool)
         {
             packet.cardCombinations.Add(new S_CardPool.CardCombination
             {
@@ -76,4 +85,6 @@ class DeckManager
         _playerDecks.Clear();
         _cardPool.Clear();
     }
+
+    public List<Card> CardPoolList => _cardPool;
 }

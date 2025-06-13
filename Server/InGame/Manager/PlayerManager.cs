@@ -1,5 +1,6 @@
 ﻿using Server;
 using System.Collections.Generic;
+using System.Linq;
 
 class PlayerManager
 {
@@ -8,12 +9,15 @@ class PlayerManager
 
     public IReadOnlyDictionary<int, Mana> Manas => _manas;
 
-    public void AddPlayer(ClientSession session)
+    public void Init(IEnumerable<ClientSession> sessions)
     {
-        _sessions[session.SessionID] = session;
-        _manas[session.SessionID] = new Mana();
+        foreach (var session in sessions)
+        {
+            int id = session.SessionID;
+            _sessions[id] = session;
+            _manas[id] = new Mana();
+        }
     }
-
     public void RegenManaAll()
     {
         foreach (var mana in _manas)

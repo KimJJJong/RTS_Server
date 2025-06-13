@@ -10,6 +10,8 @@ namespace ServerCore
 
     public abstract class PacketSession : Session
     {
+        public int SessionID { get; set; }
+
         public static readonly int HeaderSize = 2;
 
         // [size(2)][packetId(2)][ ... ][size(2)][packetId(2)][ ... ]
