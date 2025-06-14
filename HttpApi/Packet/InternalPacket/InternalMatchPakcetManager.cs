@@ -21,6 +21,8 @@ public class InternalMatchPakcetManager
     {
         _makeFunc.Add((ushort)InternalPacketID.S_M_CreateRoom, MakePacket<S_M_CreateRoom>);
         _handler.Add((ushort)InternalPacketID.S_M_CreateRoom, InternalPacketHandler.S_M_CreateRoomHandler);
+        _makeFunc.Add((ushort)InternalPacketID.S_M_GameResult, MakePacket<S_M_GameResult>);
+        _handler.Add((ushort)InternalPacketID.S_M_GameResult, InternalPacketHandler.S_M_GameResultHandler);
     }
 
 

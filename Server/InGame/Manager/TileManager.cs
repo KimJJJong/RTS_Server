@@ -17,7 +17,7 @@ class TileManager
         _occupationManager = occupationManager;
         _positionCache = positionCache;
 
-        
+
     }
 
     public void Init(List<int> sessionIdList)
@@ -51,12 +51,12 @@ class TileManager
         if (!IsValidCoord(x, y)) return false;
 
         TileState tile = _tiles[x, y];
-        if ( tile.OwnerSessionId == sessionId ) return false;   //이미 내가 점령 하구 있다구~
+        if (tile.OwnerSessionId == sessionId) return false;   //이미 내가 점령 하구 있다구~
 
         tile.Claim(sessionId);
         _occupationManager.OnTileClaim(sessionId, x, y);
 
-        Console.WriteLine($"[TileManager] Tile Captured: ({x}, {y}) by Session {sessionId}");
+        //    Console.WriteLine($"[TileManager] Tile Captured: ({x}, {y}) by Session {sessionId}");
         return true;
     }
 

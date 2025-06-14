@@ -10,25 +10,6 @@ namespace Server
     {
         static Listener _clientListener = new Listener();
         static Listener _matchingListener = new Listener();
-        //static HttpServer _httpServer;
-
-        //static void FlushLobby()
-        //{
-        //    JobTimer.Instance.Push(FlushLobby, 250);
-        //}
-        static void FlushMatchQueue()
-        {
-    /*        while (true)
-            {
-                var match = RedisMatchQueue.Dequeue();
-                if (match == null)
-                    break;
-
-                string roomId = GameRoomManager.Instance.CreateRoom(match);
-                Console.WriteLine($"[GameServer] Created room {roomId} for players: {string.Join(", ", match)}");
-            }
-            JobTimer.Instance.Push(FlushMatchQueue, 500);*/
-        }
 
         static void Main(string[] args)
         {

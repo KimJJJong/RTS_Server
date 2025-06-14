@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 
-
-
     class SessionManager
     {
         static SessionManager _session = new SessionManager();
@@ -36,7 +34,7 @@ using System.Threading;
         }
 
 
-        public PacketSession ClientSessionFind(int id)
+        public PacketSession SessionFind(int id)
         {
             lock (_lock)
             {

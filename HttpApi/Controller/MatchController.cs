@@ -15,12 +15,12 @@ public class MatchController : ControllerBase
     }
 
     [HttpPost("request")]
-    public IActionResult RequestMatch([FromBody] MatchRequest request)
+    public IActionResult RequestMatch([FromBody] MatchPlayerInfo request)
     {
-        if (_queue.Enqueue(request.UserId))
+        if (_queue.Enqueue(request))
         {
            Console.WriteLine($"{request.UserId} Join Matching");
-           return Ok("Enqueued");
+           return Conflict("Enqueued");
         }
 
         Console.WriteLine($"{request.UserId} already Join");
@@ -29,9 +29,9 @@ public class MatchController : ControllerBase
     }
 
     [HttpPost("status")]
-    public IActionResult MatchStatus([FromBody] MatchRequest request)
+    public IActionResult MatchStatus([FromBody] MatchPlayerInfo request)
     {
-        var room = _mapping.GetRoom(request.UserId);
+        var room = _mapping.GetRoomInfo(request.UserId);
         if (room == null)
             return Ok("Waiting");
 
@@ -39,7 +39,7 @@ public class MatchController : ControllerBase
     }
 
     [HttpPost("cancel")]
-    public IActionResult CancelMatch([FromBody] MatchRequest request)
+    public IActionResult CancelMatch([FromBody] MatchPlayerInfo request)
     {
         if (!_queue.Cancel(request.UserId))
         {
@@ -57,4 +57,5 @@ public class MatchController : ControllerBase
 public class MatchRequest
 {
     public string UserId { get; set; }
+    public List<CardInfo> Deck {  get; set; }
 }

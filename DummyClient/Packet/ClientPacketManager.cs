@@ -19,12 +19,12 @@ public class PacketManager
 		
 	public void Register()
 	{
-		_makeFunc.Add((ushort)PacketID.S_InitGame, MakePacket<S_InitGame>);
-		_handler.Add((ushort)PacketID.S_InitGame, PacketHandler.S_InitGameHandler);
 		_makeFunc.Add((ushort)PacketID.S_CardPool, MakePacket<S_CardPool>);
 		_handler.Add((ushort)PacketID.S_CardPool, PacketHandler.S_CardPoolHandler);
 		_makeFunc.Add((ushort)PacketID.S_GameUpdate, MakePacket<S_GameUpdate>);
 		_handler.Add((ushort)PacketID.S_GameUpdate, PacketHandler.S_GameUpdateHandler);
+		_makeFunc.Add((ushort)PacketID.S_ConfirmJoinGameServer, MakePacket<S_ConfirmJoinGameServer>);
+		_handler.Add((ushort)PacketID.S_ConfirmJoinGameServer, PacketHandler.S_ConfirmJoinGameServerHandler);
 		_makeFunc.Add((ushort)PacketID.S_GameInitBundle, MakePacket<S_GameInitBundle>);
 		_handler.Add((ushort)PacketID.S_GameInitBundle, PacketHandler.S_GameInitBundleHandler);
 		_makeFunc.Add((ushort)PacketID.S_AnsSummon, MakePacket<S_AnsSummon>);
@@ -35,6 +35,8 @@ public class PacketManager
 		_handler.Add((ushort)PacketID.S_AttackConfirm, PacketHandler.S_AttackConfirmHandler);
 		_makeFunc.Add((ushort)PacketID.S_ShootConfirm, MakePacket<S_ShootConfirm>);
 		_handler.Add((ushort)PacketID.S_ShootConfirm, PacketHandler.S_ShootConfirmHandler);
+		_makeFunc.Add((ushort)PacketID.S_DeActivateConfirm, MakePacket<S_DeActivateConfirm>);
+		_handler.Add((ushort)PacketID.S_DeActivateConfirm, PacketHandler.S_DeActivateConfirmHandler);
 		_makeFunc.Add((ushort)PacketID.S_OccupationSync, MakePacket<S_OccupationSync>);
 		_handler.Add((ushort)PacketID.S_OccupationSync, PacketHandler.S_OccupationSyncHandler);
 		_makeFunc.Add((ushort)PacketID.S_TileClaimed, MakePacket<S_TileClaimed>);

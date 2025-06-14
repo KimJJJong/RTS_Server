@@ -12,158 +12,33 @@ class PacketHandler
 
     public static void C_ReqJoinGameServerHandler(PacketSession session, IPacket packet)
     {
-   /*     C_ReqJoinGameServer reqPacket = packet as C_ReqJoinGameServer;
+     
+        C_ReqJoinGameServer reqPacket = packet as C_ReqJoinGameServer;
         ClientSession clientSession = session as ClientSession;
 
-        int playerId = reqPacket.playerUid;
-        GameRoom gameRoom = (GameRoomManager.Instance?.FindRoom(reqPacket.roomId)) as GameRoom;
-        
-        if (gameRoom is null) return;
+            S_ConfirmJoinGameServer confirmPacket = new S_ConfirmJoinGameServer();
+        GameRoom gameRoom = GameRoomManager.Instance.FindRoom(reqPacket.roomId);
+        if ( gameRoom is null || 
+             gameRoom.AddClient(reqPacket.playerSUid, clientSession) )
+        {
+            confirmPacket.confirm = false;
+            Console.WriteLine($"[{reqPacket.roomId}]는 없습니다.");
+        }
+        else
+        {
+            confirmPacket.confirm = true;
+        }
+       
+        clientSession.Send(confirmPacket.Write());
+       
 
-        // 어떻게 하면 더 좋은 구조일까..? ClientDeck을 관리 방법의 문제
-        foreach (var cardData in reqPacket.playerOwnCardss)
-            clientSession.OwnDeck.Add(new Card(cardData.uid, cardData.lv));
-
-        if ( gameRoom.AddClient(playerId, clientSession) is false) return;
-
-*/
     }
 
-    //public static void C_MatchRequestHandler(PacketSession session, IPacket packet)
-    //{
-    //    ClientSession clientSession = session as ClientSession;
-    //    if (clientSession == null || clientSession.isMatching)
-    //        return;
-    //    clientSession.isMatching = true;
 
-    //    Console.WriteLine($"Client :{ clientSession.SessionID } Mtaching...");
-
-    //    Program.Lobby.Push(() => clientSession.Lobby.EnterMatchQueue(clientSession));
-    //}
-    //public static void C_MatchCancelHandler(PacketSession session, IPacket packet)
-    //{
-    //    ClientSession clientSession = session as ClientSession;
-
-    //    if (clientSession == null)
-    //        return;
-
-    //    Program.Lobby.Push(() => Program.Lobby.LeaveMatchQueue(clientSession));
-    //}
-    //public static void C_CreateRoomHandler(PacketSession session, IPacket packet)
-    //{
-    //    ClientSession clientSession = session as ClientSession;
-
-    //    S_CreateRoom s_CreateRoom = new S_CreateRoom();
-    //    s_CreateRoom.success = true;
-
-    //    Program.Lobby.Push(() => s_CreateRoom.roomId = clientSession.Lobby.CreateRoom());
-    //    Console.WriteLine($"Client [{clientSession.SessionID}] Create Room [{s_CreateRoom.roomId}]");
-
-    //    Program.Lobby.Push(() => clientSession.Lobby.FindRoom(s_CreateRoom.roomId).Enter(clientSession));
-    //    Program.Lobby.Push(() => clientSession.Send(s_CreateRoom.Write()));
-
-
-    //}
-    //public static void C_JoinRoomHandler(PacketSession session, IPacket packet)
-    //{
-    //    C_JoinRoom c_JoinRoom = packet as C_JoinRoom;
-    //    ClientSession clientSession = session as ClientSession;
-    //    Program.Lobby.Push(() => clientSession.Lobby.FindRoom(c_JoinRoom.roomId)?.Enter(clientSession));
-
-    //}
     #endregion
 
     #region Room BroadCast
-    //public static void C_ReadyHandler(PacketSession session, IPacket packet)
-    //{
-    //    C_Ready c_Ready = packet as C_Ready;
-    //    ClientSession clientSession =session as ClientSession;
-    //    GameRoom gameRoom = clientSession.Room;
-    //    clientSession.isReady = true;
-    //    Console.WriteLine($"Client[{clientSession.SessionID}] Ready[{clientSession.isReady}]");
 
-    //    if (gameRoom.Sessions.Count == 2)
-    //    {
-    //        foreach (ClientSession _session in gameRoom.Sessions.Values)
-    //        {
-    //            if (_session.isReady == false) return;
-    //        }
-    //        clientSession.Room.ReadyStartGame();
-    //    }
-    //    else
-    //    {
-    //        Console.WriteLine($"Not Enough Room Cound{gameRoom.Sessions.Count}");
-    //        return;
-    //    }
-
-        
-    //}
-    //public static void C_SetCardPoolHandler(PacketSession session, IPacket pacekt)
-    //{
-    //    ClientSession clientSession = session as ClientSession;
-    //    C_SetCardPool c_SetCardPool = pacekt as C_SetCardPool;
-
-    //    GameRoom gameRoom = clientSession.Room;
-    //    clientSession.isReady = true;
-
-    //    try
-    //    {
-    //        if (gameRoom.Players.Count == 2)
-    //        {
-    //            Console.WriteLine("GetTwo");
-    //            foreach (ClientSession _session in gameRoom.Sessions.Values)
-    //            {
-    //                if (_session.isReady == false) return;
-    //            }
-    //            clientSession.Room.ReadyStartGame();
-    //            foreach(var player in gameRoom.Sessions.Values)
-    //            clientSession.Room.GameLogic.OnReceiveDeck(player, c_SetCardPool);
-    //        }
-    //        else
-    //        {
-    //            Console.WriteLine($"Not Enough Room Cound{gameRoom.Sessions.Count}");
-    //            return;
-    //        }
-
-
-    //    }catch (Exception e)
-    //    {
-    //        Console.WriteLine(e.ToString()); return;
-    //    }
-
-
-    //}
-    //public static void C_SceneLoadedHandler(PacketSession session, IPacket packet)
-    //{
-    //    var loadPacket = packet as C_SceneLoaded;
-    //    var client = session as ClientSession;
-    //    var room = client.Room;
-
-    //    client.isLoad = loadPacket.isLoad;
-
-    //    if (room.Sessions.Count == 2)
-    //    {
-    //        foreach (ClientSession s in room.Sessions.Values)
-    //        {
-    //            if (!s.isLoad)
-    //                return;
-    //        }
-
-    //        var response = new S_SceneLoad
-    //        {
-    //            ServerSendTime = DateTime.UtcNow.Ticks * 1e-7,
-    //            StartTime = 180 + 2d
-    //        };
-
-    //        room.BroadCast(response.Write());
-    //    }
-    //    else
-    //    {
-    //        Console.WriteLine($"[SceneLoad] Invalid player count: {room.Sessions.Count}");
-    //    }
-    //}
-
-    //public static void C_GameActionHandler(PacketSession session, IPacket packet) { }
 
     public static void C_ReqSummonHandler(PacketSession session, IPacket packet)
     {

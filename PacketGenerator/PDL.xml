@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <PDL>
-	<!-- 게임 -->
+	<!-- 게임 
 	<packet name="S_InitGame">
 		<double name ="gameStartTime"/>
 		<double name ="duration"/>
 	</packet>
-	
+	-->
 	<packet name ="S_CardPool">
 		<int name ="size"/>
 		<list name="cardCombination">
@@ -25,13 +25,23 @@
 	
 	<!-- InitSetting -->
 	<packet name ="C_ReqJoinGameServer">
-		<int name="playerUid"/>
+		<string name="playerSUid"/>
+		<string name ="roomId"/>
+	</packet>
+<!--
 		<string name="roomId"/>
 		<list name="playerOwnCards">
 			<int name ="lv"/>
 			<string name="uid"/>
 		</list>
-	</packet>
+-->
+
+
+	<packet name ="S_ConfirmJoinGameServer">
+		<bool name="confirm"/>
+	</packet >
+	
+	
 	
 	<packet name="S_GameInitBundle">
 		<double name="gameStartTime"/>
@@ -54,6 +64,7 @@
 		<long name="ClientSendTimeMs"/>
 	</packet>
 	<packet name="S_AnsSummon">
+		<bool name="canSummon"/>
 		<float name="x"/>
 		<float name="y"/>
 		<float name="reducedMana"/>
@@ -134,7 +145,12 @@
 	</packet>
 
 <!-- ====== -->
-
+	<!-- DeActivateTick -->
+	<packet name ="S_DeActivateConfirm">
+		<int name = "attackerOid"/>
+		<int name ="deActivateOid"/>
+		<int name ="deActivateTick"/>
+	</packet>
 	<!-- Occupation-->>
 	<packet name="S_OccupationSync">
 		<int name ="playerSession"/>
@@ -189,8 +205,9 @@
 		<double name="serverTime"/>
 	</packet>
 
-<packet name="S_ManaUpdate">
+	<packet name="S_ManaUpdate">
 		<int name="playerId"/>
+		<long name="serverTick"/>
 		<float name="currentMana"/>
 	</packet>
 
@@ -208,8 +225,28 @@
 		<int name="winnerId"/>
 		<string name="resultMessage"/>
 	</packet>
+
+
 	
-	
+	<!--	
+	<packet name ="S_M_GameResult">
+		<string name="roomId"/>
+		<string name="winnerId"/>
+		<string name="loserId"/>
+	</packet>
+
+	<packet name ="S_M_CreateRoom">
+		<string name="roomId"/>
+		<string name="player1"/>
+		<string name="player2"/>
+	</packet>
+
+	-->
+
+
+
+
+
 
 
 </PDL>

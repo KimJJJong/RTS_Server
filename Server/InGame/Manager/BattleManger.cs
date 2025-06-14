@@ -1,5 +1,6 @@
 ﻿// BattleManager.cs
 using Server;
+using Shared;
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -10,6 +11,7 @@ class BattleManager
     private GameRoom _room;
     private TickManager _tickManager;
     private OccupationManager _occupationManager;
+
 
     private int HpDecreassTick = 15;  // 근접 공격 체력 decreass Tick Delay
     private int HpDecreassProjectileTick = 3; // 투사체 공격 체력 decreass Tick Delay
@@ -25,7 +27,7 @@ class BattleManager
         _tickManager = tickManager;
         _occupationManager = occupationManager;
 
-        
+
     }
     public void Init(List<int> sessionListId)
     {
@@ -45,7 +47,7 @@ class BattleManager
         var (serverX, serverY) = PositionConverter.ClientToServer(
             packet.reqSessionID, packet.x, packet.y, player0);
         Unit unit = _unitPoolManager.GetUnit(packet.oid);
-        unit.Summon(serverX, serverY, session.SessionID);
+        unit.Summon(serverX, serverY, session.SessionID, _tickManager.GetCurrentTick());
 
         // Send To Client With Convert
         foreach (int target in _occupationManager.GetPlayerSessionIds())
@@ -55,6 +57,7 @@ class BattleManager
 
             S_AnsSummon response = new S_AnsSummon
             {
+                canSummon = true,
                 oid = packet.oid,
                 reqSessionID = session.SessionID,
                 x = clientX,
@@ -79,7 +82,7 @@ class BattleManager
         var (serverX, serverY) = PositionConverter.ClientToServer(
             session.SessionID, packet.summonerX, packet.summonerY, player0);
         Unit proj = _unitPoolManager.GetUnit(packet.projectileOid);
-        proj.Summon(serverX, serverY, session.SessionID);
+        proj.Summon(serverX, serverY, session.SessionID, _tickManager.GetCurrentTick());
 
         var (serverTargetX, serverTargetY) = PositionConverter.ClientToServer(
             session.SessionID, packet.targetX, packet.targetY, player0);
@@ -112,33 +115,18 @@ class BattleManager
     #region Attack - Melee
     public void ProcessAttack(ClientSession session, C_AttackedRequest packet)
     {
-        Unit attacker = _unitPoolManager.GetUnit(packet.attackerOid);
-        Unit target = _unitPoolManager.GetUnit(packet.targetOid);
-
-        if (attacker == null || target == null)
-            return;
-
-        float curHp = target.CurrentHP - attacker.AttackPower;
-        bool isDead = curHp <= 0;
-
-        if (isDead)
+        try
         {
-            target.Dead(_tickManager.GetCurrentTick());
+            Unit attacker = _unitPoolManager.GetUnit(packet.attackerOid);
+            Unit target = _unitPoolManager.GetUnit(packet.targetOid);
+
+            ApplyDamage(attacker, target, attacker.AttackPower, packet.clientAttackedTick, HpDecreassTick);
         }
-        else
+        catch (Exception ex)
         {
-            target.CurrentHP = curHp;
+            Console.WriteLine($"[BattleManager:ProcessAttack] Exception: {ex}");
         }
 
-        S_AttackConfirm response = new S_AttackConfirm
-        {
-            attackerOid = packet.attackerOid,
-            targetOid = packet.targetOid,
-            targetVerifyHp = Math.Max(0, curHp),
-            attackVerifyTick = packet.clientAttackedTick + HpDecreassTick  // hp decreass Rate
-        };
-
-        _room.BroadCast(response.Write());
     }
     public void ProcessWallMariaAttacked(ClientSession session, C_AttackedRequest packet)
     {
@@ -157,28 +145,21 @@ class BattleManager
     #region Attack - Projectile
     public void ProcessProjectileAttack(ClientSession session, C_AttackedRequest packet)
     {
-        Unit projectile = _unitPoolManager.GetUnit(packet.attackerOid);
-        Unit target = _unitPoolManager.GetUnit(packet.targetOid);
-
-        if (projectile == null || target == null) return;
-
-
-        float curHp = target.CurrentHP - projectile.AttackPower;
-        target.CurrentHP = curHp;
-        Console.WriteLine($"targetHP : {target.CurrentHP} || Damage : { projectile.AttackPower } || Resaurt : {curHp}");
-        S_AttackConfirm response = new S_AttackConfirm
+        try
         {
-            attackerOid = packet.attackerOid,
-            targetOid = packet.targetOid,
-            targetVerifyHp = Math.Max(0, curHp),
-            attackVerifyTick = packet.clientAttackedTick + HpDecreassProjectileTick // hp decreass Rate
-        };
+            Unit projectile = _unitPoolManager.GetUnit(packet.attackerOid);
+            Unit target = _unitPoolManager.GetUnit(packet.targetOid);
 
-        projectile.Dead(_tickManager.GetCurrentTick());
+            ApplyDamage(projectile, target, projectile.AttackPower, packet.clientAttackedTick, HpDecreassProjectileTick);
 
-        _room.BroadCast(response.Write());
+            projectile.Deactivate(_tickManager.GetCurrentTick());
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[BattleManager:ProjectilAttack]Exception: {ex}");
+        }
     }
- 
+
 
     public void ProcessWallMariaProjectileAttacked(ClientSession session, C_AttackedRequest packet)
     {
@@ -192,9 +173,45 @@ class BattleManager
 
 
 
-        projectile.Dead(_tickManager.GetCurrentTick());
+        projectile.Deactivate(_tickManager.GetCurrentTick());
     }
-    #endregion 
+    #endregion
 
 
-} 
+    #region AttackLogic
+    private void ApplyDamage(Unit attacker, Unit target, float damage, int clientTick, int delayTick)
+    {
+        /*      if (*//*attacker == null || *//*target == null)
+              {
+                  Console.WriteLine($"[BattleManager]Null attacker or target. Attacker: {attacker?.OId}, Target: {target?.OId}");
+                  return;
+              }*/
+
+        float curHp = target.CurrentHP - damage;
+        bool isDead = curHp <= 0;
+        int effectTick = clientTick + delayTick;
+
+        if (isDead)
+        {
+            target.Deactivate(clientTick + 8);
+        }
+        else
+        {
+            target.CurrentHP = curHp;
+
+            S_AttackConfirm response = new S_AttackConfirm
+            {
+                attackerOid = attacker.OId,
+                targetOid = target.OId,
+                targetVerifyHp = curHp,
+                attackVerifyTick = effectTick
+            };
+
+            Console.WriteLine($"[Hit Send] {attacker.OId} → {target.OId} | Damage: {damage}, HP: {curHp}, Tick: {effectTick}");
+            _room.BroadCast(response.Write());
+        }
+    }
+
+    #endregion
+
+}

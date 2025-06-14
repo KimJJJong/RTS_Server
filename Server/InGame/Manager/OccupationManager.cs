@@ -49,19 +49,20 @@ class OccupationManager
 
         foreach (int target in ids)
         {
-            var (clientX, clientY) = _positionCache.ServerToClient(sessionId, x, y);
+            var (clientX, clientY) = _positionCache.ServerToClient(target, x, y);
 
             S_TileClaimed packet = new S_TileClaimed()
             {
                 x = clientX,
                 y = clientY,
 
-                excutionTick = _tickManager.GetCurrentTick()+WallHitDelay,
+                excutionTick = _tickManager.GetCurrentTick() + WallHitDelay,
 
                 playerSession = sessionId,
                 playerOccupation = GetOccupation(sessionId),
                 opponentOccupation = GetOccupation(opponent)
             };
+            //Console.WriteLine($"Send To {target} [X : {clientX} / Y : {clientY} ]");
             _logic.SendToPlayer(target, packet.Write());
 
             // ToDo : Client Tile 동기화
@@ -77,13 +78,13 @@ class OccupationManager
 
         AddScore(sessionId, opponet, totalBulkScore);
 
-        foreach(int target in GetPlayerSessionIds())
+        foreach (int target in GetPlayerSessionIds())
         {
             List<S_TileBulkClaimed.TileBulk> tileInfo = new List<S_TileBulkClaimed.TileBulk>();
-            
-            foreach(var(x,y) in tilePositions)
+
+            foreach (var (x, y) in tilePositions)
             {
-                var ( clientX, clientY ) = _positionCache.ServerToClient(target, x, y);
+                var (clientX, clientY) = _positionCache.ServerToClient(target, x, y);
                 tileInfo.Add(new S_TileBulkClaimed.TileBulk
                 {
                     x = clientX,
@@ -96,7 +97,7 @@ class OccupationManager
             {
                 tileBulks = tileInfo,
                 occupationRate = GetOccupation(sessionId),
-                excutionTick = _tickManager.GetCurrentTick()+ WallHitDelay,
+                excutionTick = _tickManager.GetCurrentTick() + WallHitDelay,
                 ReqPlayerSessionId = sessionId,
             };
 
@@ -110,7 +111,7 @@ class OccupationManager
         var ids = GetPlayerSessionIds();
         int player0 = ids[0];
 
-        foreach( int target in ids)
+        foreach (int target in ids)
         {
             S_OccupationSync pack = new S_OccupationSync()
             {
@@ -132,7 +133,7 @@ class OccupationManager
         _occupation[opponentId] -= amount;
         Clamp(playerId, opponentId);
 
-        Console.WriteLine($"[Occupation] {playerId}: {_occupation[playerId]:0.00}, {opponentId}: {_occupation[opponentId]:0.00}");
+        //  Console.WriteLine($"[Occupation] {playerId}: {_occupation[playerId]:0.00}, {opponentId}: {_occupation[opponentId]:0.00}");
 
         if (_occupation[playerId] >= InstantWinThreshold)
         {
@@ -159,9 +160,15 @@ class OccupationManager
     {
         var sorted = _occupation.OrderByDescending(kvp => kvp.Value).ToList();
         if (sorted[0].Value > sorted[1].Value)
+        {
             _logic.EndGame(sorted[0].Key);
+            Console.WriteLine($"Player {sorted[0].Key} Win");
+        }
         else
+        {
             _logic.EndGame(-1); // 무승부
+            Console.WriteLine("비김 ㅋ");
+        }
     }
 
     public float GetOccupation(int sessionId)

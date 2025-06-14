@@ -9,23 +9,25 @@ class DeckManager
 {
     private Dictionary<int, List<Card>> _playerDecks = new Dictionary<int, List<Card>>();
     private List<Card> _cardPool = new List<Card>();
+    private List<Card> _playerDeckList = new List<Card>();
 
-    public void Init(IEnumerable<ClientSession> clientSessions)
+    public void Init(List<Card> deckList)
     {
-        _playerDecks.Clear();
-        _cardPool.Clear();
+        /*     _playerDecks.Clear();
+             _cardPool.Clear();
 
-        foreach (var session in clientSessions)
-        {
-            int id = session.SessionID;
-            var deck = session.OwnDeck ?? new List<Card>();
+             foreach (var session in clientSessions)
+             {
+                 int id = session.SessionID;
+                 var deck = session.OwnDeck ?? new List<Card>();
 
-            _playerDecks[id] = new List<Card>(deck);
-            _cardPool.AddRange(deck);
-        }
+                 _playerDecks[id] = new List<Card>(deck);
+                 _cardPool.AddRange(deck);
+             }
 
-        Console.WriteLine("CardPool is ready, ");
-
+             Console.WriteLine("CardPool is ready, ");*/
+        _playerDeckList.Clear();
+        _playerDeckList = deckList;
     }
 
 
@@ -38,11 +40,15 @@ class DeckManager
         allCards.AddRange(castles);
 
         // Card Object 추가
-        foreach (var deck in _playerDecks.Values)
-            allCards.AddRange(deck);
+            allCards.AddRange(_playerDeckList);
 
         // 파생 데미지 관련 추가
         AppendProjectileCards(allCards);
+
+        foreach(Card card in allCards)
+        {
+            Console.WriteLine($"Card ID :[ {card.ID} ]  Lv : [ {card.LV} ]");
+        }
 
         return allCards;
     }

@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
     public class GameRoomFactory
     {
-        public static IGameRoom CreateRoom(string roomId, List<string> playerIds)
+        public static GameRoom CreateRoom(string roomId, List<string> playerIds, List<Card> deckCombination)
         {
-            return new GameRoom(roomId, playerIds);
+            return new GameRoom(roomId, playerIds, deckCombination);
         }
     }

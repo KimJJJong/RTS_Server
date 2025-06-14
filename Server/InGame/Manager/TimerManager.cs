@@ -5,8 +5,8 @@ class TimerManager
 {
     private TickManager _tickManager;
     private int _startTick;
-    private const int DurationTick = 9000; // 예: 300초 * 30Tick = 9000Tick
-    public int Duratino => DurationTick;
+    private const int _durationTick = 7273; // 예: 300초 * 30Tick = 9000Tick
+    public int DurationTick => _durationTick;
     
     public TimerManager(TickManager tickManager)
     {
@@ -16,7 +16,7 @@ class TimerManager
     public void Init()
     {
         _startTick = _tickManager.GetCurrentTick();
-        Console.WriteLine($"[GameTimerManager] Game Start Tick: {_startTick}, Duration Tick: {DurationTick}");
+        Console.WriteLine($"[TimerManager] Game Start Tick: {_startTick}, Duration Tick: {DurationTick}");
     }
 
     public int ElapsedTick => _tickManager.GetCurrentTick() - _startTick;
@@ -27,12 +27,12 @@ class TimerManager
     
     public bool IsTimeUp() => ElapsedTick >= DurationTick;
 
-    public S_InitGame MakeInitPacket()
+/*    public S_InitGame MakeInitPacket()
     {
         return new S_InitGame
         {
             gameStartTime = _tickManager.GetStartTimeMs(),
             duration = DurationTick
         };
-    }
+    }*/
 }

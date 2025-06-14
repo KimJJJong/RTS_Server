@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 
 public enum UnitType
 {
@@ -10,6 +11,7 @@ public enum UnitType
 
 public abstract class Unit
 {
+    public int OId { get; protected set; }
     public string UnitID { get; protected set; }
     public int CardLV { get; protected set; }
     public float PlayerID { get; protected set; }
@@ -24,14 +26,16 @@ public abstract class Unit
     public float CurrentHP { get; set; }
 
     public bool IsActive { get; protected set; }
-    public int DeadTick { get; protected set; }
+    public int SpawnTick { get; protected set; }
+    public int DeactivateTick { get; protected set; }
 
     public Action<Unit> OnDead; // Event callback for external use
 
-    public void InitializeID(string unitID, int level)
+    public void InitializeID(string unitID, int level, int oid)
     {
         UnitID = unitID;
         CardLV = level;
+        OId = oid;
     }
 
     public virtual void SetStats(UnitStat stat)
@@ -41,21 +45,22 @@ public abstract class Unit
         AttackPower = stat.AttackPower;
         AttackRange = stat.AttackRange;
 
-        Console.WriteLine($"UID : {UnitID} || MaxHP: {MaxHP} || AttackPower :{AttackPower}");
+        Console.WriteLine($"OID : {OId} || UID : {UnitID} || MaxHP: {MaxHP} || AttackPower :{AttackPower}");
     }
 
-    public virtual void Summon(float x, float y, float playerId)
+    public virtual void Summon(float x, float y, float playerId, int spawnTick)
     {
         PositionX = x;
         PositionY = y;
         PlayerID = playerId;
+        SpawnTick = spawnTick;
         CurrentHP = MaxHP;
-        DeadTick = 999999;
+        DeactivateTick = 999999;
         IsActive = true;
     }
 
 
-    public virtual void Dead(int tick)
+    public virtual void Deactivate(int tick)
     {
         SetDeadTick(tick);
         OnDead?.Invoke(this);
@@ -64,14 +69,16 @@ public abstract class Unit
 
     public virtual void Reset()
     {
+        SpawnTick = -1;
         PositionX = -99;
         PositionY = -99;
         PlayerID = -1;
         CurrentHP = -1;
         IsActive = false;
+        OnDead = null;
     }
 
-    public void SetDeadTick(int tick) => DeadTick = tick;
+    public void SetDeadTick(int tick) => DeactivateTick = tick;
 
     public abstract void TickUpdate(int tick);
     public abstract UnitType UnitTypeIs();
