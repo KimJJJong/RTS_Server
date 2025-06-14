@@ -6,32 +6,31 @@ using ServerCore;
 
 public enum PacketID
 {
-	S_CardPool = 1,
-	S_GameUpdate = 2,
-	C_ReqJoinGameServer = 3,
-	S_ConfirmJoinGameServer = 4,
-	S_GameInitBundle = 5,
-	C_SceneLoaded = 6,
-	C_ReqSummon = 7,
-	S_AnsSummon = 8,
-	C_TargetCapture = 9,
-	S_VerifyCapture = 10,
-	C_AttackedRequest = 11,
-	S_AttackConfirm = 12,
-	C_SummonProJectile = 13,
-	S_ShootConfirm = 14,
-	S_DeActivateConfirm = 15,
-	S_OccupationSync = 16,
-	S_TileClaimed = 17,
-	S_TileBulkClaimed = 18,
-	C_TileClaimReq = 19,
-	C_RequestManaStatus = 20,
-	S_SyncTime = 21,
-	S_GameStateUpdate = 22,
-	S_ManaUpdate = 23,
-	S_UnitAction = 24,
-	C_GoToLobby = 25,
-	S_GameOver = 26,
+	S_GameUpdate = 1,
+	C_ReqJoinGameServer = 2,
+	S_ConfirmJoinGameServer = 3,
+	S_GameInitBundle = 4,
+	C_SceneLoaded = 5,
+	C_ReqSummon = 6,
+	S_AnsSummon = 7,
+	C_TargetCapture = 8,
+	S_VerifyCapture = 9,
+	C_AttackedRequest = 10,
+	S_AttackConfirm = 11,
+	C_SummonProJectile = 12,
+	S_ShootConfirm = 13,
+	S_DeActivateConfirm = 14,
+	S_OccupationSync = 15,
+	S_TileClaimed = 16,
+	S_TileBulkClaimed = 17,
+	C_TileClaimReq = 18,
+	C_RequestManaStatus = 19,
+	S_SyncTime = 20,
+	S_GameStateUpdate = 21,
+	S_ManaUpdate = 22,
+	S_UnitAction = 23,
+	C_GoToLobby = 24,
+	S_GameOver = 25,
 	
 }
 
@@ -42,86 +41,6 @@ public  interface IPacket
 	ArraySegment<byte> Write();
 }
 
-
-public class S_CardPool : IPacket
-{
-	public int size;
-	public class CardCombination
-	{
-		public int lv;
-		public string uid;
-	
-		public void Read(ReadOnlySpan<byte> s, ref ushort count)
-		{
-			this.lv = BitConverter.ToInt32(s.Slice(count, s.Length - count));
-			count += sizeof(int);
-			ushort uidLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
-			count += sizeof(ushort);
-			this.uid = Encoding.Unicode.GetString(s.Slice(count, uidLen));
-			count += uidLen;
-		}
-	
-		public bool Write(Span<byte> s, ref ushort count)
-		{
-			ArraySegment<byte> segment = SendBufferHelper.Open(4096);
-	
-			bool success = true;
-			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.lv);
-			count += sizeof(int);
-			ushort uidLen = (ushort)Encoding.Unicode.GetBytes(this.uid, 0, this.uid.Length, segment.Array, segment.Offset + count + sizeof(ushort));
-			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), uidLen);
-			count += sizeof(ushort);
-			count += uidLen;
-			return success;
-		}	
-	}
-	public List<CardCombination> cardCombinations = new List<CardCombination>();
-
-	public ushort Protocol { get { return (ushort)PacketID.S_CardPool; } }
-
-	public void Read(ArraySegment<byte> segment)
-	{
-		ushort count = 0;
-
-		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
-		count += sizeof(ushort);
-		count += sizeof(ushort);
-		this.size = BitConverter.ToInt32(s.Slice(count, s.Length - count));
-		count += sizeof(int);
-		this.cardCombinations.Clear();
-		ushort cardCombinationLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
-		count += sizeof(ushort);
-		for (int i = 0; i < cardCombinationLen; i++)
-		{
-			CardCombination cardCombination = new CardCombination();
-			cardCombination.Read(s, ref count);
-			cardCombinations.Add(cardCombination);
-		}
-	}
-
-	public ArraySegment<byte> Write()
-	{
-		ArraySegment<byte> segment = SendBufferHelper.Open(4096);
-		ushort count = 0;
-		bool success = true;
-
-		Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
-
-		count += sizeof(ushort);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_CardPool);
-		count += sizeof(ushort);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.size);
-		count += sizeof(int);
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)this.cardCombinations.Count);
-		count += sizeof(ushort);
-		foreach (CardCombination cardCombination in this.cardCombinations)
-			success &= cardCombination.Write(s, ref count);
-		success &= BitConverter.TryWriteBytes(s, count);
-		if (success == false)
-			return null;
-		return SendBufferHelper.Close(count);
-	}
-}
 
 public class S_GameUpdate : IPacket
 {

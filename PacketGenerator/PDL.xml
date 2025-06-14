@@ -5,7 +5,6 @@
 		<double name ="gameStartTime"/>
 		<double name ="duration"/>
 	</packet>
-	-->
 	<packet name ="S_CardPool">
 		<int name ="size"/>
 		<list name="cardCombination">
@@ -13,6 +12,7 @@
 			<string name="uid"/>
 		</list>	
 	</packet>
+	-->
 	
 	<packet name="S_GameUpdate">
 		<list name="pool">

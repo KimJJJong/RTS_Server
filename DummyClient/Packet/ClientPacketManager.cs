@@ -19,8 +19,6 @@ public class PacketManager
 		
 	public void Register()
 	{
-		_makeFunc.Add((ushort)PacketID.S_CardPool, MakePacket<S_CardPool>);
-		_handler.Add((ushort)PacketID.S_CardPool, PacketHandler.S_CardPoolHandler);
 		_makeFunc.Add((ushort)PacketID.S_GameUpdate, MakePacket<S_GameUpdate>);
 		_handler.Add((ushort)PacketID.S_GameUpdate, PacketHandler.S_GameUpdateHandler);
 		_makeFunc.Add((ushort)PacketID.S_ConfirmJoinGameServer, MakePacket<S_ConfirmJoinGameServer>);
