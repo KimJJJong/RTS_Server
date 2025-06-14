@@ -258,6 +258,7 @@ public class GameLogicManager
         return new S_GameInitBundle
         {
             gameStartTime = _tickManager.GetStartTimeMs(),
+            serverSendTime = _tickManager.GetNowTimeMs(),
             duration = _timerManager.DurationTick,
             size = 10,      // ObjectPool Size
             cardCombinationss = cardPool.Select(card => new S_GameInitBundle.CardCombinations
@@ -289,7 +290,7 @@ public class GameLogicManager
         if (_room.ConnectedCount == 2)
         {
             S_GameOver s_GameOver = new S_GameOver()
-            { 
+            {
                 winnerId = winnerSessionId,
                 resultMessage = ":<",
             };
@@ -298,7 +299,7 @@ public class GameLogicManager
         else if (_room.ConnectedCount == 1)
         {
             S_GameOver s_GameOver = new S_GameOver()
-            { 
+            {
                 winnerId = winnerSessionId,
                 resultMessage = ":<",
             };
@@ -306,7 +307,7 @@ public class GameLogicManager
         }
         //////////////////to LobbyServer/////////////////
 
-        SendGameResult( _room.RoomId, winnerSessionId);
+        SendGameResult(_room.RoomId, winnerSessionId);
 
         /////////////////////////////////////////////
         _gameOver = true;

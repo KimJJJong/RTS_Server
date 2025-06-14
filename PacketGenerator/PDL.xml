@@ -44,15 +44,26 @@
 	
 	
 	<packet name="S_GameInitBundle">
-		<double name="gameStartTime"/>
-		<double name="duration"/>
+		<long name="gameStartTime"/>
+		<long name="serverSendTime"/>
+		<long name="duration"/>
 		<int name="size"/>
 		<list name="cardCombinations">
 			<int name="lv"/>
 			<string name="uid"/>
 		</list>
 	</packet>
+
+
+	<packet name ="C_SceneLoaded">
+		<bool name="isLoad"/>
+	</packet>
+	
+	
 	<!--=========-->
+	
+	
+	
 
 	<!-- UnitSummon -->
 	<packet name="C_ReqSummon">

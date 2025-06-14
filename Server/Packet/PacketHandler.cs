@@ -16,7 +16,9 @@ class PacketHandler
         C_ReqJoinGameServer reqPacket = packet as C_ReqJoinGameServer;
         ClientSession clientSession = session as ClientSession;
 
-            S_ConfirmJoinGameServer confirmPacket = new S_ConfirmJoinGameServer();
+        S_ConfirmJoinGameServer confirmPacket = new S_ConfirmJoinGameServer();
+
+
         GameRoom gameRoom = GameRoomManager.Instance.FindRoom(reqPacket.roomId);
         if ( gameRoom is null || 
              gameRoom.AddClient(reqPacket.playerSUid, clientSession) )

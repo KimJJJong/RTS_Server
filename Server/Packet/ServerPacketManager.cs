@@ -21,6 +21,8 @@ public class PacketManager
 	{
 		_makeFunc.Add((ushort)PacketID.C_ReqJoinGameServer, MakePacket<C_ReqJoinGameServer>);
 		_handler.Add((ushort)PacketID.C_ReqJoinGameServer, PacketHandler.C_ReqJoinGameServerHandler);
+		_makeFunc.Add((ushort)PacketID.C_SceneLoaded, MakePacket<C_SceneLoaded>);
+		_handler.Add((ushort)PacketID.C_SceneLoaded, PacketHandler.C_SceneLoadedHandler);
 		_makeFunc.Add((ushort)PacketID.C_ReqSummon, MakePacket<C_ReqSummon>);
 		_handler.Add((ushort)PacketID.C_ReqSummon, PacketHandler.C_ReqSummonHandler);
 		_makeFunc.Add((ushort)PacketID.C_TargetCapture, MakePacket<C_TargetCapture>);

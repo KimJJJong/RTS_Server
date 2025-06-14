@@ -11,26 +11,27 @@ public enum PacketID
 	C_ReqJoinGameServer = 3,
 	S_ConfirmJoinGameServer = 4,
 	S_GameInitBundle = 5,
-	C_ReqSummon = 6,
-	S_AnsSummon = 7,
-	C_TargetCapture = 8,
-	S_VerifyCapture = 9,
-	C_AttackedRequest = 10,
-	S_AttackConfirm = 11,
-	C_SummonProJectile = 12,
-	S_ShootConfirm = 13,
-	S_DeActivateConfirm = 14,
-	S_OccupationSync = 15,
-	S_TileClaimed = 16,
-	S_TileBulkClaimed = 17,
-	C_TileClaimReq = 18,
-	C_RequestManaStatus = 19,
-	S_SyncTime = 20,
-	S_GameStateUpdate = 21,
-	S_ManaUpdate = 22,
-	S_UnitAction = 23,
-	C_GoToLobby = 24,
-	S_GameOver = 25,
+	C_SceneLoaded = 6,
+	C_ReqSummon = 7,
+	S_AnsSummon = 8,
+	C_TargetCapture = 9,
+	S_VerifyCapture = 10,
+	C_AttackedRequest = 11,
+	S_AttackConfirm = 12,
+	C_SummonProJectile = 13,
+	S_ShootConfirm = 14,
+	S_DeActivateConfirm = 15,
+	S_OccupationSync = 16,
+	S_TileClaimed = 17,
+	S_TileBulkClaimed = 18,
+	C_TileClaimReq = 19,
+	C_RequestManaStatus = 20,
+	S_SyncTime = 21,
+	S_GameStateUpdate = 22,
+	S_ManaUpdate = 23,
+	S_UnitAction = 24,
+	C_GoToLobby = 25,
+	S_GameOver = 26,
 	
 }
 
@@ -292,8 +293,9 @@ public class S_ConfirmJoinGameServer : IPacket
 
 public class S_GameInitBundle : IPacket
 {
-	public double gameStartTime;
-	public double duration;
+	public long gameStartTime;
+	public long serverSendTime;
+	public long duration;
 	public int size;
 	public class CardCombinations
 	{
@@ -335,10 +337,12 @@ public class S_GameInitBundle : IPacket
 		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 		count += sizeof(ushort);
 		count += sizeof(ushort);
-		this.gameStartTime = BitConverter.ToDouble(s.Slice(count, s.Length - count));
-		count += sizeof(double);
-		this.duration = BitConverter.ToDouble(s.Slice(count, s.Length - count));
-		count += sizeof(double);
+		this.gameStartTime = BitConverter.ToInt64(s.Slice(count, s.Length - count));
+		count += sizeof(long);
+		this.serverSendTime = BitConverter.ToInt64(s.Slice(count, s.Length - count));
+		count += sizeof(long);
+		this.duration = BitConverter.ToInt64(s.Slice(count, s.Length - count));
+		count += sizeof(long);
 		this.size = BitConverter.ToInt32(s.Slice(count, s.Length - count));
 		count += sizeof(int);
 		this.cardCombinationss.Clear();
@@ -364,15 +368,54 @@ public class S_GameInitBundle : IPacket
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_GameInitBundle);
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.gameStartTime);
-		count += sizeof(double);
+		count += sizeof(long);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.serverSendTime);
+		count += sizeof(long);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.duration);
-		count += sizeof(double);
+		count += sizeof(long);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.size);
 		count += sizeof(int);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)this.cardCombinationss.Count);
 		count += sizeof(ushort);
 		foreach (CardCombinations cardCombinations in this.cardCombinationss)
 			success &= cardCombinations.Write(s, ref count);
+		success &= BitConverter.TryWriteBytes(s, count);
+		if (success == false)
+			return null;
+		return SendBufferHelper.Close(count);
+	}
+}
+
+public class C_SceneLoaded : IPacket
+{
+	public bool isLoad;
+
+	public ushort Protocol { get { return (ushort)PacketID.C_SceneLoaded; } }
+
+	public void Read(ArraySegment<byte> segment)
+	{
+		ushort count = 0;
+
+		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
+		count += sizeof(ushort);
+		count += sizeof(ushort);
+		this.isLoad = BitConverter.ToBoolean(s.Slice(count, s.Length - count));
+		count += sizeof(bool);
+	}
+
+	public ArraySegment<byte> Write()
+	{
+		ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+		ushort count = 0;
+		bool success = true;
+
+		Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
+
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.C_SceneLoaded);
+		count += sizeof(ushort);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.isLoad);
+		count += sizeof(bool);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;
