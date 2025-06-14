@@ -322,15 +322,22 @@ public class GameLogicManager
 
         Console.WriteLine($"[GameLogicManager] Game ended. Winner: Session {winnerSessionId}");
     }
-    public void SendGameResult(string roomId, int winnerId)
+    public void SendGameResult(string thisRoomId, int winnerIdforClient)
     {
-        string winnerUserId = _room.GetExternalId(winnerId);
-        string loserUserId = _room.GetExternalId(1 - winnerId); // 상대쪽 계산
+        bool draw;
+        if (winnerIdforClient == -1)
+            draw = true;
+        else
+        {
+            draw = false;
+        }
+        string winnerUserId = _room.GetExternalId(winnerIdforClient);
+        string loserUserId = _room.GetExternalId(1 - winnerIdforClient); // 상대쪽 계산
         S_M_GameResult packet = new S_M_GameResult
         {
-            roomId = roomId,
-            winnerId = winnerUserId,
-            loserId = loserUserId
+            roomId = thisRoomId,
+            isDraw = draw, 
+            winnerId = winnerUserId
         };
 
         SessionManager.Instance.SessionFind(1).Send(packet.Write());

@@ -13,9 +13,9 @@ public class MatchCompleteRequest
 
 public class MatchResultRequest
 {
-    public string RoomId { get; set; }
-    public string WinnerId { get; set; }
-    public string LoserId {  get; set; }
+    public bool isDraw { get; set; }
+    public string winnerId { get; set; }
+
 }
 
 

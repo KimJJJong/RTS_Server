@@ -179,8 +179,8 @@ public class S_M_CreateRoom : IPacket
 public class S_M_GameResult : IPacket
 {
     public string roomId;
+    public bool isDraw;
     public string winnerId;
-    public string loserId;
 
     public ushort Protocol { get { return (ushort)InternalPacketID.S_M_GameResult; } }
 
@@ -195,14 +195,12 @@ public class S_M_GameResult : IPacket
         count += sizeof(ushort);
         this.roomId = Encoding.Unicode.GetString(s.Slice(count, roomIdLen));
         count += roomIdLen;
+        this.isDraw = BitConverter.ToBoolean(s.Slice(count, s.Length - count));
+        count += sizeof(bool);
         ushort winnerIdLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
         count += sizeof(ushort);
         this.winnerId = Encoding.Unicode.GetString(s.Slice(count, winnerIdLen));
         count += winnerIdLen;
-        ushort loserIdLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
-        count += sizeof(ushort);
-        this.loserId = Encoding.Unicode.GetString(s.Slice(count, loserIdLen));
-        count += loserIdLen;
     }
 
     public ArraySegment<byte> Write()
@@ -220,17 +218,16 @@ public class S_M_GameResult : IPacket
         success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), roomIdLen);
         count += sizeof(ushort);
         count += roomIdLen;
+        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.isDraw);
+        count += sizeof(bool);
         ushort winnerIdLen = (ushort)Encoding.Unicode.GetBytes(this.winnerId, 0, this.winnerId.Length, segment.Array, segment.Offset + count + sizeof(ushort));
         success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), winnerIdLen);
         count += sizeof(ushort);
         count += winnerIdLen;
-        ushort loserIdLen = (ushort)Encoding.Unicode.GetBytes(this.loserId, 0, this.loserId.Length, segment.Array, segment.Offset + count + sizeof(ushort));
-        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), loserIdLen);
-        count += sizeof(ushort);
-        count += loserIdLen;
         success &= BitConverter.TryWriteBytes(s, count);
         if (success == false)
             return null;
         return SendBufferHelper.Close(count);
     }
 }
+

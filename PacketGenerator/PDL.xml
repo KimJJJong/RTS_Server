@@ -242,8 +242,8 @@
 	<!--	
 	<packet name ="S_M_GameResult">
 		<string name="roomId"/>
+		<bool name="isDraw"/>
 		<string name="winnerId"/>
-		<string name="loserId"/>
 	</packet>
 
 	<packet name ="S_M_CreateRoom">

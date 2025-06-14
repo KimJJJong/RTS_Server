@@ -29,7 +29,7 @@ class InternalPacketHandler
     public static async void S_M_GameResultHandler(PacketSession session, IPacket packet)
     {
         S_M_GameResult resultPacket = packet as S_M_GameResult;
-
+        if(resultPacket.isDraw is true) Console.WriteLine($"[MatchServer] 게임 결과 수신: Room = {resultPacket.roomId}, 비김");
         Console.WriteLine($"[MatchServer] 게임 결과 수신: Room = {resultPacket.roomId}, 승자 = {resultPacket.winnerId}, 패자");
 
         RoomMapping.Instance.Remove(resultPacket.roomId);
@@ -39,9 +39,8 @@ class InternalPacketHandler
             LobbyURL,
             new MatchResultRequest
             {
-                RoomId = resultPacket.roomId,
-                WinnerId = resultPacket.winnerId,
-                LoserId = resultPacket.loserId,
+                isDraw = resultPacket.isDraw,
+                winnerId = resultPacket.winnerId,
             });
     }
 
