@@ -3,22 +3,25 @@ using static System.Net.WebRequestMethods;
 
 class InternalPacketHandler
 {
-    static string LobbyURL = "http://lobby-server-address";
+    static string LobbyURL = "https://leeyoungwoo.shop";
     public static async void S_M_CreateRoomHandler(PacketSession session, IPacket packet)
     {
         S_M_CreateRoom smPacekt = packet as S_M_CreateRoom;
 
         RoomMapping.Instance.AddRoomInfo(smPacekt);
 
-        Console.WriteLine(smPacekt.roomId);
+        Console.WriteLine($"{smPacekt.roomId} with player1 [{smPacekt.player1}] player2 [{smPacekt.player2}]");
+
+
 
         // Lobby로 매칭 성공 통보
         await LobbyApiSender.SendMatchCompleteAsync(
             LobbyURL,
             new MatchCompleteRequest
             {
+                Player1 = smPacekt.player1,//new List<string> { smPacekt.player1, smPacekt.player2 }
+                Player2 = smPacekt.player2,
                 RoomId = smPacekt.roomId,
-                Players = new List<string> { smPacekt.player1, smPacekt.player2 }
             });
     }
 

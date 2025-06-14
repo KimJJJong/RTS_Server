@@ -3,8 +3,11 @@ using System.Text;
 
 public class MatchCompleteRequest
 {
+//    public List<string> Players { get; set; }
+    public string Player1 {  get; set; }
+    public  string Player2 { get; set; }
     public string RoomId { get; set; }
-    public List<string> Players { get; set; }
+       
 }
 
 
@@ -22,19 +25,32 @@ public static class LobbyApiSender
 
     public static async Task SendMatchCompleteAsync(string lobbyUrl, MatchCompleteRequest request)
     {
-        var json = JsonSerializer.Serialize(request);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        try
+        {
+            var json = JsonSerializer.Serialize(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _client.PostAsync($"{lobbyUrl}/match/complete", content);
-        response.EnsureSuccessStatusCode();
+            var response = await _client.PostAsync($"{lobbyUrl}/match/complete", content);
+            response.EnsureSuccessStatusCode();
+        }catch (Exception ex)
+        {
+            Console.WriteLine($"[Warning] Failed to notify lobby: {ex.Message}");
+        }
     }
 
     public static async Task SendMatchResultAsync(string lobbyUrl, MatchResultRequest request)
     {
-        var json = JsonSerializer.Serialize(request);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        try
+        {
+            var json = JsonSerializer.Serialize(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _client.PostAsync($"{lobbyUrl}/match/result", content);
-        response.EnsureSuccessStatusCode();
+            var response = await _client.PostAsync($"{lobbyUrl}/match/result", content);
+            response.EnsureSuccessStatusCode();
+        }
+        catch (Exception ex) 
+        {
+            Console.WriteLine($"[Warning] Failed to notify lobby: {ex.Message}"); 
+        }
     }
 }

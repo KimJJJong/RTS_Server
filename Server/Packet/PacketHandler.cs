@@ -20,8 +20,9 @@ class PacketHandler
 
 
         GameRoom gameRoom = GameRoomManager.Instance.FindRoom(reqPacket.roomId);
+        bool canAddClient = gameRoom.AddClient(reqPacket.playerSUid, clientSession);
         if ( gameRoom is null || 
-             gameRoom.AddClient(reqPacket.playerSUid, clientSession) )
+             canAddClient is false )
         {
             confirmPacket.confirm = false;
             Console.WriteLine($"[{reqPacket.roomId}]는 없습니다.");
@@ -33,6 +34,11 @@ class PacketHandler
        
         clientSession.Send(confirmPacket.Write());
        
+
+    }
+
+    public static void C_SceneLoadedHandler(PacketSession session, IPacket packet)
+    {
 
     }
 
