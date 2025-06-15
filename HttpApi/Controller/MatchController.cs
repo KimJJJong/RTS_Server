@@ -39,7 +39,7 @@ public class MatchController : ControllerBase
     }
 
     [HttpPost("cancel")]
-    public IActionResult CancelMatch([FromBody] MatchPlayerInfo request)
+    public IActionResult CancelMatch([FromBody] MatchPlayerCancel request)
     {
         if (!_queue.Cancel(request.UserId))
         {

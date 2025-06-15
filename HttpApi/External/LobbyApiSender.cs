@@ -4,9 +4,9 @@ using System.Text;
 public class MatchCompleteRequest
 {
 //    public List<string> Players { get; set; }
-    public string Player1 {  get; set; }
-    public  string Player2 { get; set; }
-    public string RoomId { get; set; }
+    public string player1 {  get; set; }
+    public  string player2 { get; set; }
+    public string roomId { get; set; }
        
 }
 
@@ -29,6 +29,8 @@ public static class LobbyApiSender
         {
             var json = JsonSerializer.Serialize(request);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
+    
+
 
             var response = await _client.PostAsync($"{lobbyUrl}/match/complete", content);
             response.EnsureSuccessStatusCode();
@@ -45,7 +47,7 @@ public static class LobbyApiSender
             var json = JsonSerializer.Serialize(request);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync($"{lobbyUrl}/match/result", content);
+            var response = await _client.PostAsync($"{lobbyUrl}/battle-log/create", content);
             response.EnsureSuccessStatusCode();
         }
         catch (Exception ex) 

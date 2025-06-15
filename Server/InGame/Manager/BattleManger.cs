@@ -49,6 +49,8 @@ class BattleManager
         Unit unit = _unitPoolManager.GetUnit(packet.oid);
         unit.Summon(serverX, serverY, session.SessionID, _tickManager.GetCurrentTick());
 
+
+        int _tmpRandom = rng.Next(0, 10);
         // Send To Client With Convert
         foreach (int target in _occupationManager.GetPlayerSessionIds())
         {
@@ -62,7 +64,7 @@ class BattleManager
                 reqSessionID = session.SessionID,
                 x = clientX,
                 y = clientY,
-                randomValue = rng.Next(0, 10),
+                randomValue = _tmpRandom,
                 reducedMana = packet.needMana, // TODO: 실제 마나 시스템 연결
                 ExcuteTick = executeTick,
                 ServerReceiveTimeMs = _tickManager.GetNowTimeMs(),

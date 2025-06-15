@@ -19,10 +19,25 @@ class InternalPacketHandler
             LobbyURL,
             new MatchCompleteRequest
             {
-                Player1 = smPacekt.player1,//new List<string> { smPacekt.player1, smPacekt.player2 }
-                Player2 = smPacekt.player2,
-                RoomId = smPacekt.roomId,
+                player1 = smPacekt.player1,//new List<string> { smPacekt.player1, smPacekt.player2 }
+                player2 = smPacekt.player2,
+                roomId = smPacekt.roomId,
             });
+
+        //if (resultPacket.isDraw is true) Console.WriteLine($"[MatchServer] 게임 결과 수신: Room = {resultPacket.roomId}, 비김");
+        //Console.WriteLine($"[MatchServer] 게임 결과 수신: Room = {resultPacket.roomId}, 승자 = {resultPacket.winnerId}, 패자");
+
+/*        RoomMapping.Instance.Remove(smPacekt.roomId); // TODO : 정리
+
+        // Lobby로 게임 결과 전송
+        await LobbyApiSender.SendMatchResultAsync(
+            LobbyURL,
+            new MatchResultRequest
+            {
+                isDraw = true,
+                winnerId = smPacekt.player2,
+            });*/
+
     }
 
 
@@ -32,7 +47,7 @@ class InternalPacketHandler
         if(resultPacket.isDraw is true) Console.WriteLine($"[MatchServer] 게임 결과 수신: Room = {resultPacket.roomId}, 비김");
         Console.WriteLine($"[MatchServer] 게임 결과 수신: Room = {resultPacket.roomId}, 승자 = {resultPacket.winnerId}, 패자");
 
-        RoomMapping.Instance.Remove(resultPacket.roomId);
+        RoomMapping.Instance.Remove(resultPacket.roomId); // TODO : 정리
 
         // Lobby로 게임 결과 전송
         await LobbyApiSender.SendMatchResultAsync(

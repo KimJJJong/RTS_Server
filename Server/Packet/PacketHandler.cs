@@ -16,6 +16,8 @@ class PacketHandler
         C_ReqJoinGameServer reqPacket = packet as C_ReqJoinGameServer;
         ClientSession clientSession = session as ClientSession;
 
+        Console.WriteLine($"player : {reqPacket.playerSUid}is ReqJoinGameServer num {reqPacket.roomId}");
+
         S_ConfirmJoinGameServer confirmPacket = new S_ConfirmJoinGameServer();
 
 

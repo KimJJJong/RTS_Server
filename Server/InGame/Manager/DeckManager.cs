@@ -69,7 +69,7 @@ class DeckManager
 
         cards.AddRange(extraProjectiles);
     }
-
+/*
     public S_CardPool MakeCardPoolPacket()
     {
         S_CardPool packet = new S_CardPool();
@@ -84,7 +84,7 @@ class DeckManager
         }
 
         return packet;
-    }
+    }*/
 
     public void Clear()
     {

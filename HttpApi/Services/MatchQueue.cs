@@ -68,6 +68,10 @@ public class MatchPlayerInfo
     public string UserId { get; set; }
     public List<CardInfo> Deck { get; set; }
 }
+public class MatchPlayerCancel
+{
+    public string UserId { get; set; }
+}
 public class CardInfo
 {
     public int Lv { get; set; }
