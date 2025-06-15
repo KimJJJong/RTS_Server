@@ -55,6 +55,7 @@ public class GameLogicManager
         _unitPoolManager.Init(_deckManager.CardPoolList);
 
         _room.BroadCast(MakeInitBundlePacket().Write());
+        S_MyPlayerInfoPacket();
 
         JobTimer.Instance.Push(Update);
     }
@@ -66,7 +67,7 @@ public class GameLogicManager
     {
         if (_gameOver)
         {
-            Console.WriteLine($"[GameLogicManager] Game has ended. Ignoring request from session {session.SessionID}");
+            Console.WriteLine($"[GameLogicManager] Game has ended. Ignoring request from session {session.PlayingID}");
             return;
         }
 
@@ -133,7 +134,7 @@ public class GameLogicManager
     {
         if (_gameOver)
         {
-            Console.WriteLine($"[GameLogicManager] Game has ended. Ignoring request from session {session.SessionID}");
+            Console.WriteLine($"[GameLogicManager] Game has ended. Ignoring request from session {session.PlayingID}");
             return;
         }
 
@@ -165,7 +166,7 @@ public class GameLogicManager
     {
         if (_gameOver)
         {
-            Console.WriteLine($"[GameLogicManager] Game has ended. Ignoring request from session {session.SessionID}");
+            Console.WriteLine($"[GameLogicManager] Game has ended. Ignoring request from session {session.PlayingID}");
             return;
         }
 
@@ -213,12 +214,12 @@ public class GameLogicManager
     {
         if (_gameOver)
         {
-            Console.WriteLine($"[GameLogicManager] Game has ended. Ignoring request from session {session.SessionID}");
+            Console.WriteLine($"[GameLogicManager] Game has ended. Ignoring request from session {session.PlayingID}");
             return;
         }
 
         Unit unit = _unitPoolManager.GetUnit(packet.unitOid);
-        if (unit == null || !unit.IsActive || unit.PlayerID != session.SessionID)
+        if (unit == null || !unit.IsActive || unit.PlayerID != session.PlayingID)
         {
             Console.WriteLine($"[TileClaim] XXXX Invalid claim attempt: oid={packet.unitOid}");
             return;
@@ -267,6 +268,15 @@ public class GameLogicManager
                 lv = card.LV
             }).ToList()
         };
+    }
+    public void S_MyPlayerInfoPacket()
+    {
+        foreach(var sessioId in _room.ClientSessions)
+        {
+            S_MyPlayerInfo packet = new S_MyPlayerInfo();
+            packet.internalSessionId = sessioId.PlayingID;
+            sessioId.Send(packet.Write());
+        }
     }
 
 

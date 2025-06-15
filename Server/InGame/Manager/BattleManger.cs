@@ -47,7 +47,7 @@ class BattleManager
         var (serverX, serverY) = PositionConverter.ClientToServer(
             packet.reqSessionID, packet.x, packet.y, player0);
         Unit unit = _unitPoolManager.GetUnit(packet.oid);
-        unit.Summon(serverX, serverY, session.SessionID, _tickManager.GetCurrentTick());
+        unit.Summon(serverX, serverY, session.PlayingID, _tickManager.GetCurrentTick());
 
 
         int _tmpRandom = rng.Next(0, 10);
@@ -61,7 +61,7 @@ class BattleManager
             {
                 canSummon = true,
                 oid = packet.oid,
-                reqSessionID = session.SessionID,
+                reqSessionID = session.PlayingID,
                 x = clientX,
                 y = clientY,
                 randomValue = _tmpRandom,
@@ -82,12 +82,12 @@ class BattleManager
 
         // Server Data Save
         var (serverX, serverY) = PositionConverter.ClientToServer(
-            session.SessionID, packet.summonerX, packet.summonerY, player0);
+            session.PlayingID, packet.summonerX, packet.summonerY, player0);
         Unit proj = _unitPoolManager.GetUnit(packet.projectileOid);
-        proj.Summon(serverX, serverY, session.SessionID, _tickManager.GetCurrentTick());
+        proj.Summon(serverX, serverY, session.PlayingID, _tickManager.GetCurrentTick());
 
         var (serverTargetX, serverTargetY) = PositionConverter.ClientToServer(
-            session.SessionID, packet.targetX, packet.targetY, player0);
+            session.PlayingID, packet.targetX, packet.targetY, player0);
 
         // Send To Client With Convert
         foreach (int target in _occupationManager.GetPlayerSessionIds())
@@ -138,7 +138,7 @@ class BattleManager
         if (attacker == null || target == null || target.UnitTypeIs() != UnitType.WallMaria)
             return;
 
-        _occupationManager.OnWallHit(session.SessionID);
+        _occupationManager.OnWallHit(session.PlayingID);
 
 
     }
@@ -171,7 +171,7 @@ class BattleManager
         if (projectile == null || target == null || target.UnitTypeIs() != UnitType.WallMaria)
             return;
 
-        _occupationManager.OnWallHit(session.SessionID);
+        _occupationManager.OnWallHit(session.PlayingID);
 
 
 

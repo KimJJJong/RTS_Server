@@ -69,22 +69,23 @@ class DeckManager
 
         cards.AddRange(extraProjectiles);
     }
-/*
-    public S_CardPool MakeCardPoolPacket()
-    {
-        S_CardPool packet = new S_CardPool();
-        packet.size = 10;   // TODO : 야...이거왜 size가 UnitPoolManager에 있냐... 맞긴 한데...그래;;;
-        foreach (var card in _cardPool)
-        {
-            packet.cardCombinations.Add(new S_CardPool.CardCombination
-            {
-                uid = card.ID,
-                lv = card.LV
-            });
-        }
 
-        return packet;
-    }*/
+
+    //public S_CardPool MakeCardPoolPacket()
+    //{
+    //    S_CardPool packet = new S_CardPool();
+    //    packet.size = 10;   // TODO : 야...이거왜 size가 UnitPoolManager에 있냐... 맞긴 한데...그래;;;
+    //    foreach (var card in _cardPool)
+    //    {
+    //        packet.cardCombinations.Add(new S_CardPool.CardCombination
+    //        {
+    //            uid = card.ID,
+    //            lv = card.LV
+    //        });
+    //    }
+
+    //    return packet;
+    //}
 
     public void Clear()
     {

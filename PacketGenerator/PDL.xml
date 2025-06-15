@@ -54,6 +54,10 @@
 		</list>
 	</packet>
 
+	<packet name ="S_MyPlayerInfo">
+		<int name ="internalSessionId"/>
+	</packet>
+
 
 	<packet name ="C_SceneLoaded">
 		<bool name="isLoad"/>

@@ -42,8 +42,8 @@ class TileManager
     }
     public bool TryCaptureFromClient(ClientSession session, C_TileClaimReq packet)
     {
-        var (serverX, serverY) = _positionCache.ClientToServer(session.SessionID, packet.x, packet.y);
-        return TryCaptureTile(serverX, serverY, session.SessionID);
+        var (serverX, serverY) = _positionCache.ClientToServer(session.PlayingID, packet.x, packet.y);
+        return TryCaptureTile(serverX, serverY, session.PlayingID);
     }
 
     public bool TryCaptureTile(int x, int y, int sessionId)

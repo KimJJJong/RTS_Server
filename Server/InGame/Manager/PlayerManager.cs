@@ -15,7 +15,7 @@ class PlayerManager
     {
         foreach (var session in sessions)
         {
-            int id = session.SessionID;
+            int id = session.PlayingID;
             _sessions[id] = session;
             _manas[id] = new Mana();
         }
