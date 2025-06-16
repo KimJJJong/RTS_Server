@@ -32,10 +32,13 @@ class PacketHandler
         else
         {
             confirmPacket.confirm = true;
+    
         }
        
         clientSession.Send(confirmPacket.Write());
        
+
+
 
     }
 

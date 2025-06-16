@@ -40,8 +40,12 @@ namespace Server
             LogManager.Instance.LogInfo("Program", "[Matching Stand By Start]");
             Console.WriteLine("MatchingSession Listening...");
 
-            
-  
+
+
+            CardMetaDatabase.Load();
+            UnitStatDatabase.Load();
+
+
 
             while (true)
             {

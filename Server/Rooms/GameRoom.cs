@@ -108,7 +108,7 @@ public class GameRoom : IGameRoom
 
         _roomState = RoomState.Finished;
         Console.WriteLine($"[GameRoom] Ending Game in Room {RoomId}");
-
+        _logicManager.EndGame(-1);
         _logicManager = null;
         _players.Clear();
     }

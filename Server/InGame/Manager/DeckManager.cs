@@ -10,6 +10,7 @@ class DeckManager
     private Dictionary<int, List<Card>> _playerDecks = new Dictionary<int, List<Card>>();
     private List<Card> _cardPool = new List<Card>();
     private List<Card> _playerDeckList = new List<Card>();
+    List<Card> allCards = new List<Card>();
 
     public void Init(List<Card> deckList)
     {
@@ -28,12 +29,16 @@ class DeckManager
              Console.WriteLine("CardPool is ready, ");*/
         _playerDeckList.Clear();
         _playerDeckList = deckList;
+        SetAllCards();
     }
-
 
     public List<Card> GetAllCards()
     {
-        List<Card> allCards = new List<Card>();
+        return allCards;
+    }
+    public List<Card> SetAllCards()
+    {
+        allCards.Clear();
 
         // WallMaria 추가
         List<Card> castles = new List<Card>() { new Card("CASTLE-U-01", 1), new Card("CASTLE-U-02", 1) };
@@ -47,7 +52,7 @@ class DeckManager
 
         foreach(Card card in allCards)
         {
-            Console.WriteLine($"Card ID :[ {card.ID} ]  Lv : [ {card.LV} ]");
+            Console.WriteLine($"Card with Object ID :[{card.ID}]  Lv : [ {card.LV} ]");
         }
 
         return allCards;
@@ -59,7 +64,9 @@ class DeckManager
 
         foreach (Card card in cards)
         {
+
             CardMeta meta = CardMetaDatabase.GetMeta(card.ID, card.LV);
+            //Console.WriteLine($"card : {card.ID} meta : [{meta.CardID} || {meta.ProjectileCardID}] ");
             if (meta != null && meta.IsRanged && !string.IsNullOrEmpty(meta.ProjectileCardID))
             {
                 extraProjectiles.Add(new Card(meta.ProjectileCardID, card.LV));

@@ -58,6 +58,6 @@ class Mana
         float regenAmount = (float)(elapsed * _regenRate);
         _currentMana = Math.Min(_maxMana, _currentMana + regenAmount);
         _lastUpdateTime = now;
-        Console.WriteLine($"[Mana] : {_currentMana}");
+        //Console.WriteLine($"[Mana] : {_currentMana}");
     }
 }

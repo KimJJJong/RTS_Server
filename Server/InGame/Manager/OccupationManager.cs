@@ -8,7 +8,7 @@ class OccupationManager
 {
     private const float MaxOccupation = 100f;
     private const float TileClaimScore = 1f;
-    private const float WallHitScore = 0.25f;
+    private const float WallHitScore = 0.35f;
     private const float InstantWinThreshold = 80f;
 
     private const int WallHitDelay = 2;

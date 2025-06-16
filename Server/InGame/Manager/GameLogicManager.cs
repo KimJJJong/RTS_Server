@@ -52,7 +52,7 @@ public class GameLogicManager
         _battleManager.Init(_room.Players);
         _deckManager.Init(_room.PlayeCardDeckCombination);
         _playerManager.Init(_room.ClientSessions, _tickManager);
-        _unitPoolManager.Init(_deckManager.CardPoolList);
+        _unitPoolManager.Init(_deckManager.GetAllCards());
 
         _room.BroadCast(MakeInitBundlePacket().Write());
         S_MyPlayerInfoPacket();
@@ -73,7 +73,7 @@ public class GameLogicManager
 
         try
         {
-            //Console.WriteLine($"[GameLogicManager] Summon requested: OID={packet.oid}, Session={session.SessionID}");
+            Console.WriteLine($"[GameLogicManager] Summon requested: OID={packet.oid}, Session={session.SessionID}");
 
             if (!_playerManager.Manas.TryGetValue(packet.reqSessionID, out Mana mana))
             {
@@ -243,7 +243,7 @@ public class GameLogicManager
 
         _dimensionManager.Update(this);
 
-        //Console.WriteLine($"CurrentTime {_timerManager.RemainingSeconds}");
+        Console.WriteLine($"CurrentTime {_timerManager.RemainingSeconds}");
 
         if (_timerManager.IsTimeUp()) _occupationManager.CheckFinalWinner();
 
@@ -316,8 +316,15 @@ public class GameLogicManager
             _room.SendToPlayer(winnerSessionId, s_GameOver.Write());
         }
         //////////////////to LobbyServer/////////////////
+        if( _room.ConnectedCount != 0)
+        {
 
         SendGameResult(_room.RoomId, winnerSessionId);
+        }
+        else
+        {
+            Console.WriteLine("둘다 나감");
+        }
 
         /////////////////////////////////////////////
         _gameOver = true;
@@ -328,7 +335,12 @@ public class GameLogicManager
         _tickDrivenUnitManager.Clear();
         _tileManager.Clear();
 
+        foreach( var session in _room.ClientSessions)
+        {
+            SessionManager.Instance.Remove(session);
+            session.Disconnect();
 
+        }
 
         Console.WriteLine($"[GameLogicManager] Game ended. Winner: Session {winnerSessionId}");
     }
@@ -336,7 +348,10 @@ public class GameLogicManager
     {
         bool draw;
         if (winnerIdforClient == -1)
+        {
             draw = true;
+            winnerIdforClient = 1;
+        }
         else
         {
             draw = false;

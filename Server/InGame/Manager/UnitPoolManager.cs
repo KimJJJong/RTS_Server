@@ -9,6 +9,7 @@ class UnitPoolManager
 
     public void Init(List<Card> cardPool)
     {
+        Console.WriteLine( "[InitUnitPoolManager] !!!!!!!!!!!!!!!!");
         _unitPool.Clear();
         int oidCounter = 0;
 
