@@ -128,6 +128,7 @@ public class C_ReqJoinGameServer : IPacket
 {
 	public string playerSUid;
 	public string roomId;
+	public string nickName;
 
 	public ushort Protocol { get { return (ushort)PacketID.C_ReqJoinGameServer; } }
 
@@ -146,6 +147,10 @@ public class C_ReqJoinGameServer : IPacket
 		count += sizeof(ushort);
 		this.roomId = Encoding.Unicode.GetString(s.Slice(count, roomIdLen));
 		count += roomIdLen;
+		ushort nickNameLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+		count += sizeof(ushort);
+		this.nickName = Encoding.Unicode.GetString(s.Slice(count, nickNameLen));
+		count += nickNameLen;
 	}
 
 	public ArraySegment<byte> Write()
@@ -167,6 +172,10 @@ public class C_ReqJoinGameServer : IPacket
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), roomIdLen);
 		count += sizeof(ushort);
 		count += roomIdLen;
+		ushort nickNameLen = (ushort)Encoding.Unicode.GetBytes(this.nickName, 0, this.nickName.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), nickNameLen);
+		count += sizeof(ushort);
+		count += nickNameLen;
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;
@@ -213,6 +222,8 @@ public class S_ConfirmJoinGameServer : IPacket
 
 public class S_GameInitBundle : IPacket
 {
+	public string player0NickName;
+	public string player1NickName;
 	public long gameStartTime;
 	public long serverSendTime;
 	public long duration;
@@ -257,6 +268,14 @@ public class S_GameInitBundle : IPacket
 		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 		count += sizeof(ushort);
 		count += sizeof(ushort);
+		ushort player0NickNameLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+		count += sizeof(ushort);
+		this.player0NickName = Encoding.Unicode.GetString(s.Slice(count, player0NickNameLen));
+		count += player0NickNameLen;
+		ushort player1NickNameLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+		count += sizeof(ushort);
+		this.player1NickName = Encoding.Unicode.GetString(s.Slice(count, player1NickNameLen));
+		count += player1NickNameLen;
 		this.gameStartTime = BitConverter.ToInt64(s.Slice(count, s.Length - count));
 		count += sizeof(long);
 		this.serverSendTime = BitConverter.ToInt64(s.Slice(count, s.Length - count));
@@ -287,6 +306,14 @@ public class S_GameInitBundle : IPacket
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_GameInitBundle);
 		count += sizeof(ushort);
+		ushort player0NickNameLen = (ushort)Encoding.Unicode.GetBytes(this.player0NickName, 0, this.player0NickName.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), player0NickNameLen);
+		count += sizeof(ushort);
+		count += player0NickNameLen;
+		ushort player1NickNameLen = (ushort)Encoding.Unicode.GetBytes(this.player1NickName, 0, this.player1NickName.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), player1NickNameLen);
+		count += sizeof(ushort);
+		count += player1NickNameLen;
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.gameStartTime);
 		count += sizeof(long);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.serverSendTime);

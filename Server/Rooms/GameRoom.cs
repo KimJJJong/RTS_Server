@@ -23,14 +23,14 @@ public class GameRoom : IGameRoom
 
         for (int i = 0; i < playerIds.Count; i++)
         {
-            _players[i] = new PlayerSlot( i, playerIds[i]);
+            _players[i] = new PlayerSlot( i, playerIds[i], _players[i].NickName);
 
         }
 
         _roomState = RoomState.Waiting;
     }
 
-    public bool AddClient(string userId, ClientSession client)
+    public bool AddClient(string userId, ClientSession client,string nickName)
     {
         if (_roomState == RoomState.Finished)
             return false;
@@ -120,6 +120,8 @@ public class GameRoom : IGameRoom
     public IEnumerable<ClientSession> ClientSessions => _players.Values.Select(p => p.Session).Where(s => s != null);
     //public IReadOnlyDictionary<int, ClientSession> Sessions => _sessions;
     public int ConnectedCount => _players.Values.Count(p => p.Session != null);
+    public string GetPlayer0NickName => _players[0].NickName;
+    public string GetPlayer1NickName => _players[1].NickName;
 
 
 }
@@ -137,10 +139,12 @@ public class PlayerSlot
     public int InternalId { get; }
     public string UserId { get; }
     public ClientSession Session { get; set; }
+    public string NickName { get; set; }
 
-    public PlayerSlot(int internalId, string userId)
+    public PlayerSlot(int internalId, string userId, string nickName)
     {
         InternalId = internalId;
         UserId = userId;
+        NickName = nickName;
     }
 }

@@ -39,7 +39,8 @@ namespace ServerCore
 			}
 		}
 
-		void RegisterAccept(SocketAsyncEventArgs args)
+
+        void RegisterAccept(SocketAsyncEventArgs args)
 		{
 			args.AcceptSocket = null;
 

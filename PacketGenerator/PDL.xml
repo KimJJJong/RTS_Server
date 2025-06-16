@@ -27,6 +27,7 @@
 	<packet name ="C_ReqJoinGameServer">
 		<string name="playerSUid"/>
 		<string name ="roomId"/>
+		<string name="nickName"/>
 	</packet>
 <!--
 		<string name="roomId"/>
@@ -44,6 +45,8 @@
 	
 	
 	<packet name="S_GameInitBundle">
+		<string name ="player0NickName"/>
+		<string name ="player1NickName"/>
 		<long name="gameStartTime"/>
 		<long name="serverSendTime"/>
 		<long name="duration"/>

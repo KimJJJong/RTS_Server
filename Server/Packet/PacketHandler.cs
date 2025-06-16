@@ -16,13 +16,13 @@ class PacketHandler
         C_ReqJoinGameServer reqPacket = packet as C_ReqJoinGameServer;
         ClientSession clientSession = session as ClientSession;
 
-        Console.WriteLine($"player : {reqPacket.playerSUid}is ReqJoinGameServer num {reqPacket.roomId}");
+        Console.WriteLine($"player : {reqPacket.playerSUid}is ReqJoinGameServer num {reqPacket.roomId} and {reqPacket.nickName}");
 
         S_ConfirmJoinGameServer confirmPacket = new S_ConfirmJoinGameServer();
 
 
         GameRoom gameRoom = GameRoomManager.Instance.FindRoom(reqPacket.roomId);
-        bool canAddClient = gameRoom.AddClient(reqPacket.playerSUid, clientSession);
+        bool canAddClient = gameRoom.AddClient(reqPacket.playerSUid, clientSession, reqPacket.nickName);
         if ( gameRoom is null || 
              canAddClient is false )
         {
