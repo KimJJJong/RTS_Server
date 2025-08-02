@@ -10,6 +10,7 @@ class PacketHandler
    
 
 
+    // 들어 오자마자 이거 바로 Searching과 CreateRoom 실행
     public static void C_ReqJoinGameServerHandler(PacketSession session, IPacket packet)
     {
      
@@ -52,6 +53,12 @@ class PacketHandler
 
 
 
+    }
+
+    public static void C_CancleMatching(PacketSession session, IPacket packet)
+    {
+        ClientSession clientSession = session as ClientSession;
+        clientSession.Room.EndGame();
     }
 
     public static void C_SceneLoadedHandler(PacketSession session, IPacket packet)

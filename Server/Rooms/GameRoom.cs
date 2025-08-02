@@ -115,7 +115,7 @@ public class GameRoom : IGameRoom
             return;
 
         _roomState = RoomState.Finished;
-        Console.WriteLine($"[GameRoom] Ending Game in Room {RoomId}");
+        Console.WriteLine($"[GameRoom] Ending Game in Room {RoomId} :Need To Check Room State");
         _logicManager.EndGame(-1);
         _logicManager = null;
         _players.Clear();

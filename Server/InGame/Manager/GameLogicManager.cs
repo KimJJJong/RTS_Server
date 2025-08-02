@@ -316,15 +316,16 @@ public class GameLogicManager
             _room.SendToPlayer(winnerSessionId, s_GameOver.Write());
         }
         //////////////////to LobbyServer/////////////////
-        if( _room.ConnectedCount != 0)
-        {
+        //if( _room.ConnectedCount != 0)
+        //{
 
-        SendGameResult(_room.RoomId, winnerSessionId);
-        }
+        //SendGameResult(_room.RoomId, winnerSessionId);
+        //}
+        if (_room.ConnectedCount != 0)
+        { }
         else
-        {
             Console.WriteLine("둘다 나감");
-        }
+        
 
         /////////////////////////////////////////////
         _gameOver = true;
@@ -346,26 +347,26 @@ public class GameLogicManager
     }
     public void SendGameResult(string thisRoomId, int winnerIdforClient)
     {
-        bool draw;
-        if (winnerIdforClient == -1)
-        {
-            draw = true;
-            winnerIdforClient = 1;
-        }
-        else
-        {
-            draw = false;
-        }
-        string winnerUserId = _room.GetExternalId(winnerIdforClient);
-        string loserUserId = _room.GetExternalId(1 - winnerIdforClient); // 상대쪽 계산
-        S_M_GameResult packet = new S_M_GameResult
-        {
-            roomId = thisRoomId,
-            isDraw = draw, 
-            winnerId = winnerUserId
-        };
+        //bool draw;
+        //if (winnerIdforClient == -1)
+        //{
+        //    draw = true;
+        //    winnerIdforClient = 1;
+        //}
+        //else
+        //{
+        //    draw = false;
+        //}
+        //string winnerUserId = _room.GetExternalId(winnerIdforClient);
+        //string loserUserId = _room.GetExternalId(1 - winnerIdforClient); // 상대쪽 계산
+        //S_M_GameResult packet = new S_M_GameResult
+        //{
+        //    roomId = thisRoomId,
+        //    isDraw = draw, 
+        //    winnerId = winnerUserId
+        //};
 
-        SessionManager.Instance.SessionFind(1).Send(packet.Write());
+        //SessionManager.Instance.SessionFind(1).Send(packet.Write());
     }
 
     public void SendToPlayer(int sessionId, ArraySegment<byte> segment) => _room.SendToPlayer(sessionId, segment);
