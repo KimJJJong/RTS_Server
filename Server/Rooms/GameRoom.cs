@@ -1,49 +1,60 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.Linq;
+using Shared;
 
 public class GameRoom : IGameRoom
 {
     public string RoomId { get; }
     private Dictionary<int, PlayerSlot> _players = new();
+    private List<int> _playerSessionID = new();
     private RoomState _roomState;
     private GameLogicManager _logicManager;
     public GameLogicManager GameLogic => _logicManager;
 
-    private List<Card> _deckCombination;
+    private List<Card> _deckCombination = new List<Card>();
+
+    public RoomState RoomState => _roomState;
 
     
 
     private readonly object _lock = new();
 
-    public GameRoom(string roomId, List<string> playerIds, List<Card> deckCombination)
+    public GameRoom(string roomId)
     {
         RoomId = roomId;
-        _deckCombination = deckCombination;
 
-        for (int i = 0; i < playerIds.Count; i++)
-        {
-            _players[i] = new PlayerSlot( i, playerIds[i], _players[i].NickName);
-
-        }
-
+    
         _roomState = RoomState.Waiting;
     }
 
-    public bool AddClient(string userId, ClientSession client,string nickName)
+    public bool AddClient(ClientSession client,List<Card> cardList)
     {
-        if (_roomState == RoomState.Finished)
+        if (_roomState != RoomState.Waiting)
             return false;
-
-        var slot = _players.Values.FirstOrDefault(p => p.UserId == userId);
-        if (slot == null || slot.Session != null)
+        
+        if(_players.Keys.Count == 0)
+        {
+            _players[0] = new PlayerSlot(0, client.SessionID);
+            _players[0].Session = client;
+            client.Room = this;
+            client.PlayingID = _players[0].InternalId;
+        }
+        else if(_players.Keys.Count == 1)
+        {
+            _players[1] = new PlayerSlot(1, client.SessionID);
+            _players[1].Session = client;
+            client.Room = this;
+            client.PlayingID = _players[1].InternalId;
+        }
+        else
+        {
+            LogManager.Instance.LogWarning(("[GameRoom]"), $"_players.Keys.Count outof Index {_players.Keys.Count}");
             return false;
+        }
 
-        slot.Session = client;
-        client.Room = this;
-        client.PlayingID = slot.InternalId;
-
-        Console.WriteLine($"[GameRoom] Client {userId} joined Room {RoomId}");
+        _deckCombination = cardList;
+        Console.WriteLine($"[GameRoom] Client {client.SessionID} joined Room {RoomId}");
 
 
         bool allPlayersJoined;
@@ -84,9 +95,6 @@ public class GameRoom : IGameRoom
 
     public void SendToPlayer(int internalId, ArraySegment<byte> segment)
     {
-/*        if (_sessions.TryGetValue(internalId, out var client))
-        {
-        }*/
             _players[internalId].Session.Send(segment);
     }
 
@@ -96,7 +104,7 @@ public class GameRoom : IGameRoom
             return;
 
         _roomState = RoomState.InGame;
-        Console.WriteLine($"[GameRoom] Starting Game in Room {RoomId}");
+        LogManager.Instance.LogInfo("[GameRoom]", $"Starting Game in Room {RoomId}|| Players {_players[0].Session} and {_players[1].Session}");
 
         _logicManager = new GameLogicManager(this);
     }
@@ -113,20 +121,17 @@ public class GameRoom : IGameRoom
         _players.Clear();
     }
 
-    public string GetExternalId(int internalId) => _players[internalId].UserId;
+    public string GetExternalId(int internalId) => _players[internalId].UserId.ToString();
 
     public List<int> Players => _players.Keys.ToList();
     public List<Card> PlayeCardDeckCombination => _deckCombination;
     public IEnumerable<ClientSession> ClientSessions => _players.Values.Select(p => p.Session).Where(s => s != null);
-    //public IReadOnlyDictionary<int, ClientSession> Sessions => _sessions;
     public int ConnectedCount => _players.Values.Count(p => p.Session != null);
-    public string GetPlayer0NickName => _players[0].NickName;
-    public string GetPlayer1NickName => _players[1].NickName;
 
 
 }
 
-enum RoomState
+public enum RoomState
 {
     Waiting,
     InGame,
@@ -139,12 +144,10 @@ public class PlayerSlot
     public int InternalId { get; }
     public string UserId { get; }
     public ClientSession Session { get; set; }
-    public string NickName { get; set; }
 
-    public PlayerSlot(int internalId, string userId, string nickName)
+    public PlayerSlot(int internalId, int userId )
     {
         InternalId = internalId;
-        UserId = userId;
-        NickName = nickName;
+        UserId = userId.ToString();
     }
 }

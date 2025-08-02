@@ -24,18 +24,18 @@ class InternalPacketHandler
 
         foreach (var card in mPacket.cardCombinations)
         {
-            deckCombination.Add(new Card( card.uid, card.lv ) );
+            deckCombination.Add(new Card( card.uid/*, card.lv */) );
 
-            Console.WriteLine($"Card [ UID :{card.uid}] [ LV : {card.lv} ]");
+            Console.WriteLine($"Card [ UID :{card.uid}] [ LV : default ]");
         }
 
         // GameRoom 생성 (RoomId 생성 후 덱까지 넘김)
-        string roomId = GameRoomManager.Instance.CreateRoom(playerList, deckCombination);
+        //string roomId = GameRoomManager.Instance.CreateRoom(playerList, deckCombination);
 
         // GameServer -> MatchServer 응답
         S_M_CreateRoom ansPacket = new S_M_CreateRoom
         {
-            roomId = roomId,
+            //roomId = roomId,
             player1 = mPacket.player1,
             player2 = mPacket.player2
         };

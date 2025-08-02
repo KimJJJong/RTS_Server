@@ -126,9 +126,31 @@ public class S_GameUpdate : IPacket
 
 public class C_ReqJoinGameServer : IPacket
 {
-	public string playerSUid;
-	public string roomId;
-	public string nickName;
+	public class CardCombinations
+	{
+		public string uid;
+	
+		public void Read(ReadOnlySpan<byte> s, ref ushort count)
+		{
+			ushort uidLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+			count += sizeof(ushort);
+			this.uid = Encoding.Unicode.GetString(s.Slice(count, uidLen));
+			count += uidLen;
+		}
+	
+		public bool Write(Span<byte> s, ref ushort count)
+		{
+			ArraySegment<byte> segment = SendBufferHelper.Open(4096);
+	
+			bool success = true;
+			ushort uidLen = (ushort)Encoding.Unicode.GetBytes(this.uid, 0, this.uid.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), uidLen);
+			count += sizeof(ushort);
+			count += uidLen;
+			return success;
+		}	
+	}
+	public List<CardCombinations> cardCombinationss = new List<CardCombinations>();
 
 	public ushort Protocol { get { return (ushort)PacketID.C_ReqJoinGameServer; } }
 
@@ -139,18 +161,15 @@ public class C_ReqJoinGameServer : IPacket
 		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 		count += sizeof(ushort);
 		count += sizeof(ushort);
-		ushort playerSUidLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+		this.cardCombinationss.Clear();
+		ushort cardCombinationsLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
 		count += sizeof(ushort);
-		this.playerSUid = Encoding.Unicode.GetString(s.Slice(count, playerSUidLen));
-		count += playerSUidLen;
-		ushort roomIdLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
-		count += sizeof(ushort);
-		this.roomId = Encoding.Unicode.GetString(s.Slice(count, roomIdLen));
-		count += roomIdLen;
-		ushort nickNameLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
-		count += sizeof(ushort);
-		this.nickName = Encoding.Unicode.GetString(s.Slice(count, nickNameLen));
-		count += nickNameLen;
+		for (int i = 0; i < cardCombinationsLen; i++)
+		{
+			CardCombinations cardCombinations = new CardCombinations();
+			cardCombinations.Read(s, ref count);
+			cardCombinationss.Add(cardCombinations);
+		}
 	}
 
 	public ArraySegment<byte> Write()
@@ -164,18 +183,10 @@ public class C_ReqJoinGameServer : IPacket
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.C_ReqJoinGameServer);
 		count += sizeof(ushort);
-		ushort playerSUidLen = (ushort)Encoding.Unicode.GetBytes(this.playerSUid, 0, this.playerSUid.Length, segment.Array, segment.Offset + count + sizeof(ushort));
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), playerSUidLen);
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)this.cardCombinationss.Count);
 		count += sizeof(ushort);
-		count += playerSUidLen;
-		ushort roomIdLen = (ushort)Encoding.Unicode.GetBytes(this.roomId, 0, this.roomId.Length, segment.Array, segment.Offset + count + sizeof(ushort));
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), roomIdLen);
-		count += sizeof(ushort);
-		count += roomIdLen;
-		ushort nickNameLen = (ushort)Encoding.Unicode.GetBytes(this.nickName, 0, this.nickName.Length, segment.Array, segment.Offset + count + sizeof(ushort));
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), nickNameLen);
-		count += sizeof(ushort);
-		count += nickNameLen;
+		foreach (CardCombinations cardCombinations in this.cardCombinationss)
+			success &= cardCombinations.Write(s, ref count);
 		success &= BitConverter.TryWriteBytes(s, count);
 		if (success == false)
 			return null;
@@ -222,8 +233,6 @@ public class S_ConfirmJoinGameServer : IPacket
 
 public class S_GameInitBundle : IPacket
 {
-	public string player0NickName;
-	public string player1NickName;
 	public long gameStartTime;
 	public long serverSendTime;
 	public long duration;
@@ -268,14 +277,6 @@ public class S_GameInitBundle : IPacket
 		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 		count += sizeof(ushort);
 		count += sizeof(ushort);
-		ushort player0NickNameLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
-		count += sizeof(ushort);
-		this.player0NickName = Encoding.Unicode.GetString(s.Slice(count, player0NickNameLen));
-		count += player0NickNameLen;
-		ushort player1NickNameLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
-		count += sizeof(ushort);
-		this.player1NickName = Encoding.Unicode.GetString(s.Slice(count, player1NickNameLen));
-		count += player1NickNameLen;
 		this.gameStartTime = BitConverter.ToInt64(s.Slice(count, s.Length - count));
 		count += sizeof(long);
 		this.serverSendTime = BitConverter.ToInt64(s.Slice(count, s.Length - count));
@@ -306,14 +307,6 @@ public class S_GameInitBundle : IPacket
 		count += sizeof(ushort);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_GameInitBundle);
 		count += sizeof(ushort);
-		ushort player0NickNameLen = (ushort)Encoding.Unicode.GetBytes(this.player0NickName, 0, this.player0NickName.Length, segment.Array, segment.Offset + count + sizeof(ushort));
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), player0NickNameLen);
-		count += sizeof(ushort);
-		count += player0NickNameLen;
-		ushort player1NickNameLen = (ushort)Encoding.Unicode.GetBytes(this.player1NickName, 0, this.player1NickName.Length, segment.Array, segment.Offset + count + sizeof(ushort));
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), player1NickNameLen);
-		count += sizeof(ushort);
-		count += player1NickNameLen;
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.gameStartTime);
 		count += sizeof(long);
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.serverSendTime);

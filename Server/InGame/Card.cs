@@ -9,6 +9,11 @@ public class Card
         this.ID = ID;
         this.LV = LV;
     }
+    public Card(string ID/*, int LV*/)
+    {
+        this.ID = ID;
+        //this.LV = LV;
+    }
 }
 
 
@@ -24,12 +29,12 @@ public class CardMeta
 
 public static class CardMetaDatabase
 {
-    private static Dictionary<(string, int), CardMeta> _metas = new Dictionary<(string, int), CardMeta>();
+    private static Dictionary</*(string, int)*/string, CardMeta> _metas = new Dictionary</*(string, int)*/string, CardMeta>();
 
     public static void Load()
     {
         // Scholar - U-JOS-003 → PRJ-U-JOS-003
-        _metas[("U-JOS-003", 1)] = new CardMeta
+        _metas["U-JOS-003"/*("U-JOS-003", 1)*/] = new CardMeta
         {
             CardID = "U-JOS-003",
             Level = 1,
@@ -38,7 +43,7 @@ public static class CardMetaDatabase
         };
 
         // Painter - U-JOS-004 → PRJ-U-JOS-004
-        _metas[("U-JOS-004", 1)] = new CardMeta
+        _metas["U-JOS-004"/*("U-JOS-004", 1)*/] = new CardMeta
         {
             CardID = "U-JOS-004",
             Level = 1,
@@ -47,7 +52,7 @@ public static class CardMetaDatabase
         };
 
         // Crossbowman - U-ENG-003 → PRJ-U-ENG-003
-        _metas[("U-ENG-003", 1)] = new CardMeta
+        _metas["U-ENG-003"] = new CardMeta
         {
             CardID = "U-ENG-003",
             Level = 1,
@@ -56,7 +61,7 @@ public static class CardMetaDatabase
         };
 
         // Tower - ChromaticCannon → PRJ-TWR-ATK-001
-        _metas[("TWR-ATK-001", 1)] = new CardMeta
+        _metas["TWR-ATK-001"] = new CardMeta
         {
             CardID = "TWR-ATK-001",
             Level = 1,
@@ -67,9 +72,9 @@ public static class CardMetaDatabase
         // ❗️기타 유닛은 추가적으로 여기에 계속 넣으면 됨
     }
 
-    public static CardMeta GetMeta(string cardID, int level)
+    public static CardMeta GetMeta(string cardID/*, int level*/)
     {
-        if (_metas.TryGetValue((cardID, level), out var meta))
+        if (_metas.TryGetValue(cardID/*(cardID, level)*/, out var meta))
             return meta;
 
         return null;

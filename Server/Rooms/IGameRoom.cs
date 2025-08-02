@@ -7,7 +7,7 @@ using Server;
 public interface IGameRoom
 {
     string RoomId{ get; }
-    bool AddClient(string clientId, ClientSession client, string nickName);
+    bool AddClient(/*string clientId, */ClientSession client, List<Card> cards);
     void RemoveClient(int clientId);
     void BroadCast(ArraySegment<byte> segment);
     void SendToPlayer(int sessionId, ArraySegment<byte> segment);

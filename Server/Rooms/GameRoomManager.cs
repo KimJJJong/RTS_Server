@@ -9,14 +9,13 @@ using System.Net.Sockets;
 
         private Dictionary<string, GameRoom> _rooms = new Dictionary<string, GameRoom>();
 
-        // Room 생성 <HTTP API 호출>
-        public string CreateRoom(List<string> players, List<Card> deckCombination)
+        public GameRoom CreateRoom()
         {
             string roomId = Guid.NewGuid().ToString().Substring(0, 5);
-            GameRoom room = GameRoomFactory.CreateRoom(roomId, players, deckCombination);
+            GameRoom room = GameRoomFactory.CreateRoom(roomId);
             _rooms[roomId] = room;
-            Console.WriteLine($"[GameRoomManager] Room {roomId} created for Players: {string.Join(", ", players)}  will be Join");
-            return roomId;
+            Console.WriteLine($"[GameRoomManager] Room not exist, -> Room {roomId} created  ");
+            return room;
         }
 
         // Room 찾기
@@ -24,9 +23,21 @@ using System.Net.Sockets;
         {
             return _rooms.TryGetValue(roomId, out var room) ? room : null;
         }
+        public GameRoom FindRoom()
+        {
+            foreach (var room in _rooms.Values)
+            {
+                if (room.RoomState is RoomState.Waiting )
+                {
+                    return room;
+                }
+            }
+            return null;
+        }
 
-        // Room 제거
-        public void RemoveRoom(string roomId)
+
+    // Room 제거
+    public void RemoveRoom(string roomId)
         {
             if (_rooms.ContainsKey(roomId))
             {

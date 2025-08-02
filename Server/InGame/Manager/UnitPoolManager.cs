@@ -17,7 +17,7 @@ class UnitPoolManager
         {
             for (int i = 0; i < _unitPoolSize; i++)
             {
-                Unit unit = UnitFactory.CreateUnit(card.ID, card.LV, oidCounter++);
+                Unit unit = UnitFactory.CreateUnit(card.ID/*, card.LV*/, oidCounter++);
                 _unitPool.Add(unit);
             }
         }

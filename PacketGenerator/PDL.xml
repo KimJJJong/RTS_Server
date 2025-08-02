@@ -1,18 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <PDL>
-	<!-- 게임 
-	<packet name="S_InitGame">
-		<double name ="gameStartTime"/>
-		<double name ="duration"/>
-	</packet>
-	<packet name ="S_CardPool">
-		<int name ="size"/>
-		<list name="cardCombination">
-			<int name ="lv"/>
-			<string name="uid"/>
-		</list>	
-	</packet>
-	-->
 	
 	<packet name="S_GameUpdate">
 		<list name="pool">
@@ -25,17 +12,11 @@
 	
 	<!-- InitSetting -->
 	<packet name ="C_ReqJoinGameServer">
-		<string name="playerSUid"/>
-		<string name ="roomId"/>
-		<string name="nickName"/>
-	</packet>
-<!--
-		<string name="roomId"/>
-		<list name="playerOwnCards">
-			<int name ="lv"/>
+		<list name="cardCombinations">
 			<string name="uid"/>
 		</list>
--->
+	</packet>
+
 
 
 	<packet name ="S_ConfirmJoinGameServer">
@@ -45,8 +26,7 @@
 	
 	
 	<packet name="S_GameInitBundle">
-		<string name ="player0NickName"/>
-		<string name ="player1NickName"/>
+
 		<long name="gameStartTime"/>
 		<long name="serverSendTime"/>
 		<long name="duration"/>

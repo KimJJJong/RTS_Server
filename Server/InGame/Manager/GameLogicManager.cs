@@ -258,8 +258,6 @@ public class GameLogicManager
         var cardPool = _deckManager.GetAllCards();
         return new S_GameInitBundle
         {
-            player0NickName = _room.GetPlayer0NickName,
-            player1NickName = _room.GetPlayer1NickName,
             gameStartTime = _tickManager.GetStartTimeMs(),
             serverSendTime = _tickManager.GetNowTimeMs(),
             duration = _timerManager.DurationTick,
@@ -267,7 +265,7 @@ public class GameLogicManager
             cardCombinationss = cardPool.Select(card => new S_GameInitBundle.CardCombinations
             {
                 uid = card.ID,
-                lv = card.LV
+                lv = 1//card.LV
             }).ToList()
         };
     }

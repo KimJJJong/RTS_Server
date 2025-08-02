@@ -1,9 +1,9 @@
 ﻿public static class UnitFactory
 {
-    public static Unit CreateUnit(string unitID, int level, int oid)
+    public static Unit CreateUnit(string unitID, int oid)
     {
-        UnitStat stat = UnitStatDatabase.GetStat(unitID, level);
-        CardMeta meta = CardMetaDatabase.GetMeta(unitID, level);
+        UnitStat stat = UnitStatDatabase.GetStat(unitID/*, level*/);
+        CardMeta meta = CardMetaDatabase.GetMeta(unitID/*, level*/);
 
         Unit unit;
         if (stat.IsProjectile)
@@ -15,7 +15,7 @@
         else
             unit = new DefaultUnit();
 
-        unit.InitializeID(unitID, level, oid);
+        unit.InitializeID(unitID, 1/*, level*/, oid);
         unit.SetStats(stat);
 
 

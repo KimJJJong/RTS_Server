@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
 
-
-
 public class UnitStat
 {
     public string UnitID;
@@ -59,8 +57,9 @@ public static class UnitStatDatabase
 
     }
 
-    public static UnitStat GetStat(string unitID, int level)
+    public static UnitStat GetStat(string unitID/*, int level*/)
     {
+        int level = 1;
         if (_stats.TryGetValue((unitID, level), out var stat))
             return stat;
         throw new Exception($"스탯 정보 없음: {unitID}, LV {level}");

@@ -15,19 +15,31 @@ class PacketHandler
      
         C_ReqJoinGameServer reqPacket = packet as C_ReqJoinGameServer;
         ClientSession clientSession = session as ClientSession;
-
-        Console.WriteLine($"player : {reqPacket.playerSUid}is ReqJoinGameServer num {reqPacket.roomId} and {reqPacket.nickName}");
-
         S_ConfirmJoinGameServer confirmPacket = new S_ConfirmJoinGameServer();
 
+        Console.WriteLine($"player : {clientSession.SessionID}");
 
-        GameRoom gameRoom = GameRoomManager.Instance.FindRoom(reqPacket.roomId);
-        bool canAddClient = gameRoom.AddClient(reqPacket.playerSUid, clientSession, reqPacket.nickName);
+
+        // 그냥 만들어 져 있는데 게임이 시작되지 않은 GameRoom 찾기
+        GameRoom gameRoom = GameRoomManager.Instance.FindRoom();
+        if (gameRoom == null)
+        {
+           gameRoom = GameRoomManager.Instance.CreateRoom();
+        }
+
+        List<Card> tmpCards = new List<Card>();
+        foreach ( var card in reqPacket.cardCombinationss )
+        {
+            Card tmpCard = new Card(card.uid);
+            tmpCards.Add(tmpCard);
+        }
+
+        bool canAddClient = gameRoom.AddClient( clientSession , tmpCards );
         if ( gameRoom is null || 
              canAddClient is false )
         {
             confirmPacket.confirm = false;
-            Console.WriteLine($"[{reqPacket.roomId}]는 없습니다.");
+            Console.WriteLine($"[C_ReqJoinGameServer] gameRoom is null || canAddClient is false  .");
         }
         else
         {
