@@ -17,7 +17,9 @@
 		</list>
 	</packet>
 
-
+	<packet name ="C_CancleMatching">
+		<bool name="empty"/>
+	</packet>
 
 	<packet name ="S_ConfirmJoinGameServer">
 		<bool name="confirm"/>

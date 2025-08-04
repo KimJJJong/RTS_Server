@@ -53,14 +53,23 @@ public class GameRoom : IGameRoom
             return false;
         }
 
-        _deckCombination = cardList;
+        _deckCombination.AddRange(cardList) ;
         Console.WriteLine($"[GameRoom] Client {client.SessionID} joined Room {RoomId}");
 
 
         bool allPlayersJoined;
         lock (_lock)
         {
-            allPlayersJoined = _players.Values.All(p => p.Session != null);
+            if(_players.Values.Count >= 2)
+            {
+            allPlayersJoined = true;
+            }
+            else
+            {
+                allPlayersJoined = false;
+            }
+            Console.WriteLine($"allPlayerJoin : {_players.Values.Count} || {allPlayersJoined}");
+
         }
 
         if (allPlayersJoined)

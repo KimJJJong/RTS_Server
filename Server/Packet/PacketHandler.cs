@@ -33,6 +33,8 @@ class PacketHandler
         {
             Card tmpCard = new Card(card.uid);
             tmpCards.Add(tmpCard);
+
+            Console.WriteLine($"Send CardList Session Id : {clientSession.SessionID}:[ {tmpCard.ID} ]");
         }
 
         bool canAddClient = gameRoom.AddClient( clientSession , tmpCards );
@@ -84,9 +86,11 @@ class PacketHandler
             return;
         }
 
+        Console.WriteLine($"[Try Summon]{client.SessionID}andd Oid : { req.oid }");
+
         try
         {
-           // Console.WriteLine($"[SummonHandler] Session:{client.SessionID}, OID:{req.oid}, Mana:{req.needMana}");
+            Console.WriteLine($"[SummonHandler] Session:{client.SessionID}, OID:{req.oid}, Mana:{req.needMana}");
             logic.OnReceiveSummon(client, req);
         }
         catch (Exception ex)
@@ -113,7 +117,7 @@ class PacketHandler
 
         try
         {
-           // Console.WriteLine($"[ProjectileHandler] ProjectileOid:{req.projectileOid}, Tick:{req.clientRequestTick}");
+            Console.WriteLine($"[ProjectileHandler] ProjectileOid:{req.projectileOid}, Tick:{req.clientRequestTick}");
             logic.OnReciveSummonProject(client, req);
         }
         catch (Exception ex)
@@ -135,7 +139,7 @@ class PacketHandler
 
         try
         {
-            //Console.WriteLine($"[AttackHandler] 요청: {req.attackerOid} -> {req.targetOid}, Tick: {req.clientAttackedTick}");
+            Console.WriteLine($"[AttackHandler] 요청: {req.attackerOid} -> {req.targetOid}, Tick: {req.clientAttackedTick}");
             logic.OnReciveAttack(client, req);
         }
         catch (Exception ex)

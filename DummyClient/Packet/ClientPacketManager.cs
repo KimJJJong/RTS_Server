@@ -22,12 +22,12 @@ public class PacketManager
 		_makeFunc.Add((ushort)PacketID.S_GameUpdate, MakePacket<S_GameUpdate>);
 		_handler.Add((ushort)PacketID.S_GameUpdate, PacketHandler.S_GameUpdateHandler);
 		_makeFunc.Add((ushort)PacketID.S_ConfirmJoinGameServer, MakePacket<S_ConfirmJoinGameServer>);
-		_handler.Add((ushort)PacketID.S_ConfirmJoinGameServer, PacketHandler.S_ConfirmJoinGameServerHandler);
+/*		_handler.Add((ushort)PacketID.S_ConfirmJoinGameServer, PacketHandler.S_ConfirmJoinGameServerHandler);
 		_makeFunc.Add((ushort)PacketID.S_GameInitBundle, MakePacket<S_GameInitBundle>);
 		_handler.Add((ushort)PacketID.S_GameInitBundle, PacketHandler.S_GameInitBundleHandler);
 		_makeFunc.Add((ushort)PacketID.S_MyPlayerInfo, MakePacket<S_MyPlayerInfo>);
-		_handler.Add((ushort)PacketID.S_MyPlayerInfo, PacketHandler.S_MyPlayerInfoHandler);
-		_makeFunc.Add((ushort)PacketID.S_AnsSummon, MakePacket<S_AnsSummon>);
+		_handler.Add((ushort)PacketID.S_MyPlayerInfo, PacketHandler.S_MyPlayerInfoHandler);*/
+		_makeFunc.Add((ushort)PacketID.S_AnsSummon, MakePacket<S_AnsSummon>);/*
 		_handler.Add((ushort)PacketID.S_AnsSummon, PacketHandler.S_AnsSummonHandler);
 		_makeFunc.Add((ushort)PacketID.S_VerifyCapture, MakePacket<S_VerifyCapture>);
 		_handler.Add((ushort)PacketID.S_VerifyCapture, PacketHandler.S_VerifyCaptureHandler);
@@ -36,7 +36,7 @@ public class PacketManager
 		_makeFunc.Add((ushort)PacketID.S_ShootConfirm, MakePacket<S_ShootConfirm>);
 		_handler.Add((ushort)PacketID.S_ShootConfirm, PacketHandler.S_ShootConfirmHandler);
 		_makeFunc.Add((ushort)PacketID.S_DeActivateConfirm, MakePacket<S_DeActivateConfirm>);
-		_handler.Add((ushort)PacketID.S_DeActivateConfirm, PacketHandler.S_DeActivateConfirmHandler);
+		_handler.Add((ushort)PacketID.S_DeActivateConfirm, PacketHandler.S_DeActivateConfirmHandler);*/
 		_makeFunc.Add((ushort)PacketID.S_OccupationSync, MakePacket<S_OccupationSync>);
 		_handler.Add((ushort)PacketID.S_OccupationSync, PacketHandler.S_OccupationSyncHandler);
 		_makeFunc.Add((ushort)PacketID.S_TileClaimed, MakePacket<S_TileClaimed>);

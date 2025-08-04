@@ -56,7 +56,7 @@ public class GameLogicManager
 
         _room.BroadCast(MakeInitBundlePacket().Write());
         S_MyPlayerInfoPacket();
-
+        Console.WriteLine("[GameLogic] : Init Finished");
         JobTimer.Instance.Push(Update);
     }
 
@@ -243,7 +243,7 @@ public class GameLogicManager
 
         _dimensionManager.Update(this);
 
-        Console.WriteLine($"CurrentTime {_timerManager.RemainingSeconds}");
+       // Console.WriteLine($"CurrentTime {_timerManager.RemainingSeconds}");
 
         if (_timerManager.IsTimeUp()) _occupationManager.CheckFinalWinner();
 

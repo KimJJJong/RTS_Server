@@ -37,9 +37,11 @@ class DeckManager
         // 파생 데미지 관련 추가
         AppendProjectileCards(allCards);
 
+        int index = 0;
         foreach(Card card in allCards)
         {
-            Console.WriteLine($"Card with Object ID :[{card.ID}]  Lv : [ default ]");
+            Console.WriteLine($"{index}Card with Object ID :[{card.ID}]  Lv : [ default ]");
+            index++;
         }
 
         return allCards;
