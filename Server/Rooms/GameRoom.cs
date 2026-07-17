@@ -23,7 +23,7 @@ public class GameRoom : IGameRoom
 
         for (int i = 0; i < playerIds.Count; i++)
         {
-            _players[i] = new PlayerSlot( i, playerIds[i], _players[i].NickName);
+            _players[i] = new PlayerSlot(i, playerIds[i], string.Empty);
 
         }
 
@@ -39,6 +39,7 @@ public class GameRoom : IGameRoom
         if (slot == null || slot.Session != null)
             return false;
 
+        slot.NickName = nickName;
         slot.Session = client;
         client.Room = this;
         client.PlayingID = slot.InternalId;

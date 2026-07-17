@@ -22,16 +22,15 @@ class PacketHandler
 
 
         GameRoom gameRoom = GameRoomManager.Instance.FindRoom(reqPacket.roomId);
-        bool canAddClient = gameRoom.AddClient(reqPacket.playerSUid, clientSession, reqPacket.nickName);
-        if ( gameRoom is null || 
-             canAddClient is false )
+        if (gameRoom is null)
         {
             confirmPacket.confirm = false;
             Console.WriteLine($"[{reqPacket.roomId}]는 없습니다.");
         }
         else
         {
-            confirmPacket.confirm = true;
+            bool canAddClient = gameRoom.AddClient(reqPacket.playerSUid, clientSession, reqPacket.nickName);
+            confirmPacket.confirm = canAddClient;
     
         }
        

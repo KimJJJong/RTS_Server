@@ -26,7 +26,7 @@ GameServer ── JSON log ──> Filebeat ──> Elasticsearch ──> Kibana
 ```
 
 - `HttpApi`: 매칭 요청·취소·상태 조회와 GameServer room 생성 요청
-- `Server`: TCP session, room 입장, 전투 요청 검증과 결과 Tick 패킷 전송
+- `Server`: TCP session, room 입장, 전투 요청 검증과 33ms 논리 Tick 기반 결과 패킷 scheduling
 - `ServerCore`: listener, session, receive/send buffer, send queue
 - `PacketGenerator`: `PDL.xml` 기반 packet class·manager 생성
 - `DummyClient`: 서버 통신 검증용 .NET 8 클라이언트
@@ -34,7 +34,7 @@ GameServer ── JSON log ──> Filebeat ──> Elasticsearch ──> Kibana
 
 ## 동기화 범위
 
-서버는 mana, OID, HP, 점령 상태 등 자신이 보유한 결과를 확정하고 적용할 Result Tick을 양쪽 Client에 전달합니다. 33ms 값은 결과 실행 시점을 나타내는 논리 시간 좌표이며, 전체 World를 30Hz로 시뮬레이션하는 deterministic lockstep이나 rollback netcode를 의미하지 않습니다.
+서버는 OID 풀, 좌표 변환, HP, 점령도와 승패 등 일부 결과 상태를 처리하고, 클라이언트는 전달받은 기준값으로 연출을 실행하도록 분리했습니다. 여기서 33ms는 Room 전체를 30Hz로 시뮬레이션한다는 뜻이 아니라, 결과 패킷의 적용 시점을 맞추기 위한 논리 Tick 간격입니다.
 
 ## 빌드
 
