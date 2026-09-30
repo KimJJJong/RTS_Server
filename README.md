@@ -1,4 +1,6 @@
-# WAR'LD Painting Server
+[한국어](README.md) | [日本語](README.ja.md) | [English](README.en.md)
+
+# WAR'LD Painting 게임 서버 / WAR'LD Painting ゲームサーバー
 
 WAR'LD Painting의 1:1 실시간 PvP를 지원하는 **.NET 8 기반 게임 서버**입니다. ASP.NET Core Match API와 C# TCP GameServer를 분리하고, `SocketAsyncEventArgs` 기반 비동기 세션·2-byte length-prefix framing·결과 Tick 패킷·JSON 로그 파이프라인을 구현했습니다.
 
